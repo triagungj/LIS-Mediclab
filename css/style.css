@@ -1,0 +1,30 @@
+.body-login {
+  height: 100%;
+}
+.form-login {
+  background: #dadef4;
+  padding: 50px 50px 20px 50px;
+  width: 450px;
+  border-radius: 30px;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 30%);
+}
+
+.form-login input {
+  border-radius: 10px;
+}
+
+.content-dashboard .menu-items {
+  min-height: 500px;
+}
+
+.content-dashboard .menu-items .menus img {
+  width: 120;
+  height: 120px;
+  color: #dadef4;
+}
+
+svg {
+  color: #ffffff;
+}
