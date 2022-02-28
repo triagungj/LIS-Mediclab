@@ -25,7 +25,7 @@ if (isset($_SESSION['username'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <title>Mediclab - Dashboard</title>
 </head>
@@ -52,12 +52,49 @@ if (isset($_SESSION['username'])) {
             </div>
             <div class="col-lg-6 col-12 container menus">
                 <div class="row">
-                    <div class="col-lg-6 col-12 bg-danger text-center">
-                        <img src="assets/fact_check_black_24dp.svg" alt="" class="image-worklist">
-                        <h6 class=" text-light ">WORKLIST</h6>
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-5 col-12 text-center">
+                        <a href="#" class="decoration-none">
+                            <div class="bg-danger pt-2 pb-2 border-radius-4">
+                                <img src="assets/fact_check_black_24dp.svg" alt="image" class="filter-white">
+                                <div style="min-height: 15px;"></div>
+                                <h6 class="text-light">WORKLIST</h6>
+                            </div>
+                        </a>
                     </div>
-                    <div class=" col-lg-6 col-12">
-                        REPORT
+                    <div class=" col-lg-1">
+                    </div>
+                    <div class="col-lg-5 col-12 text-center">
+                        <a href="#" class="decoration-none">
+                            <div class="bg-primary pt-2 pb-2 border-radius-4">
+                                <img src="assets/summarize_black_24dp.svg" alt="image" class="filter-white">
+                                <div style="min-height: 15px;"></div>
+                                <h6 class="text-light">REPORT</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="spacer" style="min-height: 50px;"></div>
+                <div class="row">
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-5 col-12 text-center">
+                        <a href="#" class="decoration-none">
+                            <div class="bg-warning pt-2 pb-2 border-radius-4">
+                                <img src="assets/history_black_24dp.svg" alt="image" class="filter-white">
+                                <div style="min-height: 15px;"></div>
+                                <h6 class="text-light">HISTORY</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-5 col-12 text-center">
+                        <a href="#" class="decoration-none">
+                            <div class="bg-success pt-2 pb-2 border-radius-4">
+                                <img src="assets/print_black_24dp.svg" alt="image" class="filter-white">
+                                <div style="min-height: 15px;"></div>
+                                <h6 class="text-light">LIST PRINT</h6>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

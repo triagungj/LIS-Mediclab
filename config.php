@@ -1,8 +1,8 @@
 <?php
 
 $server = "localhost";
-$user = "root";
-$pass = "";
+$user = "phpadmin";
+$pass = "root";
 $database = "mediclab";
 
 $conn = mysqli_connect($server, $user, $pass, $database);
