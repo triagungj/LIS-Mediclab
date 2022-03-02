@@ -50,7 +50,7 @@
 
         <div class="col-4 col-lg-3">
             <button type="submit" class="btn btn-primary">Cari</button>
-            <button type="submit" class="btn btn-primary">Tambah</button>
+            <a href="./add_patient.php" class="btn btn-primary" type="submit" class="btn btn-primary">Tambah</a class="btn btn-primary">
         </div>
 
     </form>
