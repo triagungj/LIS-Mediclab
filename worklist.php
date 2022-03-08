@@ -55,7 +55,7 @@
 
     </form>
 
-    <div class="ms-3 me-3">
+    <div class="ms-3 me-3 table-responsive-lg">
         <table class="table table-bordered">
             <thead>
                 <tr>
