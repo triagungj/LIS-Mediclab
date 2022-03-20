@@ -14,6 +14,11 @@ a {
   filter: invert(92%) sepia(99%) saturate(2%) hue-rotate(339deg)
     brightness(103%) contrast(100%);
 }
+
+.bg-surface {
+  background-color: #ebe5e5;
+}
+
 .body-login {
   height: 100%;
 }
