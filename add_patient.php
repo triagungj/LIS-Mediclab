@@ -22,7 +22,8 @@
         </div>
     </div>
 
-    <div class="add-patient-content ps-4 pe-4">
+    <!-- Add Patient Form -->
+    <div class="ps-4 pe-4">
         <div class="bg-surface p-3 rounded-top border">
             <h6>Data Pasien</h6>
             <div class="d-inline">
@@ -38,13 +39,13 @@
                     <div class="col-12 col-md-6">
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end text-end">
-                                <label for="inputDatePatient" class="col-form-label">Tanggal:</label>
+                                <label for="inputDatePatient" class="col-form-label">Tanggal :</label>
                             </div>
                             <div class="col-4">
                                 <input type="date" id="inputDatePatient" class="form-control" aria-describedby="datePatientHelpInline" disabled>
                             </div>
                             <div class="col-2 text-end">
-                                <label for="inputLabNumberPatient" class="col-form-label">No. Lab:</label>
+                                <label for="inputLabNumberPatient" class="col-form-label">No. Lab :</label>
                             </div>
                             <div class="col-4">
                                 <input type="number" id="inputLabNumberPatient" class="form-control" aria-describedby="inputLabNumberPatientHelpInline" disabled>
@@ -52,13 +53,13 @@
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputRegNumberPatient" class="col-form-label">No. RM:</label>
+                                <label for="inputRegNumberPatient" class="col-form-label">No. RM :</label>
                             </div>
                             <div class="col-4">
                                 <input type="number" id="inputRegNumberPatient" class="form-control" aria-describedby="regNumberPatientHelpInline" disabled>
                             </div>
                             <div class="col-2 text-end">
-                                <label for="inputNotaPatient" class="col-form-label">Nota:</label>
+                                <label for="inputNotaPatient" class="col-form-label">Nota :</label>
                             </div>
                             <div class="col-4">
                                 <input type="number" id="inputNotaPatient" class="form-control" aria-describedby="inputNotaPatientHelpInline" disabled>
@@ -66,7 +67,7 @@
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputNIKPatient" class="col-form-label">NIK:</label>
+                                <label for="inputNIKPatient" class="col-form-label">NIK :</label>
                             </div>
                             <div class="col-10">
                                 <input type="text" id="inputNIKPatient" class="form-control" aria-describedby="nikPatientHelpInline">
@@ -74,7 +75,7 @@
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputNamePatient" class="col-form-label">Nama:</label>
+                                <label for="inputNamePatient" class="col-form-label">Nama :</label>
                             </div>
                             <div class="col-10">
                                 <input type="text" id="inputNamePatient" class="form-control" aria-describedby="namePatientHelpInline">
@@ -82,7 +83,7 @@
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputBirthDayPatient" class="col-form-label">Tgl. Lahir:</label>
+                                <label for="inputBirthDayPatient" class="col-form-label">Tgl. Lahir :</label>
                             </div>
                             <div class="col-4">
                                 <input type="date" id="inputBirthDayPatient" class="form-control" aria-describedby="birthdayPatientHelpInline">
@@ -100,7 +101,7 @@
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputBirthDayPatient" class="col-form-label">Umur:</label>
+                                <label class="col-form-label">Umur :</label>
                             </div>
                             <div class="col-3">
                                 <span class="col-form-label ms-1">Tahun</span>
@@ -108,7 +109,7 @@
                             </div>
                             <div class="col-3">
                                 <span class="col-form-label ms-1">Bulan</span>
-                                <input type="text" disabled id="inputYearAgePatient" class="form-control" aria-describedby="yearAgePatientHelpInline" value="8">
+                                <input type="text" disabled id="inputMonthAgePatient" class="form-control" aria-describedby="yearAgePatientHelpInline" value="8">
                             </div>
                             <div class="col-4">
                                 <span class="col-form-label ms-1">Hari</span>
@@ -117,7 +118,7 @@
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputAddressPatient" class="col-form-label">Alamat:</label>
+                                <label for="inputAddressPatient" class="col-form-label">Alamat :</label>
                             </div>
                             <div class="col-10">
                                 <input type="text" id="inputAddressPatient" class="form-control" aria-describedby="addressPatientHelpInline">
@@ -125,7 +126,7 @@
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="selectRoomPatient" class="col-form-label">Ruang:</label>
+                                <label for="selectRoomPatient" class="col-form-label">Ruang :</label>
                             </div>
                             <div class="col-3">
                                 <select class="form-select" aria-label="selectRoomPatient">
@@ -146,7 +147,7 @@
                             <div class="col-3 d-flex">
                                 <label for="selectStatusPatient" class="col-form-label me-2">Status:</label>
                                 <select class="form-select" aria-label="selectStatusPatient">
-                                    <option selected>Status</option>
+                                    <option selected>-</option>
                                     <option value="bpjs">BPJS</option>
                                     <option value="reguler">Reguler</option>
                                 </select>
@@ -154,7 +155,7 @@
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="descClinicPatient" class="col-form-label">Ket Klinik:</label>
+                                <label for="descClinicPatient" class="col-form-label">Ket Klinik :</label>
                             </div>
                             <div class="col-10">
                                 <input type="text" id="descClinicPatient" class="form-control" aria-describedby="descClinicPatientHelpInline">
@@ -162,7 +163,7 @@
                         </div>
                         <div class="row align-items-center">
                             <div class="col-2 text-end">
-                                <label for="phoneNumberPatient" class="col-form-label">No. HP:</label>
+                                <label for="phoneNumberPatient" class="col-form-label">No. HP :</label>
                             </div>
                             <div class="col-10">
                                 <input type="text" id="phoneNumberPatient" class="form-control" aria-describedby="phoneNumberPatientHelpInline">
@@ -172,18 +173,18 @@
 
                     <div class="col-12 col-md-6">
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="phoneNumberPatient" class="col-form-label">Dokter Pengirim:</label>
+                            <div class="col-3 text-end">
+                                <label for="phoneNumberPatient" class="col-form-label">Dokter Pengirim :</label>
                             </div>
-                            <div class="col-10">
+                            <div class="col-9">
                                 <input type="text" id="phoneNumberPatient" class="form-control" aria-describedby="phoneNumberPatientHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="select-status" class="col-form-label">Status:</label>
+                            <div class="col-3 text-end">
+                                <label for="select-status" class="col-form-label">Dokter ACC :</label>
                             </div>
-                            <div class="col-10">
+                            <div class="col-9">
                                 <select class="form-select" aria-label="selectStatusPatient">
                                     <option selected>-</option>
                                     <option value="dr1">dr. Hendrawan Nugroho, M.Sc., Sp. PK</option>
@@ -193,10 +194,10 @@
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="select-status" class="col-form-label">Petugas:</label>
+                            <div class="col-3 text-end">
+                                <label for="select-status" class="col-form-label">Petugas :</label>
                             </div>
-                            <div class="col-10">
+                            <div class="col-9">
                                 <select class="form-select" aria-label="selectStatusPatient">
                                     <option selected>-</option>
                                     <option value="petugas1">BAMBANG HARIYADI</option>
@@ -205,26 +206,26 @@
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="massagePatient" class="col-form-label">Pesan:</label>
+                            <div class="col-3 text-end">
+                                <label for="massagePatient" class="col-form-label">Pesan :</label>
                             </div>
-                            <div class="col-10">
+                            <div class="col-9">
                                 <input type="text" id="massagePatient" class="form-control" aria-describedby="massagePatientHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="impressionPatient" class="col-form-label">Kesan:</label>
+                            <div class="col-3 text-end">
+                                <label for="impressionPatient" class="col-form-label">Kesan :</label>
                             </div>
-                            <div class="col-10">
+                            <div class="col-9">
                                 <input type="text" id="impressionPatient" class="form-control" aria-describedby="impressionPatientHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="samplePatient" class="col-form-label">Sample:</label>
+                            <div class="col-3 text-end">
+                                <label for="samplePatient" class="col-form-label">Sample :</label>
                             </div>
-                            <div class="col-10 d-flex">
+                            <div class="col-9 d-flex">
                                 <div class="form-check me-2">
                                     <input class="form-check-input" type="radio" name="radioSample" id="flexRadioSampleNormal" checked>
                                     <label class="form-check-label" for="flexRadioSampleNormal">
@@ -252,10 +253,10 @@
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="select-sample" class="col-form-label">Jenis Sample:</label>
+                            <div class="col-3 text-end">
+                                <label for="select-sample" class="col-form-label">Jenis Sample :</label>
                             </div>
-                            <div class="col-10">
+                            <div class="col-9">
                                 <select class="form-select" aria-label="selectStatusPatient">
                                     <option selected>-</option>
                                     <option value="hematologi">Hematologi</option>
@@ -263,18 +264,18 @@
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="notePatient" class="form-label">Catatan:</label>
+                            <div class="col-3 text-end">
+                                <label for="notePatient" class="form-label">Catatan :</label>
                             </div>
-                            <div class="col-10">
+                            <div class="col-9">
                                 <textarea class="form-control" id="notePatient" rows="2">-</textarea>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-2 text-end">
-                                <label for="packagePatient" class="form-label">Paket:</label>
+                            <div class="col-3 text-end">
+                                <label for="packagePatient" class="form-label">Paket :</label>
                             </div>
-                            <div class="col-10">
+                            <div class="col-9">
                                 <select class="form-select" aria-label="packagePatient">
                                     <option selected>-</option>
                                     <option value="package1">Paket 1</option>
@@ -283,16 +284,53 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 align-items-center mt-4 text-center">
+                    <div class="col-12 align-items-center mt-4 mb-4 text-center">
                         <button type="button" class="btn btn-success me-2">Save</button>
                         <button type="button" class="btn btn-primary me-1 ms-1">Reset</button>
                         <button type="button" class="btn btn-danger ms-2">Hapus</button>
-
                     </div>
                 </div>
             </form>
         </div>
+        <div class="bg-surface p-3 rounded-bottom border d-flex align-items-center">
+            <h6 class="me-4">Hasil Pemeriksaan</h6>
+            <div class="d-inline">
+                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary">All</button>
+                <button type="button" class="btn btn-primary">Uncheck</button>
+                <button type="button" class="btn btn-primary">Hapus</button>
+                <button type="button" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-primary">Print</button>
+                <button type="button" class="btn btn-primary">Print Group</button>
+                <button type="button" class="btn btn-primary">Sinc</button>
+                <button type="button" class="btn btn-primary">Diagnosa</button>
+                <button type="button" class="btn btn-primary">Send</button>
+
+            </div>
+        </div>
     </div>
+
+    <div class="ps-4 pe-4 mt-4 table-responsive-lg">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Pemeriksaan</th>
+                    <th scope="col">Hasil</th>
+                    <th scope="col">Flag</th>
+                    <th scope="col">Rujukan</th>
+                    <th scope="col">ACC</th>
+                    <th scope="col">Satuan</th>
+                    <th scope="col">Alat</th>
+                    <th scope="col">Waktu</th>
+                    <th scope="col">HISTORY</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+
+
 </body>
 
 </html>
