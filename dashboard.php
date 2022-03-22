@@ -67,7 +67,7 @@ if (isset($_SESSION['username'])) {
                     <div class=" col-lg-1">
                     </div>
                     <div class="col-lg-5 col-12 text-center">
-                        <a href="#" class="decoration-none">
+                        <a href="./report/report-tat.php" class="decoration-none">
                             <div class="bg-primary pt-2 pb-2 border-radius-4">
                                 <img src="assets/summarize_black_24dp.svg" alt="image" class="filter-white">
                                 <div style="min-height: 15px;"></div>

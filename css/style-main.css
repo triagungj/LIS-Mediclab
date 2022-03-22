@@ -6,17 +6,21 @@ a:hover {
   text-decoration: none;
 }
 
+svg {
+  color: #ffffff;
+}
+
+.filter-white {
+  filter: invert(92%) sepia(99%) saturate(2%) hue-rotate(339deg)
+    brightness(103%) contrast(100%);
+}
+
 .border-radius-4 {
   border-radius: 8px;
 }
 
 .decoration-none {
   text-decoration: none;
-}
-
-.filter-white {
-  filter: invert(92%) sepia(99%) saturate(2%) hue-rotate(339deg)
-    brightness(103%) contrast(100%);
 }
 
 .bg-surface {
@@ -50,6 +54,7 @@ a:hover {
   color: #dadef4;
 }
 
-svg {
-  color: #ffffff;
+/* REPORT */
+.report-selected {
+  background-color: #dedede;
 }
