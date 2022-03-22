@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <div class="header bg-primary mb-4">
+    <div class="header bg-primary mb-4 ">
         <div class="container d-flex justify-content-between pt-4 pb-2">
             <a href="./">
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
@@ -30,18 +30,19 @@
         <button class="btn btn-primary">Cari</button>
     </div>
     <div class="row ms-2 me-2 mt-2">
-        <div class="col-md-6 pe-2 ps-2">
-            <div class="table-responsive-md">
-                <div class="bg-surface p-2 rounded-top border">
+        <div class="col-md-6">
+            <div class="table-responsive-md border rounded-top">
+                <div class="bg-surface p-2">
                     <span>Daftar Pasien</span>
                 </div>
-                <div class="p3">
-                    <table class="table table-bordered ">
+                <div class="ms-2 me-2 mt-2">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">No Lab</th>
-                                <th scope="col">No RM</th>
+                                <th scope="col" width="10%">No</th>
+                                <th scope="col">Tanggal</th>
                                 <th scope="col">Nama</th>
+                                <th scope="col">No. RM</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,9 +50,11 @@
                                 <td>1</td>
                                 <td>Data</td>
                                 <td>Data</td>
+                                <td>Data</td>
                             </tr>
                             <tr>
                                 <td>2</td>
+                                <td>Data</td>
                                 <td>Data</td>
                                 <td>Data</td>
                             </tr>
@@ -59,10 +62,12 @@
                                 <td>3</td>
                                 <td>Data</td>
                                 <td>Data</td>
+                                <td>Data</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
         <div class="col-md-6 pe-2 ps-2">
@@ -116,7 +121,6 @@
                             <div class="col-9">Jl. Wates No. 32 RT 3/5, Kulonprogo, DIY</div>
                         </div>
                     </div>
-                    <hr>
 
                     <div style="min-height: 200px;"></div>
                 </div>
