@@ -32,7 +32,9 @@ if (isset($_SESSION['username'])) {
 <body>
     <div class="header bg-primary">
         <div class="container d-flex justify-content-between pt-4 pb-2">
-            <h3 class="text-light"><b>MEDICLAB</b></h3>
+            <a href="./">
+                <h3 class="text-light"><b>MEDICLAB</b></h3>
+            </a>
             <div class="d-flex align-items-end">
                 <h5 class="mr-4 text-light">Selamat pagi, <?= $name ?></h5>
                 <div style="min-width:40px"></div>
@@ -78,7 +80,7 @@ if (isset($_SESSION['username'])) {
                 <div class="row">
                     <div class="col-lg-1"></div>
                     <div class="col-lg-5 col-12 text-center">
-                        <a href="#" class="decoration-none">
+                        <a href="./lab_record.php" class="decoration-none">
                             <div class="bg-warning pt-2 pb-2 border-radius-4">
                                 <img src="assets/history_black_24dp.svg" alt="image" class="filter-white">
                                 <div style="min-height: 15px;"></div>

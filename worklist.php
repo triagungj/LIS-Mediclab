@@ -13,7 +13,9 @@
 <body>
     <div class="header bg-primary">
         <div class="container d-flex justify-content-between pt-4 pb-2">
-            <h3 class="text-light"><b>MEDICLAB</b></h3>
+            <a href="./">
+                <h3 class="text-light"><b>MEDICLAB</b></h3>
+            </a>
             <div class="d-flex align-items-center">
                 <h5 class="mr-4 text-light">Selamat pagi, <?= $name ?></h5>
                 <div style="min-width:40px"></div>
