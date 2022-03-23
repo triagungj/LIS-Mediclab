@@ -23,10 +23,10 @@
             </div>
         </div>
     </div>
-    <div class="d-inline container pt-4 align-middle">
+    <div class="ms-4 ">
         <input type="text" placeholder="Nomor RM" />
-        <input type="text" placeholder="Nama Pasien">
-        <input type="text" placeholder="Ruang">
+        <input type="text" placeholder="Nama Pasien" />
+        <input type="text" placeholder="Ruang" />
         <button class="btn btn-primary">Cari</button>
     </div>
     <div class="row ms-2 me-2 mt-2">
