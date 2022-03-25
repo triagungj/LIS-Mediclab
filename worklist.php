@@ -82,22 +82,22 @@ if (isset($_SESSION['username'])) {
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th scope="col">No Lab</th>
-                    <th scope="col">No RM</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Ruang</th>
-                    <th scope="col">No Trans</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Transmit</th>
-                    <th scope="col">Barcode</th>
-                    <th scope="col">Print</th>
-                    <th scope="col">Diagnosa</th>
+                    <th scope="col" class="text-center">No Lab</th>
+                    <th scope="col" class="text-center">No RM</th>
+                    <th scope="col" class="text-center">Nama</th>
+                    <th scope="col" class="text-center">Ruang</th>
+                    <th scope="col" class="text-center">No Trans</th>
+                    <th scope="col" class="text-center">Status</th>
+                    <th scope="col" class="text-center">Transmit</th>
+                    <th scope="col" class="text-center">Barcode</th>
+                    <th scope="col" class="text-center">Print</th>
+                    <th scope="col" class="text-center">Diagnosa</th>
 
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>1</td>
+                    <td class="text-center" width="7%">1</td>
                     <td>Data</td>
                     <td>Data</td>
                     <td>Data</td>
@@ -109,7 +109,7 @@ if (isset($_SESSION['username'])) {
                     <td class="text-center"><button class="btn btn-primary">Diagnosa</button></td>
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <td class="text-center">2</td>
                     <td>Data</td>
                     <td>Data</td>
                     <td>Data</td>
@@ -121,7 +121,7 @@ if (isset($_SESSION['username'])) {
                     <td class="text-center"><button class="btn btn-primary">Diagnosa</button></td>
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <td class="text-center">2</td>
                     <td>Data</td>
                     <td>Data</td>
                     <td>Data</td>

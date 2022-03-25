@@ -25,10 +25,9 @@ if (isset($_SESSION['username'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Dashboard</title>
+    <title>Mediclab - Add Patient</title>
 </head>
 
 <body>
@@ -65,7 +64,7 @@ if (isset($_SESSION['username'])) {
                                 <label for="inputDatePatient" class="col-form-label">Tanggal :</label>
                             </div>
                             <div class="col-4">
-                                <input type="date" id="inputDatePatient" class="form-control" aria-describedby="datePatientHelpInline" disabled>
+                                <input id="inputDatePatient" class="form-control" aria-describedby="datePatientHelpInline" disabled value="<?= date("Y/m/d"); ?>">
                             </div>
                             <div class="col-2 text-end">
                                 <label for="inputLabNumberPatient" class="col-form-label">No. Lab :</label>
@@ -349,6 +348,11 @@ if (isset($_SESSION['username'])) {
                     <th scope="col">HISTORY</th>
                 </tr>
             </thead>
+            <tbody>
+                <td>
+                    <div style="min-height: 300px;"></div>
+                </td>
+            </tbody>
         </table>
     </div>
 
