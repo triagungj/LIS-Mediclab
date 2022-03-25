@@ -1,13 +1,33 @@
+<?php
+include 'config.php';
+
+error_reporting(0);
+
+session_start();
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+
+    $sql = "SELECT * FROM users WHERE username='$username'";
+    $result = mysqli_query($conn, $sql);
+    if ($result->num_rows > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $name = $row['name'];
+    }
+} else {
+    header("Location: ./");
+}
+
+?>
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Dashboard</title>
+    <title>Mediclab - Add Patient</title>
 </head>
 
 <body>
@@ -32,7 +52,7 @@
                 <button type="button" class="btn btn-primary">Hide</button>
                 <button type="button" class="btn btn-primary">Show</button>
                 <button type="button" class="btn btn-primary">Order</button>
-                <button type="button" class="btn btn-primary">Back</button>
+                <a href="./worklist.php"><button type="button" class="btn btn-primary">Back</button></a>
             </div>
         </div>
         <div class="border p-3">
@@ -44,7 +64,7 @@
                                 <label for="inputDatePatient" class="col-form-label">Tanggal :</label>
                             </div>
                             <div class="col-4">
-                                <input type="date" id="inputDatePatient" class="form-control" aria-describedby="datePatientHelpInline" disabled>
+                                <input id="inputDatePatient" class="form-control" aria-describedby="datePatientHelpInline" disabled value="<?= date("Y/m/d"); ?>">
                             </div>
                             <div class="col-2 text-end">
                                 <label for="inputLabNumberPatient" class="col-form-label">No. Lab :</label>
@@ -328,6 +348,11 @@
                     <th scope="col">HISTORY</th>
                 </tr>
             </thead>
+            <tbody>
+                <td>
+                    <div style="min-height: 300px;"></div>
+                </td>
+            </tbody>
         </table>
     </div>
 

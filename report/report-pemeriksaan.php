@@ -1,3 +1,24 @@
+<?php
+include 'config.php';
+
+error_reporting(0);
+
+session_start();
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+
+    $sql = "SELECT * FROM users WHERE username='$username'";
+    $result = mysqli_query($conn, $sql);
+    if ($result->num_rows > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $name = $row['name'];
+    }
+} else {
+    header("Location: ./");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
