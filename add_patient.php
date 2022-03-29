@@ -75,7 +75,7 @@ function generateTransNumber()
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
             <div class="d-flex align-items-center">
-                <h5 class="text-light me-4 text-name">Selamat pagi, <?= $name ?></h5>
+                <h5 class="text-light me-4 text-name">Selamat Datang, <?= $name ?></h5>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
         </div>
@@ -382,8 +382,10 @@ function generateTransNumber()
                         </div>
                     </div>
                     <div class="col-12 align-items-center mt-4 mb-4 text-center">
-                        <input name="submit" type="submit" class="btn btn-success me-2" value="Save" />
-                        <a href="./delete_report.php?nota=<?= $resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger">Hapus</a>
+                        <input name="submit" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Save" />
+                        <?php if ($edit) { ?>
+                            <a href="./delete_report.php?nota=<?= $$resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger ps-4 pe-4">Hapus</a>
+                        <?php }  ?>
                     </div>
                 </div>
             </form>

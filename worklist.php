@@ -42,7 +42,7 @@ $resultReport = mysqli_query($conn, $sqlReport);
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
             <div class="d-flex align-items-center">
-                <h5 class="mr-4 text-light">Selamat pagi, <?= $name ?></h5>
+                <h5 class="mr-4 text-light text-name">Selamat datang, <?= $name ?></h5>
                 <div style="min-width:40px"></div>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
