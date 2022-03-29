@@ -18,6 +18,10 @@ if (isset($_SESSION['username'])) {
     header("Location: ./");
 }
 
+$sqlReport = "SELECT * FROM report";
+$resultReport = mysqli_query($conn, $sqlReport);
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,61 +86,54 @@ if (isset($_SESSION['username'])) {
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th scope="col" class="text-center">No Lab</th>
-                    <th scope="col" class="text-center">No RM</th>
-                    <th scope="col" class="text-center">Nama</th>
-                    <th scope="col" class="text-center">Ruang</th>
-                    <th scope="col" class="text-center">No Trans</th>
-                    <th scope="col" class="text-center">Status</th>
-                    <th scope="col" class="text-center">Transmit</th>
-                    <th scope="col" class="text-center">Barcode</th>
-                    <th scope="col" class="text-center">Print</th>
-                    <th scope="col" class="text-center">Diagnosa</th>
+                    <th scope="col" class="text-center" width="7%">No Lab</th>
+                    <th scope="col" class="text-center" width="7%">No RM</th>
+                    <th scope="col" class="text-center" width="20%">Nama</th>
+                    <th scope="col" class="text-center" width="14%">Ruang</th>
+                    <th scope="col" class="text-center" width="14%">No Trans</th>
+                    <th scope="col" class="text-center" width="7%">Status</th>
+                    <th scope="col" class="text-center" width="10%">Transmit</th>
+                    <th scope="col" class="text-center" width="7%">Barcode</th>
+                    <th scope="col" class="text-center" width="7%">Print</th>
+                    <th scope="col" class="text-center" width="7%">Diagnosa</th>
 
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="text-center" width="7%">1</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td class="text-center"><button class="btn btn-primary">Barcode</button></td>
-                    <td class="text-center"><button class="btn btn-primary">Print</button></td>
-                    <td class="text-center"><button class="btn btn-primary">Diagnosa</button></td>
-                </tr>
-                <tr>
-                    <td class="text-center">2</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td class="text-center"><button class="btn btn-primary">Barcode</button></td>
-                    <td class="text-center"><button class="btn btn-primary">Print</button></td>
-                    <td class="text-center"><button class="btn btn-primary">Diagnosa</button></td>
-                </tr>
-                <tr>
-                    <td class="text-center">2</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td>Data</td>
-                    <td class="text-center"><button class="btn btn-primary">Barcode</button></td>
-                    <td class="text-center"><button class="btn btn-primary">Print</button></td>
-                    <td class="text-center"><button class="btn btn-primary">Diagnosa</button></td>
-                </tr>
+
+                <?php foreach ($resultReport as $dataReport) : ?>
+                    <tr onclick="onClickTable('<?= $dataReport['nota']; ?>')">
+                        <td><?= $dataReport['nolab'] ?></td>
+                        <td><?= $dataReport['norm']; ?></td>
+                        <td><?= $dataReport['name_patient']; ?></td>
+                        <td><?= $dataReport['room']; ?></td>
+                        <td><?= $dataReport['nota']; ?></td>
+                        <td><?php if ($dataReport['progress'] == 0) {
+                                echo 'PROCESS';
+                            } else {
+                                echo 'FINISH';
+                            } ?></td>
+                        <td class="text-center">TRANSMITTED</td>
+                        <td class="text-center"><button class="btn btn-primary">Barcode</button></td>
+                        <td class="text-center"><button class="btn btn-primary">Print</button></td>
+                        <td class="text-center"><button class="btn btn-primary">Diagnosa</button></td>
+                    </tr>
+                    <?php $number++; ?>
+                <?php endforeach; ?>
+
             </tbody>
         </table>
     </div>
 
 
 </body>
+
+<script>
+    function onClickTable(nota) {
+        let getPatientUrl = 'add_patient.php?nota='
+        let url = getPatientUrl.concat(nota);
+        window.location.replace(url);
+    }
+</script>
 
 </html>

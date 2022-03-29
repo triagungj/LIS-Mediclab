@@ -1,9 +1,10 @@
 <?php
+
+// Starter
 include 'config.php';
-
 error_reporting(0);
-
 session_start();
+$edit = false;
 
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
@@ -14,8 +15,45 @@ if (isset($_SESSION['username'])) {
         $row = mysqli_fetch_assoc($result);
         $name = $row['name'];
     }
+    $resultValidatorSql = "SELECT * FROM users WHERE jabatan='validator'";
+    $resultValidator = mysqli_query($conn, $resultValidatorSql);
+
+    $resultPetugasSql = "SELECT * FROM users WHERE jabatan='petugas'";
+    $resultPetugas = mysqli_query($conn, $resultPetugasSql);
 } else {
     header("Location: ./");
+}
+
+// GET EDIT
+if (isset($_GET['nota'])) {
+    $edit = true;
+    $nota = $_GET['nota'];
+    $resultEditSql = "SELECT * FROM report WHERE nota='$nota'";
+    $resultEditArray = mysqli_query($conn, $resultEditSql);
+
+    if ($resultEditArray->num_rows > 0) {
+        $resultEdit = mysqli_fetch_assoc($resultEditArray);
+    }
+}
+
+
+// Random Lab Number
+function generateLabNumber($conn)
+{
+    $dateNow = date('Y-m-d');
+    $resultCountSql = "SELECT COUNT(nota) as total FROM report WHERE date_report like '$dateNow%'";
+    $resultCountArray = mysqli_query($conn, $resultCountSql);
+    $resultCount = mysqli_fetch_assoc($resultCountArray);
+
+    $count = str_pad($resultCount['total'] + 1, 3, '0', STR_PAD_LEFT); // Must be resolve
+    $newLabNumber = date('Ymd') . $count;
+    echo $newLabNumber;
+}
+
+// Random Trans Number
+function generateTransNumber()
+{
+    echo strtoupper(uniqid());
 }
 
 ?>
@@ -37,8 +75,7 @@ if (isset($_SESSION['username'])) {
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
             <div class="d-flex align-items-center">
-                <h5 class="mr-4 text-light">Selamat pagi, <?= $name ?></h5>
-                <div style="min-width:40px"></div>
+                <h5 class="text-light me-4 text-name">Selamat pagi, <?= $name ?></h5>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
         </div>
@@ -56,68 +93,91 @@ if (isset($_SESSION['username'])) {
             </div>
         </div>
         <div class="border p-3">
-            <form>
-                <div class="row">
+            <form method="POST" action="<?php if ($edit) {
+                                            echo 'insert_report.php?nota=' . $_GET['nota'];
+                                        } else {
+                                            echo 'insert_report.php';
+                                        } ?>">
+                <div class="row table-responsive">
                     <div class="col-12 col-md-6">
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end text-end">
-                                <label for="inputDatePatient" class="col-form-label">Tanggal :</label>
+                                <label for="inputDateReport" class="col-form-label">Tanggal :</label>
                             </div>
                             <div class="col-4">
-                                <input id="inputDatePatient" class="form-control" aria-describedby="datePatientHelpInline" disabled value="<?= date("Y/m/d"); ?>">
+                                <input value="<?php if ($edit) {
+                                                    echo $resultEdit['date_report'];
+                                                } else {
+                                                    echo
+                                                    date("Y-m-d H:i");
+                                                } ?>" required name="inputDateReport" readonly class="form-control" aria-describedby="dateHelpInline">
                             </div>
-                            <div class="col-2 text-end">
-                                <label for="inputLabNumberPatient" class="col-form-label">No. Lab :</label>
+                            <div value="<?php if ($edit) {
+                                            echo $resultEdit['date_report'];
+                                        } ?>" class="col-2 text-end">
+                                <label for="inputLabNumberReport" class="col-form-label">No. Lab :</label>
                             </div>
                             <div class="col-4">
-                                <input type="number" id="inputLabNumberPatient" class="form-control" aria-describedby="inputLabNumberPatientHelpInline" disabled>
+                                <input value="<?php if ($edit) {
+                                                    echo $resultEdit['nolab'];
+                                                } else echo generateLabNumber($conn); ?>" required type="number" name="inputLabNumberReport" class="form-control" aria-describedby="inputLabNumberHelpInline" readonly>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputRegNumberPatient" class="col-form-label">No. RM :</label>
+                                <label for="inputRegNumberReport" class="col-form-label">No. RM :</label>
                             </div>
                             <div class="col-4">
-                                <input type="number" id="inputRegNumberPatient" class="form-control" aria-describedby="regNumberPatientHelpInline" disabled>
+                                <input value="<?php if ($edit) {
+                                                    echo $resultEdit['norm'];
+                                                } ?>" required type="number" name="inputRegNumberReport" id="inputRegNumberReport" class="form-control" aria-describedby="regNumberHelpInline">
                             </div>
                             <div class="col-2 text-end">
-                                <label for="inputNotaPatient" class="col-form-label">Nota :</label>
+                                <label for="inputNotaReport" class="col-form-label">Nota :</label>
                             </div>
                             <div class="col-4">
-                                <input type="number" id="inputNotaPatient" class="form-control" aria-describedby="inputNotaPatientHelpInline" disabled>
+                                <input value="<?php if ($edit) {
+                                                    echo $resultEdit['nota'];
+                                                } else {
+                                                    echo generateTransNumber();
+                                                } ?>" required type="text" name="inputNotaReport" class="form-control" aria-describedby="inputNotaHelpInline" readonly>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputNIKPatient" class="col-form-label">NIK :</label>
+                                <label for="inputNikReport" class="col-form-label">NIK :</label>
                             </div>
                             <div class="col-10">
-                                <input type="text" id="inputNIKPatient" class="form-control" aria-describedby="nikPatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['nik']; ?>" required type="text" id="inputNikReport" name="inputNikReport" class="form-control" aria-describedby="nikHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputNamePatient" class="col-form-label">Nama :</label>
+                                <label for="inputNameReport" class="col-form-label">Nama :</label>
                             </div>
                             <div class="col-10">
-                                <input type="text" id="inputNamePatient" class="form-control" aria-describedby="namePatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['name_patient']; ?>" required type="text" id="inputNameReport" name="inputNameReport" class="form-control" aria-describedby="nameHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputBirthDayPatient" class="col-form-label">Tgl. Lahir :</label>
+                                <label for="birthDayReport" class="col-form-label">Tgl. Lahir :</label>
                             </div>
                             <div class="col-4">
-                                <input type="date" id="inputBirthDayPatient" class="form-control" aria-describedby="birthdayPatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['birthdate']; ?>" required id="birthdayReport" name="inputBirthdayReport" type="date" class="form-control" aria-describedby="birthdayHelpInline" onchange="getAgeBirthday()">
                             </div>
                             <div class="col-2 text-end">
-                                <label for="inputBirthdayPatient" class="col-form-label">Jenis Kelamin</label>
+                                <label for="selectGenderReport" class="col-form-label">Jenis Kelamin</label>
                             </div>
                             <div class="col-4">
-                                <select class="form-select" aria-label="select-jk">
-                                    <option selected>Jenis Kelamin</option>
-                                    <option value="L">Pria</option>
-                                    <option value="P">Wanita</option>
+                                <select required name="selectGenderReport" class="form-select" aria-label="select-jk">
+                                    <option disabled selected hidden value="">-</option>
+                                    <option value="L" <?php if ($edit) {
+                                                            if ($resultEdit['gender'] == 'L') echo 'selected';
+                                                        } ?>>Laki-laki</option>
+                                    <option value="P" <?php if ($edit) {
+                                                            if ($resultEdit['gender'] == 'P') echo 'selected';
+                                                        } ?>>Perempuan</option>
                                 </select>
                             </div>
                         </div>
@@ -127,68 +187,82 @@ if (isset($_SESSION['username'])) {
                             </div>
                             <div class="col-3">
                                 <span class="col-form-label ms-1">Tahun</span>
-                                <input type="text" disabled id="inputYearAgePatient" class="form-control" aria-describedby="yearAgePatientHelpInline" value="21">
+                                <input id="inputAgeYear" type="text" disabled class="form-control">
                             </div>
                             <div class="col-3">
                                 <span class="col-form-label ms-1">Bulan</span>
-                                <input type="text" disabled id="inputMonthAgePatient" class="form-control" aria-describedby="yearAgePatientHelpInline" value="8">
+                                <input id="inputAgeMonth" type="text" disabled class="form-control">
                             </div>
                             <div class="col-4">
                                 <span class="col-form-label ms-1">Hari</span>
-                                <input type="text" disabled id="inputYearAgePatient" class="form-control" aria-describedby="yearAgePatientHelpInline" value="15">
+                                <input id="inputAgeDate" type="text" disabled class="form-control">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="inputAddressPatient" class="col-form-label">Alamat :</label>
+                                <label for="inputAddressReport" class="col-form-label">Alamat :</label>
                             </div>
                             <div class="col-10">
-                                <input type="text" id="inputAddressPatient" class="form-control" aria-describedby="addressPatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['address']; ?>" required type="text" name="inputAddressReport" class="form-control" aria-describedby="addressHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="selectRoomPatient" class="col-form-label">Ruang :</label>
+                                <label for="selectRoomReport" class="col-form-label">Ruang :</label>
                             </div>
                             <div class="col-3">
-                                <select class="form-select" aria-label="selectRoomPatient">
-                                    <option selected>-</option>
-                                    <option value="kalibiru1">KALIBIRU 1</option>
-                                    <option value="kalibiru2">KALIBIRU 2</option>
-                                </select>
-                            </div>
-                            <div class="col-4 d-flex">
-                                <label for="selectClassPatient" class="col-form-label me-2">Kelas:</label>
-                                <select class="form-select" aria-label="selectClassPatient">
-                                    <option selected>-</option>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
+                                <select name="selectRoomReport" class="form-select" aria-label="selectRoom" required>
+                                    <option disabled selected hidden value="">-</option>
+                                    <option <?php if ($edit) {
+                                                if ($resultEdit['room'] == 'kalibiru1') echo 'selected';
+                                            } ?> value="kalibiru1">KALIBIRU 1</option>
+                                    <option <?php if ($edit) {
+                                                if ($resultEdit['room'] == 'kalibiru2') echo 'selected';
+                                            } ?> value="kalibiru2">KALIBIRU 2</option>
                                 </select>
                             </div>
                             <div class="col-3 d-flex">
-                                <label for="selectStatusPatient" class="col-form-label me-2">Status:</label>
-                                <select class="form-select" aria-label="selectStatusPatient">
-                                    <option selected>-</option>
-                                    <option value="bpjs">BPJS</option>
-                                    <option value="reguler">Reguler</option>
+                                <label for="selectClassReport" class="col-form-label me-2">Kelas:</label>
+                                <select required name="selectClassReport" class="form-select" aria-label="selectClass">
+                                    <option disabled selected hidden value="">-</option>
+                                    <option <?php if ($edit) {
+                                                if ($resultEdit['class'] == 'A') echo 'selected';
+                                            } ?> value="A">A</option>
+                                    <option <?php if ($edit) {
+                                                if ($resultEdit['class'] == 'B') echo 'selected';
+                                            } ?> value="B">B</option>
+                                    <option <?php if ($edit) {
+                                                if ($resultEdit['class'] == 'C') echo 'selected';
+                                            } ?> value="C">C</option>
+                                </select>
+                            </div>
+                            <div class="col-4 d-flex">
+                                <label for="selectStatusReport" class="col-form-label me-2">Status:</label>
+                                <select required name="selectStatusReport" class="form-select" aria-label="selectStatus">
+                                    <option disabled selected hidden value="">-</option>
+                                    <option <?php if ($edit) {
+                                                if ($resultEdit['status'] == 'bpjs') echo 'selected';
+                                            } ?> value="bpjs">BPJS</option>
+                                    <option <?php if ($edit) {
+                                                if ($resultEdit['status'] == 'reguler') echo 'selected';
+                                            } ?> value="reguler">Reguler</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-2 text-end">
-                                <label for="descClinicPatient" class="col-form-label">Ket Klinik :</label>
+                                <label for="inputDescClinicReport" class="col-form-label">Ket Klinik :</label>
                             </div>
                             <div class="col-10">
-                                <input type="text" id="descClinicPatient" class="form-control" aria-describedby="descClinicPatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['desc_clinic']; ?>" required type="text" name="inputDescClinicReport" class="form-control" aria-describedby="descClinicHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center">
                             <div class="col-2 text-end">
-                                <label for="phoneNumberPatient" class="col-form-label">No. HP :</label>
+                                <label for="inputPhoneNumberReport" class="col-form-label">No. HP :</label>
                             </div>
                             <div class="col-10">
-                                <input type="text" id="phoneNumberPatient" class="form-control" aria-describedby="phoneNumberPatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['phone']; ?>" required type="text" name="inputPhoneNumberReport" class="form-control" aria-describedby="phoneNumberHelpInline">
                             </div>
                         </div>
                     </div>
@@ -196,51 +270,52 @@ if (isset($_SESSION['username'])) {
                     <div class="col-12 col-md-6">
                         <div class="row align-items-center mb-1">
                             <div class="col-3 text-end">
-                                <label for="phoneNumberPatient" class="col-form-label">Dokter Pengirim :</label>
+                                <label for="inputRequestDoctorReport" class="col-form-label">Dokter Pengirim :</label>
                             </div>
                             <div class="col-9">
-                                <input type="text" id="phoneNumberPatient" class="form-control" aria-describedby="phoneNumberPatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['reqdoc']; ?>" required type="text" name="inputRequestDoctorReport" class="form-control" aria-describedby="requestDoctorHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-3 text-end">
-                                <label for="select-status" class="col-form-label">Dokter ACC :</label>
+                                <label for="selectAccDoctorReport" class="col-form-label">Dokter ACC :</label>
                             </div>
                             <div class="col-9">
-                                <select class="form-select" aria-label="selectStatusPatient">
-                                    <option selected>-</option>
-                                    <option value="dr1">dr. Hendrawan Nugroho, M.Sc., Sp. PK</option>
-                                    <option value="dr2">dr. Maulana Ibrahim, M.Sc., Sp. PK</option>
-                                    <option value="dr3">dr. Bill Gates, M.Sc., Sp. PK</option>
+                                <select required name="selectAccDoctorReport" class="form-select" aria-label="selectStatus">
+                                    <option disabled selected hidden value="">-</option>
+                                    <?php foreach ($resultValidator as $value) : ?>
+                                        <option value="<?= $value['username']; ?>" <?php if ($value['username'] == $resultEdit['accdoc']) echo 'selected' ?>><?= $value['name']; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-3 text-end">
-                                <label for="select-status" class="col-form-label">Petugas :</label>
+                                <label for="selectPetugasReport" class="col-form-label">Petugas :</label>
                             </div>
                             <div class="col-9">
-                                <select class="form-select" aria-label="selectStatusPatient">
-                                    <option selected>-</option>
-                                    <option value="petugas1">BAMBANG HARIYADI</option>
-                                    <option value="petugas2">MAULANA HARIYADI</option>
+                                <select required name="selectPetugasReport" class="form-select" aria-label="selectStatus">
+                                    <option disabled selected hidden value="">-</option>
+                                    <?php foreach ($resultPetugas as $value) : ?>
+                                        <option value="<?= $value['username']; ?>" <?php if ($value['username'] == $resultEdit['petugas']) echo 'selected' ?>><?= $value['name']; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-3 text-end">
-                                <label for="massagePatient" class="col-form-label">Pesan :</label>
+                                <label for="inputPesanReport" class="col-form-label">Pesan :</label>
                             </div>
                             <div class="col-9">
-                                <input type="text" id="massagePatient" class="form-control" aria-describedby="massagePatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['pesan']; ?>" required name="inputPesanReport" type="text" class="form-control" aria-describedby="massagePatientHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-3 text-end">
-                                <label for="impressionPatient" class="col-form-label">Kesan :</label>
+                                <label for="inputKesanReport" class="col-form-label">Kesan :</label>
                             </div>
                             <div class="col-9">
-                                <input type="text" id="impressionPatient" class="form-control" aria-describedby="impressionPatientHelpInline">
+                                <input value="<?php if ($edit) echo $resultEdit['kesan']; ?>" required type="text" name="inputKesanReport" class="form-control" aria-describedby="impressionPatientHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -249,25 +324,25 @@ if (isset($_SESSION['username'])) {
                             </div>
                             <div class="col-9 d-flex">
                                 <div class="form-check me-2">
-                                    <input class="form-check-input" type="radio" name="radioSample" id="flexRadioSampleNormal" checked>
+                                    <input <?php if ($edit) if ($resultEdit['sample'] == 'normal') echo 'checked'; ?> required value="normal" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleNormal">
                                     <label class="form-check-label" for="flexRadioSampleNormal">
                                         Normal
                                     </label>
                                 </div>
                                 <div class="form-check me-2">
-                                    <input class="form-check-input" type="radio" name="radioSample" id="flexRadioSampleIkterik">
+                                    <input <?php if ($edit) if ($resultEdit['sample'] == 'ikterik') echo 'checked'; ?> value="ikterik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleIkterik">
                                     <label class="form-check-label" for="flexRadioSampleIkterik">
                                         Ikterik
                                     </label>
                                 </div>
                                 <div class="form-check me-2">
-                                    <input class="form-check-input" type="radio" name="radioSample" id="flexRadioSampleLisis">
+                                    <input <?php if ($edit) if ($resultEdit['sample'] == 'lisis') echo 'checked'; ?> value="lisis" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLisis">
                                     <label class="form-check-label" for="flexRadioSampleLisis">
                                         Lisis
                                     </label>
                                 </div>
                                 <div class="form-check me-2">
-                                    <input class="form-check-input" type="radio" name="radioSample" id="flexRadioSampleLipemik">
+                                    <input <?php if ($edit) if ($resultEdit['sample'] == 'lipemik') echo 'checked'; ?> value="lipemik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLipemik">
                                     <label class="form-check-label" for="flexRadioSampleLipemik">
                                         Lipemik
                                     </label>
@@ -276,45 +351,44 @@ if (isset($_SESSION['username'])) {
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-3 text-end">
-                                <label for="select-sample" class="col-form-label">Jenis Sample :</label>
+                                <label for="selectSampleCategoryReport" class="col-form-label">Jenis Sample :</label>
                             </div>
                             <div class="col-9">
-                                <select class="form-select" aria-label="selectStatusPatient">
-                                    <option selected>-</option>
-                                    <option value="hematologi">Hematologi</option>
+                                <select required name="selectSampleCategoryReport" class="form-select" aria-label="selectStatusPatient">
+                                    <option disabled selected hidden value="">-</option>
+                                    <option <?php if ($edit) if ($resultEdit['sample_category'] == 'hematologi') echo 'selected'; ?> value="hematologi">Hematologi</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-3 text-end">
-                                <label for="notePatient" class="form-label">Catatan :</label>
+                                <label for="inputNotesReport" class="form-label">Catatan :</label>
                             </div>
                             <div class="col-9">
-                                <textarea class="form-control" id="notePatient" rows="2">-</textarea>
+                                <textarea class="form-control" name="inputNotesReport" rows="2"><?php if ($edit) echo $resultEdit['notes']; ?></textarea>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
                             <div class="col-3 text-end">
-                                <label for="packagePatient" class="form-label">Paket :</label>
+                                <label for="selectPackageReport" class="form-label">Paket :</label>
                             </div>
                             <div class="col-9">
-                                <select class="form-select" aria-label="packagePatient">
-                                    <option selected>-</option>
-                                    <option value="package1">Paket 1</option>
-                                    <option value="package2">Paket 2</option>
+                                <select required name="selectPackageReport" class="form-select" aria-label="packagePatient">
+                                    <option disabled selected hidden value="">-</option>
+                                    <option value="paket1" <?php if ($edit) if ($resultEdit['paket'] == 'paket1') echo 'selected'; ?>>Paket 1</option>
+                                    <option value="paket2" <?php if ($edit) if ($resultEdit['paket'] == 'paket2') echo 'selected'; ?>>Paket 2</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 align-items-center mt-4 mb-4 text-center">
-                        <button type="button" class="btn btn-success me-2">Save</button>
-                        <button type="button" class="btn btn-primary me-1 ms-1">Reset</button>
-                        <button type="button" class="btn btn-danger ms-2">Hapus</button>
+                        <input name="submit" type="submit" class="btn btn-success me-2" value="Save" />
+                        <a href="./delete_report.php?nota=<?= $resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger">Hapus</a>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="bg-surface p-3 rounded-bottom border d-flex align-items-center">
+        <div class="bg-surface p-3 border d-flex align-items-center">
             <h6 class="me-4">Hasil Pemeriksaan</h6>
             <div class="d-inline">
                 <button type="button" class="btn btn-primary">Simpan</button>
@@ -330,34 +404,75 @@ if (isset($_SESSION['username'])) {
 
             </div>
         </div>
+
+
+        <div class="table-responsive-lg">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Pemeriksaan</th>
+                        <th scope="col">Hasil</th>
+                        <th scope="col">Flag</th>
+                        <th scope="col">Rujukan</th>
+                        <th scope="col">ACC</th>
+                        <th scope="col">Satuan</th>
+                        <th scope="col">Alat</th>
+                        <th scope="col">Waktu</th>
+                        <th scope="col">HISTORY</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td>
+                        <div style="min-height: 300px;"></div>
+                    </td>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <div class="ps-4 pe-4 mt-4 table-responsive-lg">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Pemeriksaan</th>
-                    <th scope="col">Hasil</th>
-                    <th scope="col">Flag</th>
-                    <th scope="col">Rujukan</th>
-                    <th scope="col">ACC</th>
-                    <th scope="col">Satuan</th>
-                    <th scope="col">Alat</th>
-                    <th scope="col">Waktu</th>
-                    <th scope="col">HISTORY</th>
-                </tr>
-            </thead>
-            <tbody>
-                <td>
-                    <div style="min-height: 300px;"></div>
-                </td>
-            </tbody>
-        </table>
-    </div>
-
-
-
 </body>
+
+<script>
+    if (document.getElementById("birthdayReport").value != '') {
+        getAgeBirthday();
+    }
+    // kalkulasi umur
+    function getAgeBirthday() {
+        var today = new Date();
+        var birthday = new Date(document.getElementById("birthdayReport").value);
+
+        var yearNow = today.getFullYear();
+        var monthNow = today.getMonth();
+        var dateNow = today.getDate();
+
+        var yearBirth = birthday.getFullYear();
+        var monthBirth = birthday.getMonth();
+        var dateBirth = birthday.getDate();
+
+        if (dateNow >= dateBirth) {
+            document.getElementById("inputAgeDate").value = (dateNow - dateBirth);
+        } else {
+            monthBirth--;
+
+            document.getElementById("inputAgeDate").value = 31 + dateNow - dateBirth;
+
+            if (monthBirth < 0) {
+                monthBirth = 11;
+                yearAge--;
+            }
+            document.getElementById("inputAgeDate").value = (dateNow - dateBirth + 30);
+
+        }
+
+        if (monthNow >= monthBirth) {
+            document.getElementById("inputAgeMonth").value = (monthNow - monthBirth);
+        } else {
+            yearNow = yearNow - 1;
+            document.getElementById("inputAgeMonth").value = (monthNow - monthBirth + 12);
+        }
+
+        document.getElementById("inputAgeYear").value = yearNow - yearBirth;
+    }
+</script>
 
 </html>

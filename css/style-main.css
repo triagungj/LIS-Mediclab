@@ -27,6 +27,13 @@ svg {
   background-color: #ebe5e5;
 }
 
+/* name-responsive */
+@media screen and (max-width: 600px) and (min-width: 0px) {
+  .text-name {
+    display: none;
+  }
+}
+
 .body-login {
   height: 100%;
 }
