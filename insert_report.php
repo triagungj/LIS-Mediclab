@@ -28,9 +28,28 @@ if (isset($_POST['submit'])) {
     $sampleCategoryReport = $_POST['selectSampleCategoryReport'];
     $notesReport = $_POST['inputNotesReport'];
     $packageReport = $_POST['selectPackageReport'];
-    $progressReport = 'process';
+    $progressReport = 0;
 
-    $insertSql = "INSERT INTO report(
+
+    if (isset($_GET['nota'])) {
+        $editSql = "UPDATE report SET nolab='$labNumberReport', norm='$regNumberReport', date_report='$dateReport', nik='$nikReport', name_patient='$nameReport',
+        birthdate='$birthDayReport', gender='$selectGenderReport', address='$addressReport', room='$roomReport', class='$classReport', status='$statusReport',
+        desc_clinic='$descClinicReport', phone='$phoneNumberReport', reqdoc='$requestDoctorReport', accdoc='$accDoctorReport', petugas='$petugasReport', kesan='$kesanReport',
+        pesan='$pesanReport', sample='$sampleReport', sample_category='$sampleCategoryReport', notes='$notesReport', paket='$packageReport' WHERE nota='$notaReport'";
+        if (mysqli_query($conn, $editSql)) {
+            echo "<script>alert('Success')</script>";
+            header("Location: ./add_patient.php?nota=$notaReport");
+        } else {
+            die("<script>alert(" . mysqli_error($conn) . ")</script>");
+            echo "Error: " . $editSql . ":-" . mysqli_error($conn);
+        }
+    } else {
+        $sqlCheck = "SELECT * FROM report WHERE nota='$notaReport'";
+        $resultCheck = mysqli_query($conn, $sqlCheck);
+        while ($resultCheck->num_rows > 0) {
+            $notaReport = strtoupper(uniqid());
+        }
+        $insertSql = "INSERT INTO report(
         nota, nolab, norm, date_report, nik, name_patient, birthdate, gender,
         address, room, class, status, desc_clinic, phone, reqdoc, accdoc,
         petugas, kesan, pesan, sample, sample_category, notes, paket, progress
@@ -41,16 +60,12 @@ if (isset($_POST['submit'])) {
         '$pesanReport', '$sampleReport', '$sampleCategoryReport', '$notesReport', '$packageReport', '$progressReport'
     )";
 
-    echo " '$notaReport', '$labNumberReport', '$regNumberReport', '$dateReport', '$nikReport', '$nameReport',
-        '$birthDayReport', '$selectGenderReport', '$addressReport', '$roomReport', '$classReport', '$statusReport',
-        '$descClinicReport', '$phoneNumberReport', '$requestDoctorReport', '$accDoctorReport', '$petugasReport', '$kesanReport',
-        '$pesanReport', '$sampleReport', '$sampleCategoryReport', '$notesReport', '$packageReport', '$progressReport'";
-
-    if (mysqli_query($conn, $insertSql)) {
-        echo "<script>alert('Success')</script>";
-        header("Location: ./add_patient.php");
-    } else {
-        die("<script>alert(" . mysqli_error($conn) . ")</script>");
-        echo "Error: " . $sql . ":-" . mysqli_error($conn);
+        if (mysqli_query($conn, $insertSql)) {
+            echo "<script>alert('Success')</script>";
+            header("Location: ./add_patient.php?nota=$notaReport");
+        } else {
+            die("<script>alert(" . mysqli_error($conn) . ")</script>");
+            echo "Error: " . $insertSql . ":-" . mysqli_error($conn);
+        }
     }
 }
