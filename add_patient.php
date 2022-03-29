@@ -36,6 +36,10 @@ if (isset($_GET['nota'])) {
     }
 }
 
+if ($edit) {
+    $subSampleSql = "SELECT * FROM sub_category_sample WHERE kd_category = '$resultEdit[sample_category]'";
+    $resultSample = mysqli_query($conn, $subSampleSql);
+}
 
 // Random Lab Number
 function generateLabNumber($conn)
@@ -55,7 +59,6 @@ function generateTransNumber()
 {
     echo strtoupper(uniqid());
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -384,53 +387,62 @@ function generateTransNumber()
                     <div class="col-12 align-items-center mt-4 mb-4 text-center">
                         <input name="submit" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Save" />
                         <?php if ($edit) { ?>
-                            <a href="./delete_report.php?nota=<?= $$resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger ps-4 pe-4">Hapus</a>
+                            <a href="./delete_report.php?nota=<?= $resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger ps-4 pe-4">Hapus</a>
                         <?php }  ?>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="bg-surface p-3 border d-flex align-items-center">
-            <h6 class="me-4">Hasil Pemeriksaan</h6>
-            <div class="d-inline">
-                <button type="button" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-primary">All</button>
-                <button type="button" class="btn btn-primary">Uncheck</button>
-                <button type="button" class="btn btn-primary">Hapus</button>
-                <button type="button" class="btn btn-primary">Tambah</button>
-                <button type="button" class="btn btn-primary">Print</button>
-                <button type="button" class="btn btn-primary">Print Group</button>
-                <button type="button" class="btn btn-primary">Sinc</button>
-                <button type="button" class="btn btn-primary">Diagnosa</button>
-                <button type="button" class="btn btn-primary">Send</button>
+        <?php if ($edit) { ?>
+            <div class="bg-surface p-3 border d-flex align-items-center">
+                <h6 class="me-4">Hasil Pemeriksaan</h6>
+                <div class="d-inline">
+                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary">All</button>
+                    <button type="button" class="btn btn-primary">Uncheck</button>
+                    <button type="button" class="btn btn-primary">Hapus</button>
+                    <button type="button" class="btn btn-primary">Tambah</button>
+                    <button type="button" class="btn btn-primary">Print</button>
+                    <button type="button" class="btn btn-primary">Print Group</button>
+                    <button type="button" class="btn btn-primary">Sinc</button>
+                    <button type="button" class="btn btn-primary">Diagnosa</button>
+                    <button type="button" class="btn btn-primary">Send</button>
 
+                </div>
             </div>
-        </div>
 
 
-        <div class="table-responsive-lg">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Pemeriksaan</th>
-                        <th scope="col">Hasil</th>
-                        <th scope="col">Flag</th>
-                        <th scope="col">Rujukan</th>
-                        <th scope="col">ACC</th>
-                        <th scope="col">Satuan</th>
-                        <th scope="col">Alat</th>
-                        <th scope="col">Waktu</th>
-                        <th scope="col">HISTORY</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <td>
-                        <div style="min-height: 300px;"></div>
-                    </td>
-                </tbody>
-            </table>
-        </div>
+            <div class="table-responsive-lg">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Pemeriksaan</th>
+                            <th scope="col">Hasil</th>
+                            <th scope="col">Flag</th>
+                            <th scope="col">Rujukan</th>
+                            <th scope="col">ACC</th>
+                            <th scope="col">Satuan</th>
+                            <th scope="col">Alat</th>
+                            <th scope="col">Waktu</th>
+                            <th scope="col">HISTORY</th>
+                        </tr>
+                    </thead>
+                    <?php foreach ($resultSample as $sampleData) : ?>
+                        <tbody>
+                            <td></td>
+                            <td><?= $sampleData['name']; ?></td>
+                            <td></td>
+                            <td></td>
+                            <td><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
+                            <td></td>
+                            <td><?= $sampleData['satuan']; ?></td>
+                            <td><?= $sampleData['metode']; ?></td>
+                        </tbody>
+                    <?php endforeach; ?>
+                </table>
+            </div>
+        <?php } ?>
     </div>
 </body>
 

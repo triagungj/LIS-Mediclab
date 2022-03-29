@@ -18,7 +18,7 @@ if (isset($_SESSION['username'])) {
     header("Location: ./");
 }
 
-$sqlReport = "SELECT * FROM report";
+$sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd";
 $resultReport = mysqli_query($conn, $sqlReport);
 
 
@@ -106,7 +106,7 @@ $resultReport = mysqli_query($conn, $sqlReport);
                         <td><?= $dataReport['nolab'] ?></td>
                         <td><?= $dataReport['norm']; ?></td>
                         <td><?= $dataReport['name_patient']; ?></td>
-                        <td><?= $dataReport['room']; ?></td>
+                        <td><?= $dataReport['room_name']; ?></td>
                         <td><?= $dataReport['nota']; ?></td>
                         <td><?php if ($dataReport['progress'] == 0) {
                                 echo 'PROCESS';
