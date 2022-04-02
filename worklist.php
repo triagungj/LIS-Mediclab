@@ -18,8 +18,20 @@ if (isset($_SESSION['username'])) {
     header("Location: ./");
 }
 
-$sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd";
-$resultReport = mysqli_query($conn, $sqlReport);
+
+if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name']) && isset($_GET['room'])) {
+    $date = $_GET['date'];
+    $norm = $_GET['norm'];
+    $name = $_GET['name'];
+    $room = $_GET['room'];
+    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
+        WHERE name_patient LIKE '%$name%' AND date_report LIKE '$date%'
+        AND norm LIKE '%$norm%' AND room LIKE '%$room%'";
+    $resultReport = mysqli_query($conn, $sqlReport);
+} else {
+    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd";
+    $resultReport = mysqli_query($conn, $sqlReport);
+}
 
 
 ?>
@@ -49,34 +61,34 @@ $resultReport = mysqli_query($conn, $sqlReport);
         </div>
     </div>
 
-    <form class="row row-cols-lg-auto g-3 align-items-center mt-2 mb-4 ms-2 me-2">
+    <form method="GET" action="worklist.php" class="row row-cols-lg-auto g-3 align-items-center mt-2 mb-4 ms-2 me-2">
         <div class="col-2 col-lg-2">
             <label class="visually-hidden ml-4" for="inlineFormInputGroupDate">Tanggal</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
+                <input value="<?= $_GET['date']; ?>" name="date" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
             </div>
         </div>
         <div class="col-2 col-lg-2">
             <label class="visually-hidden ml-4" for="inlineFormInputGroupRegistNumber">No. RM</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="inlineFormInputGroupRegistNumber" placeholder="No. RM">
+                <input value="<?= $_GET['norm']; ?>" name="norm" type="text" class="form-control" id="inlineFormInputGroupRegistNumber" placeholder="No. RM">
             </div>
         </div>
         <div class="col-2 col-lg-2">
             <label class="visually-hidden ml-4" for="inlineFormInputGroupName">Nama</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="inlineFormInputGroupName" placeholder="Nama">
+                <input value="<?= $_GET['name']; ?>" name="name" type="text" class="form-control" id="inlineFormInputGroupName" placeholder="Nama">
             </div>
         </div>
         <div class="col-2 col-lg-2">
             <label class="visually-hidden ml-4" for="inlineFormInputGroupRoom">Ruang</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Ruang">
+                <input value="<?= $_GET['room']; ?>" name="room" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Ruang">
             </div>
         </div>
 
         <div class="col-4 col-lg-3">
-            <button type="submit" class="btn btn-primary">Cari</button>
+            <input value="Cari" type="submit" class="btn btn-primary" />
             <a href="./add_patient.php" class="btn btn-primary" type="submit" class="btn btn-primary">Tambah</a class="btn btn-primary">
         </div>
 

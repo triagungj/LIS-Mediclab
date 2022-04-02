@@ -117,8 +117,7 @@ function generateTransNumber()
                                 <input value="<?php if ($edit) {
                                                     echo $resultEdit['date_report'];
                                                 } else {
-                                                    echo
-                                                    date("Y-m-d H:i");
+                                                    echo date("Y-m-d H:i");
                                                 } ?>" required name="inputDateReport" readonly class="form-control" aria-describedby="dateHelpInline">
                             </div>
                             <div value="<?php if ($edit) {
