@@ -39,7 +39,11 @@ if (isset($_GET['nota'])) {
 }
 
 if ($edit) {
-    $subSampleSql = "SELECT * FROM sub_category_sample WHERE kd_category = '$resultEdit[sample_category]'";
+    $subSampleSql = "SELECT * FROM sub_sample 
+    LEFT JOIN sample on sub_sample.kd_sample = sample.kd_sample
+    LEFT JOIN sub_category_sample on sub_sample.kd_sub_category_sample = sub_category_sample.kd_sub_category
+    WHERE nota = '$_GET[nota]'";
+
     $resultSample = mysqli_query($conn, $subSampleSql);
 }
 
@@ -387,7 +391,7 @@ function generateTransNumber()
                         </div>
                     </div>
                     <div class="col-12 align-items-center mt-4 mb-4 text-center">
-                        <input name="submit" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Save" />
+                        <input name="submit_report" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Save" />
                         <?php if ($edit) { ?>
                             <a href="./delete_report.php?nota=<?= $resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger ps-4 pe-4">Hapus</a>
                         <?php }  ?>
@@ -396,48 +400,53 @@ function generateTransNumber()
             </form>
         </div>
         <?php if ($edit) { ?>
-            <div class="bg-surface p-3 border d-flex align-items-center">
-                <h6 class="me-4 ">Hasil Pemeriksaan</h6>
-                <div class="d-inline">
-                    <button type="button" class="btn btn-primary">Simpan</button>
-                    <button type="button" class="btn btn-primary">Hapus</button>
-                    <button type="button" class="btn btn-primary">Selesai</button>
-                    <button type="button" class="btn btn-primary">Print</button>
+            <form method="POST" action="action_sample.php?nota=<?= $nota; ?>">
+                <div class="bg-surface p-3 border d-flex align-items-center">
+                    <h6 class="me-4 ">Hasil Pemeriksaan</h6>
+                    <div class="d-inline">
+                        <input type="submit" name="save_sample" class="btn btn-success" value="Simpan" />
+                        <input type="submit" name="delete_sample" class="btn btn-danger" value="Hapus" />
+                        <input type="submit" name="finish_sample" class="btn btn-primary" value="Selesai" />
+                        <button type="button" class="btn btn-info">Print</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-input-sample">
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Pemeriksaan</th>
-                            <th scope="col" width="12%">Hasil</th>
-                            <th scope="col">Flag</th>
-                            <th scope="col">Rujukan</th>
-                            <th scope="col">Satuan</th>
-                            <th scope="col">Metode</th>
-                        </tr>
-                    </thead>
-                    <?php $count = 1; ?>
-                    <?php foreach ($resultSample as $sampleData) : ?>
-                        <tbody>
-                            <td class="text-center"><?= $count; ?></td>
-                            <td><?= $sampleData['name']; ?></td>
-                            <td><input id="input<?= $sampleData['kd_sub_category']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number"></td>
-                            <td>LOW</td>
-                            <td><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
-                            <td><?= $sampleData['satuan']; ?></td>
-                            <td><?php if ($sampleData['metode'] == null) {
-                                    echo '-';
-                                } else {
-                                    echo $sampleData['metode'];
-                                } ?></td>
-                        </tbody>
-                        <?php $count++; ?>
-                    <?php endforeach; ?>
-                </table>
-            </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered border-dark table-input-sample" style="height:100px;">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Pemeriksaan</th>
+                                <th scope="col" width="12%">Hasil</th>
+                                <th scope="col">Flag</th>
+                                <th scope="col">Rujukan</th>
+                                <th scope="col">Satuan</th>
+                                <th scope="col">Metode</th>
+                            </tr>
+                        </thead>
+                        <?php $count = 1; ?>
+                        <?php foreach ($resultSample as $sampleData) : ?>
+                            <tbody>
+                                <td class="text-center"><?= $count; ?></td>
+                                <td><?= $sampleData['name']; ?></td>
+                                <td>
+                                    <input value="<?= $sampleData['value']; ?>" name="input<?= $sampleData['kd_sub_category_sample']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number" step='0.01'>
+                                </td>
+                                <td>LOW</td>
+                                <td><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
+                                <td><?= $sampleData['satuan']; ?></td>
+                                <td><?php if ($sampleData['metode'] == null) {
+                                        echo '-';
+                                    } else {
+                                        echo $sampleData['metode'];
+                                    } ?></td>
+
+                            </tbody>
+                            <?php $count++; ?>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+            </form>
         <?php } ?>
     </div>
 </body>

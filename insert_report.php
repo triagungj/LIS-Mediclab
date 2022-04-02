@@ -4,7 +4,7 @@ include 'config.php';
 error_reporting(0);
 session_start();
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit_report'])) {
     $dateReport = $_POST['inputDateReport'];
     $labNumberReport = $_POST['inputLabNumberReport'];
     $regNumberReport = $_POST['inputRegNumberReport'];
