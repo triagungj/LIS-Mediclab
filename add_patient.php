@@ -33,11 +33,17 @@ if (isset($_GET['nota'])) {
 
     if ($resultEditArray->num_rows > 0) {
         $resultEdit = mysqli_fetch_assoc($resultEditArray);
+    } else {
+        header("Location: add_patient.php");
     }
 }
 
 if ($edit) {
-    $subSampleSql = "SELECT * FROM sub_category_sample WHERE kd_category = '$resultEdit[sample_category]'";
+    $subSampleSql = "SELECT * FROM sub_sample 
+    LEFT JOIN sample on sub_sample.kd_sample = sample.kd_sample
+    LEFT JOIN sub_category_sample on sub_sample.kd_sub_category_sample = sub_category_sample.kd_sub_category
+    WHERE nota = '$_GET[nota]'";
+
     $resultSample = mysqli_query($conn, $subSampleSql);
 }
 
@@ -272,18 +278,18 @@ function generateTransNumber()
 
                     <div class="col-12 col-md-6">
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="inputRequestDoctorReport" class="col-form-label">Dokter Pengirim :</label>
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <input value="<?php if ($edit) echo $resultEdit['reqdoc']; ?>" required type="text" name="inputRequestDoctorReport" class="form-control" aria-describedby="requestDoctorHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="selectAccDoctorReport" class="col-form-label">Dokter ACC :</label>
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <select required name="selectAccDoctorReport" class="form-select" aria-label="selectStatus">
                                     <option disabled selected hidden value="">-</option>
                                     <?php foreach ($resultValidator as $value) : ?>
@@ -293,10 +299,10 @@ function generateTransNumber()
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="selectPetugasReport" class="col-form-label">Petugas :</label>
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <select required name="selectPetugasReport" class="form-select" aria-label="selectStatus">
                                     <option disabled selected hidden value="">-</option>
                                     <?php foreach ($resultPetugas as $value) : ?>
@@ -306,26 +312,26 @@ function generateTransNumber()
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="inputPesanReport" class="col-form-label">Pesan :</label>
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <input value="<?php if ($edit) echo $resultEdit['pesan']; ?>" required name="inputPesanReport" type="text" class="form-control" aria-describedby="massagePatientHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="inputKesanReport" class="col-form-label">Kesan :</label>
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <input value="<?php if ($edit) echo $resultEdit['kesan']; ?>" required type="text" name="inputKesanReport" class="form-control" aria-describedby="impressionPatientHelpInline">
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="samplePatient" class="col-form-label">Sample :</label>
                             </div>
-                            <div class="col-9 d-flex">
+                            <div class="col-10 d-flex">
                                 <div class="form-check me-2">
                                     <input <?php if ($edit) if ($resultEdit['sample'] == 'normal') echo 'checked'; ?> required value="normal" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleNormal">
                                     <label class="form-check-label" for="flexRadioSampleNormal">
@@ -353,10 +359,10 @@ function generateTransNumber()
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="selectSampleCategoryReport" class="col-form-label">Jenis Sample :</label>
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <select required name="selectSampleCategoryReport" class="form-select" aria-label="selectStatusPatient">
                                     <option disabled selected hidden value="">-</option>
                                     <option <?php if ($edit) if ($resultEdit['sample_category'] == 'hematologi') echo 'selected'; ?> value="hematologi">Hematologi</option>
@@ -364,18 +370,18 @@ function generateTransNumber()
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="inputNotesReport" class="form-label">Catatan :</label>
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <textarea class="form-control" name="inputNotesReport" rows="2"><?php if ($edit) echo $resultEdit['notes']; ?></textarea>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <div class="col-3 text-end">
+                            <div class="col-2 text-end">
                                 <label for="selectPackageReport" class="form-label">Paket :</label>
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <select required name="selectPackageReport" class="form-select" aria-label="packagePatient">
                                     <option disabled selected hidden value="">-</option>
                                     <option value="paket1" <?php if ($edit) if ($resultEdit['paket'] == 'paket1') echo 'selected'; ?>>Paket 1</option>
@@ -385,7 +391,7 @@ function generateTransNumber()
                         </div>
                     </div>
                     <div class="col-12 align-items-center mt-4 mb-4 text-center">
-                        <input name="submit" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Save" />
+                        <input name="submit_report" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Save" />
                         <?php if ($edit) { ?>
                             <a href="./delete_report.php?nota=<?= $resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger ps-4 pe-4">Hapus</a>
                         <?php }  ?>
@@ -394,54 +400,53 @@ function generateTransNumber()
             </form>
         </div>
         <?php if ($edit) { ?>
-            <div class="bg-surface p-3 border d-flex align-items-center">
-                <h6 class="me-4">Hasil Pemeriksaan</h6>
-                <div class="d-inline">
-                    <button type="button" class="btn btn-primary">Simpan</button>
-                    <button type="button" class="btn btn-primary">All</button>
-                    <button type="button" class="btn btn-primary">Uncheck</button>
-                    <button type="button" class="btn btn-primary">Hapus</button>
-                    <button type="button" class="btn btn-primary">Tambah</button>
-                    <button type="button" class="btn btn-primary">Print</button>
-                    <button type="button" class="btn btn-primary">Print Group</button>
-                    <button type="button" class="btn btn-primary">Sinc</button>
-                    <button type="button" class="btn btn-primary">Diagnosa</button>
-                    <button type="button" class="btn btn-primary">Send</button>
-
+            <form method="POST" action="action_sample.php?nota=<?= $nota; ?>">
+                <div class="bg-surface p-3 border d-flex align-items-center">
+                    <h6 class="me-4 ">Hasil Pemeriksaan</h6>
+                    <div class="d-inline">
+                        <input type="submit" name="save_sample" class="btn btn-success" value="Simpan" />
+                        <input type="submit" name="delete_sample" class="btn btn-danger" value="Hapus" />
+                        <input type="submit" name="finish_sample" class="btn btn-primary" value="Selesai" />
+                        <button type="button" class="btn btn-info">Print</button>
+                    </div>
                 </div>
-            </div>
 
+                <div class="table-responsive">
+                    <table class="table table-bordered border-dark table-input-sample" style="height:100px;">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Pemeriksaan</th>
+                                <th scope="col" width="12%">Hasil</th>
+                                <th scope="col">Flag</th>
+                                <th scope="col">Rujukan</th>
+                                <th scope="col">Satuan</th>
+                                <th scope="col">Metode</th>
+                            </tr>
+                        </thead>
+                        <?php $count = 1; ?>
+                        <?php foreach ($resultSample as $sampleData) : ?>
+                            <tbody>
+                                <td class="text-center"><?= $count; ?></td>
+                                <td><?= $sampleData['name']; ?></td>
+                                <td>
+                                    <input value="<?= $sampleData['value']; ?>" name="input<?= $sampleData['kd_sub_category_sample']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number" step='0.01'>
+                                </td>
+                                <td>LOW</td>
+                                <td><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
+                                <td><?= $sampleData['satuan']; ?></td>
+                                <td><?php if ($sampleData['metode'] == null) {
+                                        echo '-';
+                                    } else {
+                                        echo $sampleData['metode'];
+                                    } ?></td>
 
-            <div class="table-responsive-lg">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Pemeriksaan</th>
-                            <th scope="col">Hasil</th>
-                            <th scope="col">Flag</th>
-                            <th scope="col">Rujukan</th>
-                            <th scope="col">ACC</th>
-                            <th scope="col">Satuan</th>
-                            <th scope="col">Alat</th>
-                            <th scope="col">Waktu</th>
-                            <th scope="col">HISTORY</th>
-                        </tr>
-                    </thead>
-                    <?php foreach ($resultSample as $sampleData) : ?>
-                        <tbody>
-                            <td></td>
-                            <td><?= $sampleData['name']; ?></td>
-                            <td></td>
-                            <td></td>
-                            <td><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
-                            <td></td>
-                            <td><?= $sampleData['satuan']; ?></td>
-                            <td><?= $sampleData['metode']; ?></td>
-                        </tbody>
-                    <?php endforeach; ?>
-                </table>
-            </div>
+                            </tbody>
+                            <?php $count++; ?>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+            </form>
         <?php } ?>
     </div>
 </body>

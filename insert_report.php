@@ -4,7 +4,7 @@ include 'config.php';
 error_reporting(0);
 session_start();
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit_report'])) {
     $dateReport = $_POST['inputDateReport'];
     $labNumberReport = $_POST['inputLabNumberReport'];
     $regNumberReport = $_POST['inputRegNumberReport'];
@@ -29,6 +29,9 @@ if (isset($_POST['submit'])) {
     $notesReport = $_POST['inputNotesReport'];
     $packageReport = $_POST['selectPackageReport'];
     $progressReport = 0;
+
+    $resultSubCatSampleSql = "SELECT * FROM sub_category_sample WHERE kd_category='$sampleCategoryReport'";
+    $resultSubCatSample = mysqli_query($conn, $resultSubCatSampleSql);
 
 
     if (isset($_GET['nota'])) {
@@ -60,12 +63,25 @@ if (isset($_POST['submit'])) {
         '$pesanReport', '$sampleReport', '$sampleCategoryReport', '$notesReport', '$packageReport', '$progressReport'
     )";
 
-        if (mysqli_query($conn, $insertSql)) {
+        $insertSampleSql = "INSERT INTO sample VALUES (NULL, '$notaReport')";
+
+        if (mysqli_query($conn, $insertSql) && mysqli_query($conn, $insertSampleSql)) {
+            $selectSampleSql = "SELECT * FROM sample WHERE nota='$notaReport'";
+            $sampleConn = mysqli_query($conn, $selectSampleSql);
+            $sampleResult = mysqli_fetch_assoc($sampleConn);
+            $kd_sample = $sampleResult['kd_sample'];
+
+            foreach ($resultSubCatSample as $dataSubCatSample) :
+                $kd_sub_cat_sample = $dataSubCatSample['kd_sub_category'];
+                $insertSubSampleSql = "INSERT INTO sub_sample VALUES (NULL, '$kd_sub_cat_sample', NULL, '$kd_sample')";
+                mysqli_query($conn, $insertSubSampleSql);
+            endforeach;
+
             echo "<script>alert('Success')</script>";
             header("Location: ./add_patient.php?nota=$notaReport");
         } else {
             die("<script>alert(" . mysqli_error($conn) . ")</script>");
-            echo "Error: " . $insertSql . ":-" . mysqli_error($conn);
+            echo "Error: " . $insertSql . " & " . $insertSampleSql . ":-" . mysqli_error($conn);
         }
     }
 }
