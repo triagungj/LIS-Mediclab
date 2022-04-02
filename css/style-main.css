@@ -10,6 +10,10 @@ svg {
   color: #ffffff;
 }
 
+.text-bold{
+  font-weight: bold;
+}
+
 .filter-white {
   filter: invert(92%) sepia(99%) saturate(2%) hue-rotate(339deg)
     brightness(103%) contrast(100%);

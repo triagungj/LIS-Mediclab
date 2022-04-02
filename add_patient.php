@@ -391,7 +391,7 @@ function generateTransNumber()
                         </div>
                     </div>
                     <div class="col-12 align-items-center mt-4 mb-4 text-center">
-                        <input name="submit_report" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Save" />
+                        <input name="submit_report" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Simpan" />
                         <?php if ($edit) { ?>
                             <a href="./delete_report.php?nota=<?= $resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger ps-4 pe-4">Hapus</a>
                         <?php }  ?>
@@ -405,7 +405,6 @@ function generateTransNumber()
                     <h6 class="me-4 ">Hasil Pemeriksaan</h6>
                     <div class="d-inline">
                         <input type="submit" name="save_sample" class="btn btn-success" value="Simpan" />
-                        <input type="submit" name="delete_sample" class="btn btn-danger" value="Hapus" />
                         <input type="submit" name="finish_sample" class="btn btn-primary" value="Selesai" />
                         <button type="button" class="btn btn-info">Print</button>
                     </div>
@@ -416,12 +415,12 @@ function generateTransNumber()
                         <thead>
                             <tr>
                                 <th scope="col"></th>
-                                <th scope="col">Pemeriksaan</th>
-                                <th scope="col" width="12%">Hasil</th>
-                                <th scope="col">Flag</th>
-                                <th scope="col">Rujukan</th>
-                                <th scope="col">Satuan</th>
-                                <th scope="col">Metode</th>
+                                <th scope="col" class="text-center">Pemeriksaan</th>
+                                <th scope="col" width="12%" class="text-center">Hasil</th>
+                                <th scope="col" class="text-center">Flag</th>
+                                <th scope="col" class="text-center">Rujukan</th>
+                                <th scope="col" class="text-center">Satuan</th>
+                                <th scope="col" class="text-center">Metode</th>
                             </tr>
                         </thead>
                         <?php $count = 1; ?>
@@ -430,16 +429,18 @@ function generateTransNumber()
                                 <td class="text-center"><?= $count; ?></td>
                                 <td><?= $sampleData['name']; ?></td>
                                 <td>
-                                    <input value="<?= $sampleData['value']; ?>" name="input<?= $sampleData['kd_sub_category_sample']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number" step='0.01'>
+                                    <input id="input<?= $sampleData['kd_sub_category_sample']; ?>" onchange="setFlag(<?= $sampleData['min_value']; ?>, <?= $sampleData['max_value']; ?>, '<?= $sampleData['kd_sub_category_sample']; ?>')" value="<?= $sampleData['value']; ?>" name="input<?= $sampleData['kd_sub_category_sample']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number" step='0.01'>
                                 </td>
-                                <td>LOW</td>
-                                <td><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
-                                <td><?= $sampleData['satuan']; ?></td>
-                                <td><?php if ($sampleData['metode'] == null) {
-                                        echo '-';
-                                    } else {
-                                        echo $sampleData['metode'];
-                                    } ?></td>
+                                <td class="text-center">
+                                    <span id="flag<?= $sampleData['kd_sub_category_sample']; ?>"></span>
+                                </td>
+                                <td class="text-center"><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
+                                <td class="text-center"><?= $sampleData['satuan']; ?></td>
+                                <td class="text-center"><?php if ($sampleData['metode'] == null) {
+                                                            echo '-';
+                                                        } else {
+                                                            echo $sampleData['metode'];
+                                                        } ?></td>
 
                             </tbody>
                             <?php $count++; ?>
@@ -452,6 +453,26 @@ function generateTransNumber()
 </body>
 
 <script>
+    <?php foreach ($resultSample as $dataSample) : ?>
+        var flagSpan = 'flag' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+        var inputId = 'input' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+        var min = <?= $dataSample['min_value']; ?>;
+        var max = <?= $dataSample['max_value']; ?>;
+        var value = document.getElementById(inputId).value;
+        if (value != '') {
+            if (value < min) {
+                document.getElementById(flagSpan).innerHTML = 'LOW';
+                document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+            } else if (value > max) {
+                document.getElementById(flagSpan).innerHTML = 'HIGH';
+                document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+            } else {
+                document.getElementById(flagSpan).innerHTML = 'NORMAL';
+                document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+            }
+        }
+    <?php endforeach; ?>
+
     if (document.getElementById("birthdayReport").value != '') {
         getAgeBirthday();
     }
@@ -491,6 +512,22 @@ function generateTransNumber()
         }
 
         document.getElementById("inputAgeYear").value = yearNow - yearBirth;
+    }
+
+    function setFlag(min, max, kode) {
+        var flagSpan = 'flag' + kode;
+        var inputId = 'input' + kode;
+        var value = document.getElementById(inputId).value;
+        if (value < min) {
+            document.getElementById(flagSpan).innerHTML = 'LOW';
+            document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+        } else if (value > max) {
+            document.getElementById(flagSpan).innerHTML = 'HIGH';
+            document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+        } else {
+            document.getElementById(flagSpan).innerHTML = 'NORMAL';
+            document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+        }
     }
 </script>
 
