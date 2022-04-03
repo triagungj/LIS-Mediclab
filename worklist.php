@@ -19,13 +19,13 @@ if (isset($_SESSION['username'])) {
 }
 
 
-if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name']) && isset($_GET['room'])) {
+if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient']) && isset($_GET['room'])) {
     $date = $_GET['date'];
     $norm = $_GET['norm'];
-    $name = $_GET['name'];
+    $name_patient = $_GET['name_patient'];
     $room = $_GET['room'];
     $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
-        WHERE name_patient LIKE '%$name%' AND date_report LIKE '$date%'
+        WHERE name_patient LIKE '%$name_patient%' AND date_report LIKE '$date%'
         AND norm LIKE '%$norm%' AND room LIKE '%$room%'";
     $resultReport = mysqli_query($conn, $sqlReport);
 } else {
@@ -61,38 +61,45 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name']) && isse
         </div>
     </div>
 
-    <form method="GET" action="worklist.php" class="row row-cols-lg-auto g-3 align-items-center mt-2 mb-4 ms-2 me-2">
-        <div class="col-2 col-lg-2">
-            <label class="visually-hidden ml-4" for="inlineFormInputGroupDate">Tanggal</label>
-            <div class="input-group">
-                <input value="<?= $_GET['date']; ?>" name="date" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
-            </div>
-        </div>
-        <div class="col-2 col-lg-2">
-            <label class="visually-hidden ml-4" for="inlineFormInputGroupRegistNumber">No. RM</label>
-            <div class="input-group">
-                <input value="<?= $_GET['norm']; ?>" name="norm" type="text" class="form-control" id="inlineFormInputGroupRegistNumber" placeholder="No. RM">
-            </div>
-        </div>
-        <div class="col-2 col-lg-2">
-            <label class="visually-hidden ml-4" for="inlineFormInputGroupName">Nama</label>
-            <div class="input-group">
-                <input value="<?= $_GET['name']; ?>" name="name" type="text" class="form-control" id="inlineFormInputGroupName" placeholder="Nama">
-            </div>
-        </div>
-        <div class="col-2 col-lg-2">
-            <label class="visually-hidden ml-4" for="inlineFormInputGroupRoom">Ruang</label>
-            <div class="input-group">
-                <input value="<?= $_GET['room']; ?>" name="room" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Ruang">
-            </div>
-        </div>
+    <div class="ps-3">
+        <form method="GET" action="worklist.php" class="row mt-2 mb-4">
+            <div class="col-9 row pt-3">
+                <div class="col-6 col-lg-3">
+                    <div class="input-group input-group-default mb-3">
+                        <span class="input-group-text">Tanggal</span>
+                        <input value="<?= $_GET['date']; ?>" name="date" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
+                    </div>
+                </div>
 
-        <div class="col-4 col-lg-3">
-            <input value="Cari" type="submit" class="btn btn-primary" />
-            <a href="./add_patient.php" class="btn btn-primary" type="submit" class="btn btn-primary">Tambah</a class="btn btn-primary">
-        </div>
+                <div class="col-6 col-lg-3">
+                    <div class="input-group input-group-default mb-3">
+                        <span class="input-group-text">No. RM</span>
+                        <input value="<?= $_GET['norm']; ?>" name="norm" type="text" class="form-control" id="inlineFormInputGroupRegistNumber" placeholder="No. RM">
+                    </div>
+                </div>
 
-    </form>
+                <div class="col-6 col-lg-3">
+                    <div class="input-group input-group-default mb-3">
+                        <span class="input-group-text">Nama</span>
+                        <input value="<?= $_GET['name_patient']; ?>" name="name_patient" type="text" class="form-control" id="inlineFormInputGroupName" placeholder="Nama">
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="input-group input-group-default mb-3">
+                        <span class="input-group-text">Ruang</span>
+                        <input value="<?= $_GET['room']; ?>" name="room" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Ruang">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3 align-bottom">
+                <input value="Cari" type="submit" class="btn btn-primary mt-3" />
+                <a href="./add_patient.php" class="btn btn-primary mt-3" type="submit" class="btn btn-primary">Tambah</a class="btn btn-primary">
+            </div>
+
+        </form>
+    </div>
 
     <div class="ms-3 me-3 table-responsive-lg">
         <table class="table table-bordered">
