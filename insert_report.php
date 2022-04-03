@@ -28,7 +28,7 @@ if (isset($_POST['submit_report'])) {
     $sampleCategoryReport = $_POST['selectSampleCategoryReport'];
     $notesReport = $_POST['inputNotesReport'];
     $packageReport = $_POST['selectPackageReport'];
-    $progressReport = 0;
+    $transmitReport = 0;
 
     $resultSubCatSampleSql = "SELECT * FROM sub_category_sample WHERE kd_category='$sampleCategoryReport'";
     $resultSubCatSample = mysqli_query($conn, $resultSubCatSampleSql);
@@ -53,14 +53,14 @@ if (isset($_POST['submit_report'])) {
             $notaReport = strtoupper(uniqid());
         }
         $insertSql = "INSERT INTO report(
-        nota, nolab, norm, date_report, nik, name_patient, birthdate, gender,
+        nota, nolab, norm, date_report, transmit, nik, name_patient, birthdate, gender,
         address, room, class, status, desc_clinic, phone, reqdoc, accdoc,
-        petugas, kesan, pesan, sample, sample_category, notes, paket, progress
+        petugas, kesan, pesan, sample, sample_category, notes, paket
     ) VALUES (
-        '$notaReport', '$labNumberReport', '$regNumberReport', '$dateReport', '$nikReport', '$nameReport',
+        '$notaReport', '$labNumberReport', '$regNumberReport', '$dateReport', '$transmitReport', '$nikReport', '$nameReport',
         '$birthDayReport', '$selectGenderReport', '$addressReport', '$roomReport', '$classReport', '$statusReport',
         '$descClinicReport', '$phoneNumberReport', '$requestDoctorReport', '$accDoctorReport', '$petugasReport', '$kesanReport',
-        '$pesanReport', '$sampleReport', '$sampleCategoryReport', '$notesReport', '$packageReport', '$progressReport'
+        '$pesanReport', '$sampleReport', '$sampleCategoryReport', '$notesReport', '$packageReport'
     )";
 
         $insertSampleSql = "INSERT INTO sample VALUES (NULL, '$notaReport')";

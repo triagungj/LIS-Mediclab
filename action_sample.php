@@ -25,5 +25,10 @@ if (isset($_GET['nota'])) {
         if (mysqli_query($conn, $resultReportSql)) {
             header("Location: ./add_patient.php?nota=$nota");
         }
+    } else if (isset($_POST['transmit_sample'])) {
+        $transmitReportSql = "UPDATE report SET transmit='1' WHERE nota='$nota'";
+        if (mysqli_query($conn, $transmitReportSql)) {
+            header("Location: ./add_patient.php?nota=$nota");
+        }
     }
 }

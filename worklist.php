@@ -108,13 +108,12 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                     <th scope="col" class="text-center" width="7%">No Lab</th>
                     <th scope="col" class="text-center" width="7%">No RM</th>
                     <th scope="col" class="text-center" width="20%">Nama</th>
-                    <th scope="col" class="text-center" width="14%">Ruang</th>
+                    <th scope="col" class="text-center" width="7%">Ruang</th>
                     <th scope="col" class="text-center" width="14%">No Trans</th>
                     <th scope="col" class="text-center" width="7%">Status</th>
-                    <th scope="col" class="text-center" width="10%">Transmit</th>
-                    <th scope="col" class="text-center" width="7%">Barcode</th>
+                    <th scope="col" class="text-center" width="17%">Transmit</th>
                     <th scope="col" class="text-center" width="7%">Print</th>
-                    <th scope="col" class="text-center" width="7%">Diagnosa</th>
+
 
                 </tr>
             </thead>
@@ -127,15 +126,29 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                         <td><?= $dataReport['name_patient']; ?></td>
                         <td><?= $dataReport['room_name']; ?></td>
                         <td><?= $dataReport['nota']; ?></td>
-                        <td><?php if ($dataReport['progress'] == 0) {
-                                echo 'PROCESS';
+                        <td class="text-center">
+                            <?php if ($dataReport['date_finish'] != null) {
+                                echo "<b>FINISH</b>";
+                            } else if ($dataReport['date_acc'] != null) {
+                                echo "<b class='text-succes'>ACC</b>";
                             } else {
-                                echo 'FINISH';
-                            } ?></td>
-                        <td class="text-center">TRANSMITTED</td>
-                        <td class="text-center"><button class="btn btn-primary">Barcode</button></td>
-                        <td class="text-center"><button class="btn btn-primary">Print</button></td>
-                        <td class="text-center"><button class="btn btn-primary">Diagnosa</button></td>
+                                echo 'PROCESS';
+                            } ?>
+                        </td>
+                        <td class="text-center">
+                            <?php if ($dataReport['transmit'] == 1) {
+                                echo 'TRANSMITTED';
+                            } else {
+                                echo 'NOT TRANSMITTED';
+                            } ?>
+                        </td>
+
+                        <td class="text-center">
+                            <?php if ($dataReport['date_acc'] != null) { ?>
+                                <button class="btn btn-primary">Print</button>
+                            <?php } ?>
+                        </td>
+
                     </tr>
                     <?php $number++; ?>
                 <?php endforeach; ?>

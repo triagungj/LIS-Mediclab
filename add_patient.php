@@ -112,12 +112,15 @@ function generateTransNumber()
                             <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
                         </div>
                         <div>
-                            <h2 class="text-success"><u>FINISH</u></h2>
-                            <p class="text-success"><b><?= $resultEdit['date_finish']; ?></b></p>
+                            <h4 class="text-success"><u>FINISH</u></h4>
+                            <p class="text-success">
+                                <b><?= $resultEdit['date_finish']; ?></b>
+                                <?php if ($resultEdit['transmit'] == 1) echo 'TRANSMITTED' ?> <br />
+                            </p>
                         </div>
                     </div>
                 <?php } else if ($resultEdit['date_acc'] != null) { ?>
-                    <div class="col-6 col-lg-3 align-items-center d-flex">
+                    <div class="col-6 col-lg-4 align-items-center d-flex">
                         <div class="me-2">
                             <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
                         </div>
@@ -434,6 +437,9 @@ function generateTransNumber()
                     <div class="d-inline">
                         <input type="submit" name="save_sample" class="btn btn-success" value="Simpan" />
                         <input type="submit" name="finish_sample" class="btn btn-primary" value="Selesai" />
+                        <?php if ($resultEdit['date_finish'] != null) { ?>
+                            <input type="submit" name="transmit_sample" class="btn btn-warning" value="Kirim" />
+                        <?php } ?>
                         <?php if ($resultEdit['date_acc'] != null) { ?>
                             <button type="button" class="btn btn-info">Print</button>
                         <?php } ?>
