@@ -120,7 +120,7 @@ function generateTransNumber()
                         </div>
                     </div>
                 <?php } else if ($resultEdit['date_acc'] != null) { ?>
-                    <div class="col-6 col-lg-4 align-items-center d-flex">
+                    <div class="col-6 col-lg-3 align-items-center d-flex">
                         <div class="me-2">
                             <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
                         </div>

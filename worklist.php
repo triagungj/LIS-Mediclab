@@ -102,7 +102,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
     </div>
 
     <div class="ms-3 me-3 table-responsive-lg">
-        <table class="table table-bordered">
+        <table class="table table-bordered align-middle">
             <thead>
                 <tr>
                     <th scope="col" class="text-center" width="7%">No Lab</th>
@@ -113,8 +113,6 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                     <th scope="col" class="text-center" width="7%">Status</th>
                     <th scope="col" class="text-center" width="17%">Transmit</th>
                     <th scope="col" class="text-center" width="7%">Print</th>
-
-
                 </tr>
             </thead>
             <tbody>
@@ -127,7 +125,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                         <td><?= $dataReport['room_name']; ?></td>
                         <td><?= $dataReport['nota']; ?></td>
                         <td class="text-center">
-                            <?php if ($dataReport['date_finish'] != null) {
+                            <?php if ($dataReport['date_finish'] != null && $dataReport['date_acc'] == null) {
                                 echo "<b>FINISH</b>";
                             } else if ($dataReport['date_acc'] != null) {
                                 echo "<b class='text-succes'>ACC</b>";
