@@ -151,9 +151,7 @@ function generateTransNumber()
                                                     echo date("Y-m-d H:i:s");
                                                 } ?>" required name="inputDateReport" readonly class="form-control" aria-describedby="dateHelpInline">
                             </div>
-                            <div value="<?php if ($edit) {
-                                            echo $resultEdit['date_report'];
-                                        } ?>" class="col-2 text-end">
+                            <div class="col-2 text-end">
                                 <label for="inputLabNumberReport" class="col-form-label">No. Lab :</label>
                             </div>
                             <div class="col-4">
@@ -534,12 +532,11 @@ function generateTransNumber()
 
             if (monthBirth < 0) {
                 monthBirth = 11;
-                yearAge--;
+                yearBirth--;
             }
             document.getElementById("inputAgeDate").value = (dateNow - dateBirth + 30);
 
         }
-
         if (monthNow >= monthBirth) {
             document.getElementById("inputAgeMonth").value = (monthNow - monthBirth);
         } else {
