@@ -1,3 +1,6 @@
+h2{
+  font-family: serif;
+}
 a {
   text-decoration: none;
 }
@@ -8,6 +11,10 @@ a:hover {
 
 svg {
   color: #ffffff;
+}
+
+.text-bold{
+  font-weight: bold;
 }
 
 .filter-white {
@@ -59,6 +66,12 @@ svg {
   width: 120;
   height: 120px;
   color: #dadef4;
+}
+
+.icon-check{
+  width: 80px;
+  height: 80px;
+  filter: invert(43%) sepia(34%) saturate(734%) hue-rotate(92deg) brightness(94%) contrast(89%);
 }
 
 /* REPORT */

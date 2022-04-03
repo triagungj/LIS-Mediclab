@@ -47,6 +47,9 @@ if ($edit) {
     $resultSample = mysqli_query($conn, $subSampleSql);
 }
 
+$roomSql = "SELECT * FROM room";
+$resultRoom = mysqli_query($conn, $roomSql);
+
 // Random Lab Number
 function generateLabNumber($conn)
 {
@@ -93,12 +96,40 @@ function generateTransNumber()
     <!-- Add Patient Form -->
     <div class="ps-4 pe-4">
         <div class="bg-surface p-3 rounded-top border">
-            <h6>Data Pasien</h6>
-            <div class="d-inline">
-                <button type="button" class="btn btn-primary">Hide</button>
-                <button type="button" class="btn btn-primary">Show</button>
-                <button type="button" class="btn btn-primary">Order</button>
-                <a href="./worklist.php"><button type="button" class="btn btn-primary">Back</button></a>
+            <div class="row align-items-center">
+                <div class="col-6 col-lg-9">
+                    <h6>Data Pasien</h6>
+                    <div class="d-inline">
+                        <button type="button" class="btn btn-primary mt-2">Hide</button>
+                        <button type="button" class="btn btn-primary mt-2">Show</button>
+                        <button type="button" class="btn btn-primary mt-2">Order</button>
+                        <a href="./worklist.php"><button type="button" class="btn btn-primary mt-2">Back</button></a>
+                    </div>
+                </div>
+                <?php if ($resultEdit['date_finish'] != null && $resultEdit['date_acc'] == null) { ?>
+                    <div class="col-6 col-lg-3 align-items-center d-flex">
+                        <div class="me-2">
+                            <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
+                        </div>
+                        <div>
+                            <h4 class="text-success"><u>FINISH</u></h4>
+                            <p class="text-success">
+                                <b><?= $resultEdit['date_finish']; ?></b>
+                                <?php if ($resultEdit['transmit'] == 1) echo 'TRANSMITTED' ?> <br />
+                            </p>
+                        </div>
+                    </div>
+                <?php } else if ($resultEdit['date_acc'] != null) { ?>
+                    <div class="col-6 col-lg-3 align-items-center d-flex">
+                        <div class="me-2">
+                            <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
+                        </div>
+                        <div>
+                            <h2 class="text-success"><u>ACC</u></h2>
+                            <p class="text-success"><b><?= $resultEdit['date_acc']; ?></b></p>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
         <div class="border p-3">
@@ -117,8 +148,7 @@ function generateTransNumber()
                                 <input value="<?php if ($edit) {
                                                     echo $resultEdit['date_report'];
                                                 } else {
-                                                    echo
-                                                    date("Y-m-d H:i");
+                                                    echo date("Y-m-d H:i:s");
                                                 } ?>" required name="inputDateReport" readonly class="form-control" aria-describedby="dateHelpInline">
                             </div>
                             <div value="<?php if ($edit) {
@@ -222,12 +252,13 @@ function generateTransNumber()
                             <div class="col-3">
                                 <select name="selectRoomReport" class="form-select" aria-label="selectRoom" required>
                                     <option disabled selected hidden value="">-</option>
-                                    <option <?php if ($edit) {
-                                                if ($resultEdit['room'] == 'kalibiru1') echo 'selected';
-                                            } ?> value="kalibiru1">KALIBIRU 1</option>
-                                    <option <?php if ($edit) {
-                                                if ($resultEdit['room'] == 'kalibiru2') echo 'selected';
-                                            } ?> value="kalibiru2">KALIBIRU 2</option>
+                                    <?php foreach ($resultRoom as $dataRoom) : ?>
+                                        <option <?php if ($edit) {
+                                                    if ($resultEdit['room'] == $dataRoom['room_kd']) echo 'selected';
+                                                } ?> value="<?= $dataRoom['room_kd']; ?>">
+                                            <?= $dataRoom['room_name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-3 d-flex">
@@ -391,7 +422,7 @@ function generateTransNumber()
                         </div>
                     </div>
                     <div class="col-12 align-items-center mt-4 mb-4 text-center">
-                        <input name="submit_report" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Save" />
+                        <input name="submit_report" type="submit" class="btn btn-success me-2 ps-4 pe-4" value="Simpan" />
                         <?php if ($edit) { ?>
                             <a href="./delete_report.php?nota=<?= $resultEdit['nota']; ?>" onclick="return confirm('Hapus Data Pasien?');" class="btn btn-danger ps-4 pe-4">Hapus</a>
                         <?php }  ?>
@@ -400,28 +431,32 @@ function generateTransNumber()
             </form>
         </div>
         <?php if ($edit) { ?>
-            <form method="POST" action="action_sample.php?nota=<?= $nota; ?>">
+            <form method="POST" action="action_sample.php?nota=<?= $nota; ?>" id="formSample">
                 <div class="bg-surface p-3 border d-flex align-items-center">
                     <h6 class="me-4 ">Hasil Pemeriksaan</h6>
                     <div class="d-inline">
                         <input type="submit" name="save_sample" class="btn btn-success" value="Simpan" />
-                        <input type="submit" name="delete_sample" class="btn btn-danger" value="Hapus" />
                         <input type="submit" name="finish_sample" class="btn btn-primary" value="Selesai" />
-                        <button type="button" class="btn btn-info">Print</button>
+                        <?php if ($resultEdit['date_finish'] != null) { ?>
+                            <input type="submit" name="transmit_sample" class="btn btn-warning" value="Kirim" />
+                        <?php } ?>
+                        <?php if ($resultEdit['date_acc'] != null) { ?>
+                            <button type="button" class="btn btn-info">Print</button>
+                        <?php } ?>
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive-lg">
                     <table class="table table-bordered border-dark table-input-sample" style="height:100px;">
                         <thead>
                             <tr>
-                                <th scope="col"></th>
-                                <th scope="col">Pemeriksaan</th>
-                                <th scope="col" width="12%">Hasil</th>
-                                <th scope="col">Flag</th>
-                                <th scope="col">Rujukan</th>
-                                <th scope="col">Satuan</th>
-                                <th scope="col">Metode</th>
+                                <th scope="col" width="4%"></th>
+                                <th scope="col" width="32%" class="text-center">Pemeriksaan</th>
+                                <th scope="col" width="12%" class="text-center">Hasil</th>
+                                <th scope="col" width="14%" class="text-center">Flag</th>
+                                <th scope="col" class="text-center">Rujukan</th>
+                                <th scope="col" class="text-center">Satuan</th>
+                                <th scope="col" class="text-center">Metode</th>
                             </tr>
                         </thead>
                         <?php $count = 1; ?>
@@ -430,16 +465,18 @@ function generateTransNumber()
                                 <td class="text-center"><?= $count; ?></td>
                                 <td><?= $sampleData['name']; ?></td>
                                 <td>
-                                    <input value="<?= $sampleData['value']; ?>" name="input<?= $sampleData['kd_sub_category_sample']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number" step='0.01'>
+                                    <input id="input<?= $sampleData['kd_sub_category_sample']; ?>" onchange="setFlag(<?= $sampleData['min_value']; ?>, <?= $sampleData['max_value']; ?>, '<?= $sampleData['kd_sub_category_sample']; ?>')" value="<?= $sampleData['value']; ?>" name="input<?= $sampleData['kd_sub_category_sample']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number" step='0.01'>
                                 </td>
-                                <td>LOW</td>
-                                <td><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
-                                <td><?= $sampleData['satuan']; ?></td>
-                                <td><?php if ($sampleData['metode'] == null) {
-                                        echo '-';
-                                    } else {
-                                        echo $sampleData['metode'];
-                                    } ?></td>
+                                <td class="text-center">
+                                    <span id="flag<?= $sampleData['kd_sub_category_sample']; ?>"></span>
+                                </td>
+                                <td class="text-center"><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
+                                <td class="text-center"><?= $sampleData['satuan']; ?></td>
+                                <td class="text-center"><?php if ($sampleData['metode'] == null) {
+                                                            echo '-';
+                                                        } else {
+                                                            echo $sampleData['metode'];
+                                                        } ?></td>
 
                             </tbody>
                             <?php $count++; ?>
@@ -452,6 +489,26 @@ function generateTransNumber()
 </body>
 
 <script>
+    <?php foreach ($resultSample as $dataSample) : ?>
+        var flagSpan = 'flag' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+        var inputId = 'input' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+        var min = <?= $dataSample['min_value']; ?>;
+        var max = <?= $dataSample['max_value']; ?>;
+        var value = document.getElementById(inputId).value;
+        if (value != '') {
+            if (value < min) {
+                document.getElementById(flagSpan).innerHTML = 'LOW';
+                document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+            } else if (value > max) {
+                document.getElementById(flagSpan).innerHTML = 'HIGH';
+                document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+            } else {
+                document.getElementById(flagSpan).innerHTML = 'NORMAL';
+                document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+            }
+        }
+    <?php endforeach; ?>
+
     if (document.getElementById("birthdayReport").value != '') {
         getAgeBirthday();
     }
@@ -492,6 +549,28 @@ function generateTransNumber()
 
         document.getElementById("inputAgeYear").value = yearNow - yearBirth;
     }
+
+    function setFlag(min, max, kode) {
+        var flagSpan = 'flag' + kode;
+        var inputId = 'input' + kode;
+        var value = document.getElementById(inputId).value;
+        if (value < min) {
+            document.getElementById(flagSpan).innerHTML = 'LOW';
+            document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+        } else if (value > max) {
+            document.getElementById(flagSpan).innerHTML = 'HIGH';
+            document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+        } else {
+            document.getElementById(flagSpan).innerHTML = 'NORMAL';
+            document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+        }
+    }
+
+    var formSample = document.getElementById('formSample');
+
+    formSample.addEventListener('finish_sample', function() {
+        return confirm('Sample telah selesai?');
+    }, false);
 </script>
 
 </html>
