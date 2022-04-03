@@ -19,5 +19,11 @@ if (isset($_GET['nota'])) {
             mysqli_query($conn, $update_sub_sample_sql);
         endforeach;
         header("Location: ./add_patient.php?nota=$nota");
+    } else if (isset($_POST['finish_sample'])) {
+        $dateNow = date("Y-m-d H:i:s");
+        $resultReportSql = "UPDATE report SET date_finish='$dateNow' WHERE nota='$nota'";
+        if (mysqli_query($conn, $resultReportSql)) {
+            header("Location: ./add_patient.php?nota=$nota");
+        }
     }
 }

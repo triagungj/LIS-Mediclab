@@ -26,10 +26,10 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
     $room = $_GET['room'];
     $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
         WHERE name_patient LIKE '%$name_patient%' AND date_report LIKE '$date%'
-        AND norm LIKE '%$norm%' AND room LIKE '%$room%'";
+        AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nota DESC";
     $resultReport = mysqli_query($conn, $sqlReport);
 } else {
-    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd";
+    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd ORDER BY nota DESC";
     $resultReport = mysqli_query($conn, $sqlReport);
 }
 
@@ -61,17 +61,17 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
         </div>
     </div>
 
-    <div class="ps-3">
-        <form method="GET" action="worklist.php" class="row mt-2 mb-4">
-            <div class="col-9 row pt-3">
-                <div class="col-6 col-lg-3">
+    <div class="ps-3 px-4">
+        <form method="GET" action="worklist.php" class="row mt-2 mb-4 ">
+            <div class="col-10 row pt-3">
+                <div class="col-6 col-lg-4">
                     <div class="input-group input-group-default mb-3">
                         <span class="input-group-text">Tanggal</span>
                         <input value="<?= $_GET['date']; ?>" name="date" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
                     </div>
                 </div>
 
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg-2">
                     <div class="input-group input-group-default mb-3">
                         <span class="input-group-text">No. RM</span>
                         <input value="<?= $_GET['norm']; ?>" name="norm" type="text" class="form-control" id="inlineFormInputGroupRegistNumber" placeholder="No. RM">
@@ -93,7 +93,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                 </div>
             </div>
 
-            <div class="col-3 align-bottom">
+            <div class="col-2 col">
                 <input value="Cari" type="submit" class="btn btn-primary mt-3" />
                 <a href="./add_patient.php" class="btn btn-primary mt-3" type="submit" class="btn btn-primary">Tambah</a class="btn btn-primary">
             </div>

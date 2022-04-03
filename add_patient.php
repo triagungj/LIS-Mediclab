@@ -47,6 +47,9 @@ if ($edit) {
     $resultSample = mysqli_query($conn, $subSampleSql);
 }
 
+$roomSql = "SELECT * FROM room";
+$resultRoom = mysqli_query($conn, $roomSql);
+
 // Random Lab Number
 function generateLabNumber($conn)
 {
@@ -93,12 +96,37 @@ function generateTransNumber()
     <!-- Add Patient Form -->
     <div class="ps-4 pe-4">
         <div class="bg-surface p-3 rounded-top border">
-            <h6>Data Pasien</h6>
-            <div class="d-inline">
-                <button type="button" class="btn btn-primary">Hide</button>
-                <button type="button" class="btn btn-primary">Show</button>
-                <button type="button" class="btn btn-primary">Order</button>
-                <a href="./worklist.php"><button type="button" class="btn btn-primary">Back</button></a>
+            <div class="row align-items-center">
+                <div class="col-6 col-lg-9">
+                    <h6>Data Pasien</h6>
+                    <div class="d-inline">
+                        <button type="button" class="btn btn-primary mt-2">Hide</button>
+                        <button type="button" class="btn btn-primary mt-2">Show</button>
+                        <button type="button" class="btn btn-primary mt-2">Order</button>
+                        <a href="./worklist.php"><button type="button" class="btn btn-primary mt-2">Back</button></a>
+                    </div>
+                </div>
+                <?php if ($resultEdit['date_finish'] != null && $resultEdit['date_acc'] == null) { ?>
+                    <div class="col-6 col-lg-3 align-items-center d-flex">
+                        <div class="me-2">
+                            <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
+                        </div>
+                        <div>
+                            <h2 class="text-success"><u>FINISH</u></h2>
+                            <p class="text-success"><b><?= $resultEdit['date_finish']; ?></b></p>
+                        </div>
+                    </div>
+                <?php } else if ($resultEdit['date_acc'] != null) { ?>
+                    <div class="col-6 col-lg-3 align-items-center d-flex">
+                        <div class="me-2">
+                            <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
+                        </div>
+                        <div>
+                            <h2 class="text-success"><u>ACC</u></h2>
+                            <p class="text-success"><b><?= $resultEdit['date_acc']; ?></b></p>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
         <div class="border p-3">
@@ -117,7 +145,7 @@ function generateTransNumber()
                                 <input value="<?php if ($edit) {
                                                     echo $resultEdit['date_report'];
                                                 } else {
-                                                    echo date("Y-m-d H:i");
+                                                    echo date("Y-m-d H:i:s");
                                                 } ?>" required name="inputDateReport" readonly class="form-control" aria-describedby="dateHelpInline">
                             </div>
                             <div value="<?php if ($edit) {
@@ -221,12 +249,13 @@ function generateTransNumber()
                             <div class="col-3">
                                 <select name="selectRoomReport" class="form-select" aria-label="selectRoom" required>
                                     <option disabled selected hidden value="">-</option>
-                                    <option <?php if ($edit) {
-                                                if ($resultEdit['room'] == 'kalibiru1') echo 'selected';
-                                            } ?> value="kalibiru1">KALIBIRU 1</option>
-                                    <option <?php if ($edit) {
-                                                if ($resultEdit['room'] == 'kalibiru2') echo 'selected';
-                                            } ?> value="kalibiru2">KALIBIRU 2</option>
+                                    <?php foreach ($resultRoom as $dataRoom) : ?>
+                                        <option <?php if ($edit) {
+                                                    if ($resultEdit['room'] == $dataRoom['room_kd']) echo 'selected';
+                                                } ?> value="<?= $dataRoom['room_kd']; ?>">
+                                            <?= $dataRoom['room_name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-3 d-flex">
@@ -399,24 +428,26 @@ function generateTransNumber()
             </form>
         </div>
         <?php if ($edit) { ?>
-            <form method="POST" action="action_sample.php?nota=<?= $nota; ?>">
+            <form method="POST" action="action_sample.php?nota=<?= $nota; ?>" id="formSample">
                 <div class="bg-surface p-3 border d-flex align-items-center">
                     <h6 class="me-4 ">Hasil Pemeriksaan</h6>
                     <div class="d-inline">
                         <input type="submit" name="save_sample" class="btn btn-success" value="Simpan" />
                         <input type="submit" name="finish_sample" class="btn btn-primary" value="Selesai" />
-                        <button type="button" class="btn btn-info">Print</button>
+                        <?php if ($resultEdit['date_acc'] != null) { ?>
+                            <button type="button" class="btn btn-info">Print</button>
+                        <?php } ?>
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive-lg">
                     <table class="table table-bordered border-dark table-input-sample" style="height:100px;">
                         <thead>
                             <tr>
-                                <th scope="col"></th>
-                                <th scope="col" class="text-center">Pemeriksaan</th>
+                                <th scope="col" width="4%"></th>
+                                <th scope="col" width="32%" class="text-center">Pemeriksaan</th>
                                 <th scope="col" width="12%" class="text-center">Hasil</th>
-                                <th scope="col" class="text-center">Flag</th>
+                                <th scope="col" width="14%" class="text-center">Flag</th>
                                 <th scope="col" class="text-center">Rujukan</th>
                                 <th scope="col" class="text-center">Satuan</th>
                                 <th scope="col" class="text-center">Metode</th>
@@ -528,6 +559,12 @@ function generateTransNumber()
             document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
         }
     }
+
+    var formSample = document.getElementById('formSample');
+
+    formSample.addEventListener('finish_sample', function() {
+        return confirm('Sample telah selesai?');
+    }, false);
 </script>
 
 </html>
