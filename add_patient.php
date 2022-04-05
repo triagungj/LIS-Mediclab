@@ -445,7 +445,7 @@ function generateTransNumber()
                 </div>
 
                 <div class="table-responsive-lg">
-                    <table class="table table-bordered border-dark table-input-sample" style="height:100px;">
+                    <table class="table table-bordered border-dark table-input-sample">
                         <thead>
                             <tr>
                                 <th scope="col" width="4%"></th>

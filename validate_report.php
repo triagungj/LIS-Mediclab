@@ -41,6 +41,13 @@ if (isset($_GET['nota'])) {
     } else {
         header("Location: worklist_finish.php");
     }
+
+    $subSampleSql = "SELECT * FROM sub_sample 
+    LEFT JOIN sample on sub_sample.kd_sample = sample.kd_sample
+    LEFT JOIN sub_category_sample on sub_sample.kd_sub_category_sample = sub_category_sample.kd_sub_category
+    WHERE nota = '$nota'";
+
+    $resultSample = mysqli_query($conn, $subSampleSql);
 }
 
 
@@ -177,14 +184,14 @@ if (isset($_GET['nota'])) {
                             <label class="col-form-label">Umur :</label>
                         </div>
                         <div class="col-3">
-                            <span class="col-form-label ms-1"><span id="yearAge"></span> Tahun</span>
+                            <span class="col-form-label ms-1 text-bold"><span id="yearAge"></span> Tahun</span>
                         </div>
                         <div class="col-3">
-                            <span class="col-form-label ms-1"><span id="monthAge"></span> Bulan</span>
+                            <span class="col-form-label ms-1 text-bold"><span id="monthAge"></span> Bulan</span>
 
                         </div>
                         <div class="col-4">
-                            <span class="col-form-label ms-1"><span id="dayAge"></span> Hari</span>
+                            <span class="col-form-label ms-1 text-bold"><span id="dayAge"></span> Hari</span>
 
                         </div>
                     </div>
@@ -304,21 +311,84 @@ if (isset($_GET['nota'])) {
                         </div>
                     </div>
                 </div>
-                <div class="col-12 align-items-center mt-4 mb-4 text-center">
-                    <form method="POST" action="acc_report.php?nota=<?= $nota; ?>">
-                        <button type="submit" name="acc_report" class="btn btn-success align-items-center p-3">
-                            <img src="assets/check_circle_black_24dp.svg" alt="check" class="filter-white">
-                            <span class="align-middle">ACC</span>
-                        </button>
-                    </form>
-                </div>
+                <?php if ($reulstReport['date_acc'] != null) { ?>
+                    <div class="col-12 align-items-center mt-4 mb-4 text-center">
+                        <form method="POST" action="acc_report.php?nota=<?= $nota; ?>">
+                            <button type="submit" name="acc_report" class="btn btn-success align-items-center p-3">
+                                <img src="assets/check_circle_black_24dp.svg" alt="check" class="filter-white">
+                                <span class="align-middle">ACC</span>
+                            </button>
+                        </form>
+                    </div>
+                <?php } ?>
             </div>
         </div>
+        <div class="bg-surface p-4 border d-flex">
+            <h5 class="me-auto ms-auto text-bold">Hasil Pemeriksaan</h5>
+        </div>
+        <div class="table-responsive-lg">
+            <table class="table table-bordered border-dark table-input-sample">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col" class="text-center">Pemeriksaan</th>
+                        <th scope="col" class="text-center">Hasil</th>
+                        <th scope="col" class="text-center">Flag</th>
+                        <th scope="col" class="text-center">Rujukan</th>
+                        <th scope="col" class="text-center">Satuan</th>
+                        <th scope="col" class="text-center">Metode</th>
+                    </tr>
+                </thead>
+                <?php $count = 1; ?>
+                <?php foreach ($resultSample as $sampleData) : ?>
+                    <tbody>
+                        <td class="text-center"><?= $count; ?></td>
+                        <td><?= $sampleData['name']; ?></td>
+                        <td class="text-center">
+                            <span onshow="setFlag(<?= $sampleData['min_value']; ?>, <?= $sampleData['max_value']; ?>, '<?= $sampleData['kd_sub_category_sample']; ?>')">
+                                <?= $sampleData['min_value']; ?>
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span id="flag<?= $sampleData['kd_sub_category_sample']; ?>"></span>
+                        </td>
+                        <td class="text-center"><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
+                        <td class="text-center"><?= $sampleData['satuan']; ?></td>
+                        <td class="text-center"><?php if ($sampleData['metode'] == null) {
+                                                    echo '-';
+                                                } else {
+                                                    echo $sampleData['metode'];
+                                                } ?></td>
+
+                    </tbody>
+                    <?php $count++; ?>
+                <?php endforeach; ?>
+
+            </table>
+        </div>
+
     </div>
+
 
 </body>
 
 <script>
+    function setFlag(min, max, kode) {
+        var flagSpan = 'flag' + kode;
+        var inputId = 'input' + kode;
+        var value = document.getElementById(inputId).value;
+        if (value < min) {
+            document.getElementById(flagSpan).innerHTML = 'LOW';
+            document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+        } else if (value > max) {
+            document.getElementById(flagSpan).innerHTML = 'HIGH';
+            document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+        } else {
+            document.getElementById(flagSpan).innerHTML = 'NORMAL';
+            document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+        }
+    }
+
     <?php if ($resultReport['birthdate'] != null) { ?>
         var birthdateResult = "<?= $resultReport['birthdate']; ?>";
         var today = new Date();
