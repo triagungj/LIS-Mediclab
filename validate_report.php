@@ -311,7 +311,7 @@ if (isset($_GET['nota'])) {
                         </div>
                     </div>
                 </div>
-                <?php if ($reulstReport['date_acc'] != null) { ?>
+                <?php if ($resultReport['date_acc'] == null) { ?>
                     <div class="col-12 align-items-center mt-4 mb-4 text-center">
                         <form method="POST" action="acc_report.php?nota=<?= $nota; ?>">
                             <button type="submit" name="acc_report" class="btn btn-success align-items-center p-3">
@@ -345,12 +345,12 @@ if (isset($_GET['nota'])) {
                         <td class="text-center"><?= $count; ?></td>
                         <td><?= $sampleData['name']; ?></td>
                         <td class="text-center">
-                            <span onshow="setFlag(<?= $sampleData['min_value']; ?>, <?= $sampleData['max_value']; ?>, '<?= $sampleData['kd_sub_category_sample']; ?>')">
-                                <?= $sampleData['min_value']; ?>
-                            </span>
+                            <?= $sampleData['value']; ?>
                         </td>
                         <td class="text-center">
-                            <span id="flag<?= $sampleData['kd_sub_category_sample']; ?>"></span>
+                            <span class="<?php if ($sampleData['flag'] != 'normal') echo 'text-danger text-bold'; ?>">
+                                <?= strtoupper($sampleData['flag']) ?>
+                            </span>
                         </td>
                         <td class="text-center"><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
                         <td class="text-center"><?= $sampleData['satuan']; ?></td>
@@ -358,37 +358,16 @@ if (isset($_GET['nota'])) {
                                                     echo '-';
                                                 } else {
                                                     echo $sampleData['metode'];
-                                                } ?></td>
-
+                                                } ?> </td>
                     </tbody>
                     <?php $count++; ?>
                 <?php endforeach; ?>
-
             </table>
         </div>
-
     </div>
-
-
 </body>
 
 <script>
-    function setFlag(min, max, kode) {
-        var flagSpan = 'flag' + kode;
-        var inputId = 'input' + kode;
-        var value = document.getElementById(inputId).value;
-        if (value < min) {
-            document.getElementById(flagSpan).innerHTML = 'LOW';
-            document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
-        } else if (value > max) {
-            document.getElementById(flagSpan).innerHTML = 'HIGH';
-            document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
-        } else {
-            document.getElementById(flagSpan).innerHTML = 'NORMAL';
-            document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
-        }
-    }
-
     <?php if ($resultReport['birthdate'] != null) { ?>
         var birthdateResult = "<?= $resultReport['birthdate']; ?>";
         var today = new Date();
