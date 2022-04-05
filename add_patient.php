@@ -413,8 +413,8 @@ function generateTransNumber()
                             <div class="col-10">
                                 <select required name="selectPackageReport" class="form-select" aria-label="packagePatient">
                                     <option disabled selected hidden value="">-</option>
-                                    <option value="paket1" <?php if ($edit) if ($resultEdit['paket'] == 'paket1') echo 'selected'; ?>>Paket 1</option>
-                                    <option value="paket2" <?php if ($edit) if ($resultEdit['paket'] == 'paket2') echo 'selected'; ?>>Paket 2</option>
+                                    <option value="Paket 1" <?php if ($edit) if ($resultEdit['paket'] == 'Paket 1') echo 'selected'; ?>>Paket 1</option>
+                                    <option value="Paket 2" <?php if ($edit) if ($resultEdit['paket'] == 'Paket 2') echo 'selected'; ?>>Paket 2</option>
                                 </select>
                             </div>
                         </div>
@@ -442,7 +442,9 @@ function generateTransNumber()
                             <?php } ?>
                         <?php } ?>
                         <?php if ($resultEdit['date_acc'] != null) { ?>
-                            <button type="button" class="btn btn-info">Print</button>
+                            <a href="print.php?nota=<?= $resultEdit['nota']; ?>" class="btn btn-info">
+                            </a>
+
                         <?php } ?>
                     </div>
                 </div>
@@ -503,29 +505,31 @@ function generateTransNumber()
 </body>
 
 <script>
-    <?php foreach ($resultSample as $dataSample) : ?>
-        var flagSpan = 'flag' + '<?= $dataSample['kd_sub_category_sample']; ?>';
-        var flagInput = 'flagInput' + '<?= $dataSample['kd_sub_category_sample']; ?>';
-        var inputId = 'input' + '<?= $dataSample['kd_sub_category_sample']; ?>';
-        var min = <?= $dataSample['min_value']; ?>;
-        var max = <?= $dataSample['max_value']; ?>;
-        var value = document.getElementById(inputId).value;
-        if (value != '') {
-            if (value < min) {
-                document.getElementById(flagSpan).innerHTML = 'LOW';
-                document.getElementById(flagInput).value = 'low';
-                document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
-            } else if (value > max) {
-                document.getElementById(flagSpan).innerHTML = 'HIGH';
-                document.getElementById(flagInput).value = 'high';
-                document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
-            } else {
-                document.getElementById(flagSpan).innerHTML = 'NORMAL';
-                document.getElementById(flagInput).value = 'normal';
-                document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+    <?php if ($resultEdit['date_acc'] == null) { ?>
+        <?php foreach ($resultSample as $dataSample) : ?>
+            var flagSpan = 'flag' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+            var flagInput = 'flagInput' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+            var inputId = 'input' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+            var min = <?= $dataSample['min_value']; ?>;
+            var max = <?= $dataSample['max_value']; ?>;
+            var value = document.getElementById(inputId).value;
+            if (value != '') {
+                if (value < min) {
+                    document.getElementById(flagSpan).innerHTML = 'LOW';
+                    document.getElementById(flagInput).value = 'low';
+                    document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+                } else if (value > max) {
+                    document.getElementById(flagSpan).innerHTML = 'HIGH';
+                    document.getElementById(flagInput).value = 'high';
+                    document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+                } else {
+                    document.getElementById(flagSpan).innerHTML = 'NORMAL';
+                    document.getElementById(flagInput).value = 'normal';
+                    document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+                }
             }
-        }
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php } ?>
 
     if (document.getElementById("birthdayReport").value != '') {
         getAgeBirthday();
