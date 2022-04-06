@@ -7,7 +7,7 @@ if (isset($_GET['nota'])) {
     LEFT JOIN sub_category_sample on sub_sample.kd_sub_category_sample = sub_category_sample.kd_sub_category
     WHERE nota = '$_GET[nota]'";
 
-    $patientSql = "SELECT * FROM report WHERE nota ='$_GET[nota]'";
+    $patientSql = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd WHERE nota ='$_GET[nota]'";
 
     $resultSample = mysqli_query($conn, $sampleSql);
     $resultPatient = mysqli_query($conn, $patientSql);
@@ -76,7 +76,7 @@ if (isset($_GET['nota'])) {
                             <div class="row">
                                 <div class="col-5">Ruang</div>
                                 <div class="col-1">:</div>
-                                <div class="col-6"><?= $dataPatient['room'] ?></div>
+                                <div class="col-6"><?= $dataPatient['room_name'] ?></div>
                             </div>
                             <div class="row">
                                 <div class="col-5">Ket. Klinik</div>
@@ -145,34 +145,41 @@ if (isset($_GET['nota'])) {
                 <br>
                 <span><?= $dataPatient['kesan']; ?></span>
             </div>
-            <div style="min-height: 200px;">
-                <div class="row">
-                    <div class="col-4">
-                        <span>NB: Bila ada keraguan Hasil Pemeriksaan, Mohon menghubungi Laboratorium RSUD Wates. Telp. (0274) 773169 ext 1146</span>
-                        <div class="text-center">
-                            <p>Dokter Penanggung Jawab</p>
-                            <div class="blank-section"></div>
-                            <p>(<?= $accDocName; ?>)</p>
-                        </div>
-                    </div>
-                    <div class="col-4 offset-md-4 mt-auto">
+            <table>
+                <tbody>
+                    <tr>
+                        <td width="50%">
+                            <span class="text-nb">NB: Bila ada keraguan Hasil Pemeriksaan, Mohon menghubungi Laboratorium RSUD Wates. Telp. (0274) 773169 ext 1146</span>
+                            <div class="text-center">
+                                <p>Dokter Penanggung Jawab</p>
+                                <div class="blank-section"></div>
+                                <p>(<?= $accDocName; ?>)</p>
+                            </div>
+                        </td>
+                        <td width="50%" class="align-bottom">
+                            <div class="text-center">
+                                <span>ACC:</span>
+                                <p>
+                                    Tanggal: <?= $dataPatient['date_acc']; ?>
+                                    <br>
+                                    Diperiksa Oleh,
+                                </p>
+                                <div class="blank-section"></div>
+                                <p>(<?= $petugasName; ?>)</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-                        <span>ACC:</span>
-                        <div class="text-center">
-
-                            <p>
-                                Tanggal: <?= $dataPatient['date_acc']; ?>
-                                <br>
-                                Diperiksa Oleh,
-                            </p>
-                            <div class="blank-section"></div>
-                            <p>(<?= $petugasName; ?>)</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </body>
+
+<script>
+    window.onload = window.print;
+</script>
+
+
 
 </html>

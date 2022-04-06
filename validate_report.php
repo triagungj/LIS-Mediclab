@@ -21,7 +21,7 @@ if (isset($_SESSION['username'])) {
 if (isset($_GET['nota'])) {
     $edit = true;
     $nota = $_GET['nota'];
-    $resultReport = "SELECT * FROM report WHERE nota='$nota'";
+    $resultReport = "SELECT * FROM report LEFT JOIN room ON report.room = room.room_kd WHERE nota='$nota'";
     $resultReportArray = mysqli_query($conn, $resultReport);
 
     if ($resultReportArray->num_rows > 0) {
@@ -84,12 +84,24 @@ if (isset($_GET['nota'])) {
             <div class="row align-items-center">
                 <div class="col-6 col-lg-9">
                     <h6>Data Pasien</h6>
-                    <div class="d-inline">
-                        <button type="button" class="btn btn-primary mt-2">Hide</button>
-                        <button type="button" class="btn btn-primary mt-2">Show</button>
-                        <button type="button" class="btn btn-primary mt-2">Order</button>
-                        <a href="./worklist_finish.php"><button type="button" class="btn btn-primary mt-2">Back</button></a>
+                    <div class="d-flex align-middle">
+                        <a href="./worklist_finish.php" class="btn btn-primary mt-2">Back</a>
+                        <?php if ($resultReport['date_acc'] == null) { ?>
+                            <form method="POST" action="acc_report.php?nota=<?= $nota; ?>">
+                                <button type="submit" name="acc_report" class="btn btn-success align-items-center mt-2 ms-2">
+                                    <img src="assets/check_circle_black_24dp.svg" alt="check" class="filter-white">
+                                    <span class="align-middle">ACC</span>
+                                </button>
+                            </form>
+                        <?php } ?>
+                        <?php if ($resultReport['date_acc'] != null) { ?>
+                            <a href="print.php?nota=<?= $resultReport['nota']; ?>" target="_blank" class="btn btn-info mt-2 ms-2">
+                                Print
+                            </a>
+                        <?php } ?>
                     </div>
+
+
                 </div>
                 <?php if ($resultReport['date_finish'] != null && $resultReport['date_acc'] == null) { ?>
                     <div class="col-6 col-lg-3 align-items-center d-flex">
@@ -208,7 +220,7 @@ if (isset($_GET['nota'])) {
                             <label for="selectRoomReport" class="col-form-label">Ruang :</label>
                         </div>
                         <div class="col-3">
-                            <b><?= $resultReport['room']; ?></b>
+                            <b><?= $resultReport['room_name']; ?></b>
                         </div>
                         <div class="col-3 d-flex align-items-center">
                             <label for="selectClassReport" class="col-form-label me-2">Kelas:</label>
@@ -311,16 +323,6 @@ if (isset($_GET['nota'])) {
                         </div>
                     </div>
                 </div>
-                <?php if ($resultReport['date_acc'] == null) { ?>
-                    <div class="col-12 align-items-center mt-4 mb-4 text-center">
-                        <form method="POST" action="acc_report.php?nota=<?= $nota; ?>">
-                            <button type="submit" name="acc_report" class="btn btn-success align-items-center p-3">
-                                <img src="assets/check_circle_black_24dp.svg" alt="check" class="filter-white">
-                                <span class="align-middle">ACC</span>
-                            </button>
-                        </form>
-                    </div>
-                <?php } ?>
             </div>
         </div>
         <div class="bg-surface p-4 border d-flex">

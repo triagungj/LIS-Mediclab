@@ -115,13 +115,13 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
             </thead>
             <tbody>
                 <?php foreach ($resultReport as $dataReport) : ?>
-                    <tr onclick="onClickTable('<?= $dataReport['nota']; ?>')">
-                        <td><?= $dataReport['nolab'] ?></td>
-                        <td><?= $dataReport['norm']; ?></td>
-                        <td><?= $dataReport['name_patient']; ?></td>
-                        <td><?= $dataReport['room_name']; ?></td>
-                        <td><?= $dataReport['nota']; ?></td>
-                        <td class="text-center">
+                    <tr>
+                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['nolab'] ?></td>
+                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['norm']; ?></td>
+                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['name_patient']; ?></td>
+                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['room_name']; ?></td>
+                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['nota']; ?></td>
+                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')" class="text-center">
                             <?php if ($dataReport['date_finish'] != null && $dataReport['date_acc'] == null) {
                                 echo "<b>FINISH</b>";
                             } else if ($dataReport['date_acc'] != null) {
@@ -130,18 +130,18 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                                 echo 'PROCESS';
                             } ?>
                         </td>
-                        <td class="text-center">
+                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')" class="text-center">
                             <?php if ($dataReport['date_acc'] == null) { ?>
                                 <form action="acc_report.php?nota=<?= $dataReport['nota']; ?>" method="POST">
                                     <input type="submit" name="acc_report" class="btn btn-success" value="ACC">
                                 </form>
                             <?php } ?>
-
                         </td>
-
                         <td class="text-center">
                             <?php if ($dataReport['date_acc'] != null) { ?>
-                                <button class="btn btn-primary">Print</button>
+                                <a href="print.php?nota=<?= $dataReport['nota']; ?>" target="_blank" class="btn btn-info">
+                                    Print
+                                </a>
                             <?php } ?>
                         </td>
 

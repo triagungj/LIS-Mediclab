@@ -144,6 +144,11 @@ svg {
   border-bottom: 1px solid black;
 }
 
+.print-page .section-sample .text-nb {
+  font-size: 12px;
+  margin: 0;
+}
+
 /* .print-page .section-sample .table-sample tbody td{ 
   text-align: center;
  } */
