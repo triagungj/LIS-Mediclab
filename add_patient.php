@@ -443,6 +443,7 @@ function generateTransNumber()
                         <?php } ?>
                         <?php if ($resultEdit['date_acc'] != null) { ?>
                             <a href="print.php?nota=<?= $resultEdit['nota']; ?>" class="btn btn-info">
+                                Print
                             </a>
 
                         <?php } ?>
