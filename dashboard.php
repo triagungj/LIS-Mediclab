@@ -11,10 +11,9 @@ if (isset($_SESSION['username'])) {
 
     $sql = "SELECT * FROM users WHERE username='$username'";
     $result = mysqli_query($conn, $sql);
-    if ($result->num_rows > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $name = $row['name'];
-    }
+
+    $row = mysqli_fetch_assoc($result);
+    $name = $row['name'];
 } else {
     header("Location: ./");
 }
@@ -56,7 +55,11 @@ if (isset($_SESSION['username'])) {
                 <div class="row">
                     <div class="col-lg-1"></div>
                     <div class="col-lg-5 col-12 text-center">
-                        <a href="worklist.php" class="decoration-none">
+                        <a href="<?php if ($row['jabatan'] == 'validator') {
+                                        echo 'worklist_finish.php';
+                                    } else {
+                                        echo 'worklist.php';
+                                    } ?>" class="decoration-none">
                             <div class="bg-danger pt-2 pb-2 border-radius-4">
                                 <img src="assets/fact_check_black_24dp.svg" alt="image" class="filter-white">
                                 <div style="min-height: 15px;"></div>

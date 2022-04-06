@@ -73,7 +73,7 @@ if (isset($_POST['submit_report'])) {
 
             foreach ($resultSubCatSample as $dataSubCatSample) :
                 $kd_sub_cat_sample = $dataSubCatSample['kd_sub_category'];
-                $insertSubSampleSql = "INSERT INTO sub_sample VALUES (NULL, '$kd_sub_cat_sample', NULL, '$kd_sample')";
+                $insertSubSampleSql = "INSERT INTO sub_sample VALUES (NULL, '$kd_sub_cat_sample', NULL, NULL, '$kd_sample')";
                 mysqli_query($conn, $insertSubSampleSql);
             endforeach;
 

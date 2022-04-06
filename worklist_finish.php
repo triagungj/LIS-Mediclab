@@ -29,7 +29,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
         AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nota DESC";
     $resultReport = mysqli_query($conn, $sqlReport);
 } else {
-    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd ORDER BY nota DESC";
+    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd WHERE date_finish IS NOT NULL ORDER BY nota DESC";
     $resultReport = mysqli_query($conn, $sqlReport);
 }
 
@@ -44,7 +44,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
 
     <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Dashboard</title>
+    <title>Mediclab - Validator Worklist</title>
 </head>
 
 <body>
@@ -62,16 +62,16 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
     </div>
 
     <div class="ps-3 px-4">
-        <form method="GET" action="worklist.php" class="row mt-2 mb-4 ">
-            <div class="col-10 row pt-3">
-                <div class="col-6 col-lg-4">
+        <form method="GET" action="worklist_finish.php" class="row mt-2 mb-4 ">
+            <div class="col-11 row pt-3">
+                <div class="col-6 col-lg-3">
                     <div class="input-group input-group-default mb-3">
                         <span class="input-group-text">Tanggal</span>
                         <input value="<?= $_GET['date']; ?>" name="date" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
                     </div>
                 </div>
 
-                <div class="col-6 col-lg-2">
+                <div class="col-6 col-lg-3">
                     <div class="input-group input-group-default mb-3">
                         <span class="input-group-text">No. RM</span>
                         <input value="<?= $_GET['norm']; ?>" name="norm" type="text" class="form-control" id="inlineFormInputGroupRegistNumber" placeholder="No. RM">
@@ -93,14 +93,12 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                 </div>
             </div>
 
-            <div class="col-2 col">
+            <div class="col-1 col">
                 <input value="Cari" type="submit" class="btn btn-primary mt-3" />
-                <a href="./add_patient.php" class="btn btn-primary mt-3" type="submit" class="btn btn-primary">Tambah</a class="btn btn-primary">
             </div>
 
         </form>
     </div>
-
     <div class="ms-3 me-3 table-responsive-lg">
         <table class="table table-bordered align-middle">
             <thead>
@@ -111,7 +109,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                     <th scope="col" class="text-center" width="7%">Ruang</th>
                     <th scope="col" class="text-center" width="14%">No Trans</th>
                     <th scope="col" class="text-center" width="7%">Status</th>
-                    <th scope="col" class="text-center" width="17%">Transmit</th>
+                    <th scope="col" class="text-center" width="7%">ACC</th>
                     <th scope="col" class="text-center" width="7%">Print</th>
                 </tr>
             </thead>
@@ -133,11 +131,11 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                             } ?>
                         </td>
                         <td onclick="onClickTable('<?= $dataReport['nota']; ?>')" class="text-center">
-                            <?php if ($dataReport['transmit'] == 1) {
-                                echo 'TRANSMITTED';
-                            } else {
-                                echo 'NOT TRANSMITTED';
-                            } ?>
+                            <?php if ($dataReport['date_acc'] == null) { ?>
+                                <form action="acc_report.php?nota=<?= $dataReport['nota']; ?>" method="POST">
+                                    <input type="submit" name="acc_report" class="btn btn-success" value="ACC">
+                                </form>
+                            <?php } ?>
                         </td>
                         <td class="text-center">
                             <?php if ($dataReport['date_acc'] != null) { ?>
@@ -154,13 +152,11 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
             </tbody>
         </table>
     </div>
-
-
 </body>
 
 <script>
     function onClickTable(nota) {
-        let getPatientUrl = 'add_patient.php?nota='
+        let getPatientUrl = 'validate_report.php?nota='
         let url = getPatientUrl.concat(nota);
         window.location.replace(url);
     }

@@ -13,6 +13,10 @@ svg {
   color: #ffffff;
 }
 
+.blank-section{
+  min-height: 100px;
+}
+
 .text-bold{
   font-weight: bold;
 }
@@ -83,3 +87,68 @@ svg {
 .table-input-sample tbody td{
   vertical-align: middle;
 }
+
+/* print page */
+.print-page * {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.print-page .header{
+  border-bottom: 3px solid black;
+}
+.print-page .header .text-headline{
+  font-size: 16px;
+  margin: 0;
+  font-weight: bold;
+}
+
+.print-page .header .text-address{
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.print-page .patient-table{
+  margin-top: 12px;
+  width: 100%;
+}
+
+.print-page .patient-table td{
+  border: 1px solid;
+  padding: 1px 12px 1px 12px;
+  font-size: 12px;
+}
+
+.print-page .section-sample{
+  margin-top: 12px;
+}
+
+.print-page .text-headline{
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+.print-page .section-sample .table-sample{
+  width: 100%;
+  font-size: 12px;
+}
+.print-page .section-sample .table-sample thead th{
+  border: 1px solid black;
+  text-align: center;
+}
+
+.print-page .section-sample .kesan {
+  border-bottom: 1px solid black;
+}
+
+.print-page .section-sample .text-nb {
+  font-size: 12px;
+  margin: 0;
+}
+
+/* .print-page .section-sample .table-sample tbody td{ 
+  text-align: center;
+ } */

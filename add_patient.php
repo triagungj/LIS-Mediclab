@@ -151,9 +151,7 @@ function generateTransNumber()
                                                     echo date("Y-m-d H:i:s");
                                                 } ?>" required name="inputDateReport" readonly class="form-control" aria-describedby="dateHelpInline">
                             </div>
-                            <div value="<?php if ($edit) {
-                                            echo $resultEdit['date_report'];
-                                        } ?>" class="col-2 text-end">
+                            <div class="col-2 text-end">
                                 <label for="inputLabNumberReport" class="col-form-label">No. Lab :</label>
                             </div>
                             <div class="col-4">
@@ -415,8 +413,8 @@ function generateTransNumber()
                             <div class="col-10">
                                 <select required name="selectPackageReport" class="form-select" aria-label="packagePatient">
                                     <option disabled selected hidden value="">-</option>
-                                    <option value="paket1" <?php if ($edit) if ($resultEdit['paket'] == 'paket1') echo 'selected'; ?>>Paket 1</option>
-                                    <option value="paket2" <?php if ($edit) if ($resultEdit['paket'] == 'paket2') echo 'selected'; ?>>Paket 2</option>
+                                    <option value="Paket 1" <?php if ($edit) if ($resultEdit['paket'] == 'Paket 1') echo 'selected'; ?>>Paket 1</option>
+                                    <option value="Paket 2" <?php if ($edit) if ($resultEdit['paket'] == 'Paket 2') echo 'selected'; ?>>Paket 2</option>
                                 </select>
                             </div>
                         </div>
@@ -435,19 +433,24 @@ function generateTransNumber()
                 <div class="bg-surface p-3 border d-flex align-items-center">
                     <h6 class="me-4 ">Hasil Pemeriksaan</h6>
                     <div class="d-inline">
-                        <input type="submit" name="save_sample" class="btn btn-success" value="Simpan" />
-                        <input type="submit" name="finish_sample" class="btn btn-primary" value="Selesai" />
-                        <?php if ($resultEdit['date_finish'] != null) { ?>
-                            <input type="submit" name="transmit_sample" class="btn btn-warning" value="Kirim" />
+                        <?php if ($resultEdit['date_acc'] == null) { ?>
+                            <input type="submit" name="save_sample" class="btn btn-success" value="Simpan" />
+                            <input type="submit" name="finish_sample" class="btn btn-primary" value="Selesai" />
+
+                            <?php if ($resultEdit['date_finish'] != null) { ?>
+                                <input type="submit" name="transmit_sample" class="btn btn-warning" value="Kirim" />
+                            <?php } ?>
                         <?php } ?>
                         <?php if ($resultEdit['date_acc'] != null) { ?>
-                            <button type="button" class="btn btn-info">Print</button>
+                            <a href="print.php?nota=<?= $resultEdit['nota']; ?>" target="_blank" class="btn btn-info">
+                                Print
+                            </a>
                         <?php } ?>
                     </div>
                 </div>
 
                 <div class="table-responsive-lg">
-                    <table class="table table-bordered border-dark table-input-sample" style="height:100px;">
+                    <table class="table table-bordered border-dark table-input-sample">
                         <thead>
                             <tr>
                                 <th scope="col" width="4%"></th>
@@ -464,11 +467,24 @@ function generateTransNumber()
                             <tbody>
                                 <td class="text-center"><?= $count; ?></td>
                                 <td><?= $sampleData['name']; ?></td>
-                                <td>
-                                    <input id="input<?= $sampleData['kd_sub_category_sample']; ?>" onchange="setFlag(<?= $sampleData['min_value']; ?>, <?= $sampleData['max_value']; ?>, '<?= $sampleData['kd_sub_category_sample']; ?>')" value="<?= $sampleData['value']; ?>" name="input<?= $sampleData['kd_sub_category_sample']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number" step='0.01'>
+                                <td class="text-center">
+                                    <?php if ($resultEdit['date_acc'] == null) { ?>
+                                        <input id="input<?= $sampleData['kd_sub_category_sample']; ?>" onchange="setFlag(<?= $sampleData['min_value']; ?>, <?= $sampleData['max_value']; ?>, '<?= $sampleData['kd_sub_category_sample']; ?>')" value="<?= $sampleData['value']; ?>" name="input<?= $sampleData['kd_sub_category_sample']; ?>" placeholder="<?= $sampleData['name']; ?>" class="form-control" type="number" step='0.01'>
+                                    <?php } else { ?>
+                                        <span>
+                                            <?= $sampleData['value']; ?>
+                                        </span>
+                                    <?php } ?>
                                 </td>
                                 <td class="text-center">
-                                    <span id="flag<?= $sampleData['kd_sub_category_sample']; ?>"></span>
+                                    <?php if ($resultEdit['date_acc'] == null) { ?>
+                                        <span id="flag<?= $sampleData['kd_sub_category_sample']; ?>"></span>
+                                        <input type="text" id="flagInput<?= $sampleData['kd_sub_category_sample']; ?>" name="flagInput<?= $sampleData['kd_sub_category_sample']; ?>" class="d-none">
+                                    <?php } else { ?>
+                                        <span class="<?php if ($sampleData['flag'] != 'normal') echo 'text-danger text-bold' ?>">
+                                            <?= strtoupper($sampleData['flag']); ?>
+                                        </span>
+                                    <?php } ?>
                                 </td>
                                 <td class="text-center"><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
                                 <td class="text-center"><?= $sampleData['satuan']; ?></td>
@@ -489,25 +505,31 @@ function generateTransNumber()
 </body>
 
 <script>
-    <?php foreach ($resultSample as $dataSample) : ?>
-        var flagSpan = 'flag' + '<?= $dataSample['kd_sub_category_sample']; ?>';
-        var inputId = 'input' + '<?= $dataSample['kd_sub_category_sample']; ?>';
-        var min = <?= $dataSample['min_value']; ?>;
-        var max = <?= $dataSample['max_value']; ?>;
-        var value = document.getElementById(inputId).value;
-        if (value != '') {
-            if (value < min) {
-                document.getElementById(flagSpan).innerHTML = 'LOW';
-                document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
-            } else if (value > max) {
-                document.getElementById(flagSpan).innerHTML = 'HIGH';
-                document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
-            } else {
-                document.getElementById(flagSpan).innerHTML = 'NORMAL';
-                document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+    <?php if ($resultEdit['date_acc'] == null) { ?>
+        <?php foreach ($resultSample as $dataSample) : ?>
+            var flagSpan = 'flag' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+            var flagInput = 'flagInput' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+            var inputId = 'input' + '<?= $dataSample['kd_sub_category_sample']; ?>';
+            var min = <?= $dataSample['min_value']; ?>;
+            var max = <?= $dataSample['max_value']; ?>;
+            var value = document.getElementById(inputId).value;
+            if (value != '') {
+                if (value < min) {
+                    document.getElementById(flagSpan).innerHTML = 'LOW';
+                    document.getElementById(flagInput).value = 'low';
+                    document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+                } else if (value > max) {
+                    document.getElementById(flagSpan).innerHTML = 'HIGH';
+                    document.getElementById(flagInput).value = 'high';
+                    document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
+                } else {
+                    document.getElementById(flagSpan).innerHTML = 'NORMAL';
+                    document.getElementById(flagInput).value = 'normal';
+                    document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
+                }
             }
-        }
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php } ?>
 
     if (document.getElementById("birthdayReport").value != '') {
         getAgeBirthday();
@@ -534,12 +556,11 @@ function generateTransNumber()
 
             if (monthBirth < 0) {
                 monthBirth = 11;
-                yearAge--;
+                yearBirth--;
             }
             document.getElementById("inputAgeDate").value = (dateNow - dateBirth + 30);
 
         }
-
         if (monthNow >= monthBirth) {
             document.getElementById("inputAgeMonth").value = (monthNow - monthBirth);
         } else {
@@ -552,21 +573,24 @@ function generateTransNumber()
 
     function setFlag(min, max, kode) {
         var flagSpan = 'flag' + kode;
+        var flagInput = 'flagInput' + kode;
         var inputId = 'input' + kode;
         var value = document.getElementById(inputId).value;
         if (value < min) {
             document.getElementById(flagSpan).innerHTML = 'LOW';
+            document.getElementById(flagInput).value = 'low';
             document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
         } else if (value > max) {
             document.getElementById(flagSpan).innerHTML = 'HIGH';
+            document.getElementById(flagInput).value = 'high';
             document.getElementById(flagSpan).classList.add('text-danger', 'text-bold');
         } else {
             document.getElementById(flagSpan).innerHTML = 'NORMAL';
+            document.getElementById(flagInput).value = 'normal';
             document.getElementById(flagSpan).classList.remove('text-danger', 'text-bold');
         }
-    }
 
-    var formSample = document.getElementById('formSample');
+    }
 
     formSample.addEventListener('finish_sample', function() {
         return confirm('Sample telah selesai?');
