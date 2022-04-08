@@ -31,14 +31,20 @@ if (isset($_SESSION['username'])) {
 </head>
 
 <body>
-    <div class="header bg-primary mb-4 ">
-        <div class="container d-flex justify-content-between pt-4 pb-2">
+    <div class="header bg-primary pb-2">
+        <marquee>
+            <h6 class="mt-2 text-light text-name-responsive">Selamat datang, <?= $name ?>.</h6>
+        </marquee>
+        <div class="container d-flex justify-content-between">
             <a href="../">
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
-            <div class="d-flex align-items-end">
-                <h5 class="mr-4 text-light text-name">Selamat datang, <?= $name ?></h5>
-                <div style="min-width:40px"></div>
+            <div class="d-flex align-items-center">
+                <div class="mr-4 text-light text-name text-end">
+                    <h6 class="m-0">Selamat datang,</h6>
+                    <h5><?= $name ?></h5>
+                </div>
+                <div style="min-width:20px"></div>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
         </div>

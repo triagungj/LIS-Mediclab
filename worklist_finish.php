@@ -70,7 +70,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
         <marquee>
             <h6 class="mt-2 text-light text-name-responsive">Selamat datang, <?= $name ?>.</h6>
         </marquee>
-        <div class="container d-flex justify-content-between pt-2">
+        <div class="container d-flex justify-content-between">
             <a href="./">
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
