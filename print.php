@@ -62,7 +62,7 @@ if (isset($_GET['nota'])) {
             <table class="patient-table">
                 <tbody>
                     <tr>
-                        <td class="align-top">
+                        <td class="align-top" width="50%">
                             <div class="row">
                                 <div class="col-5">No. Med. Rec</div>
                                 <div class="col-1">:</div>
@@ -89,7 +89,7 @@ if (isset($_GET['nota'])) {
                                 <div class="col-6"><?= $dataPatient['gender'] ?></div>
                             </div>
                         </td>
-                        <td class="align-top">
+                        <td class="align-top" width="50%">
                             <div class="row">
                                 <div class="col-5">No. Med. Rec</div>
                                 <div class="col-1">:</div>
@@ -98,7 +98,12 @@ if (isset($_GET['nota'])) {
                             <div class="row">
                                 <div class="col-5">Tanggal Lahir</div>
                                 <div class="col-1">:</div>
-                                <div class="col-6"><?= $dataPatient['birthdate'] ?></div>
+                                <div class="col-6">
+                                    <?= $dataPatient['birthdate'] ?> /
+                                    <span id="yearBirth"></span> Th,
+                                    <span id="monthBirth"></span> Bl,
+                                    <span id="dateBirth"></span> Hr
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-5">Dokter</div>
@@ -177,9 +182,41 @@ if (isset($_GET['nota'])) {
 </body>
 
 <script>
+    var today = new Date('<?= $dataPatient['date_acc'] ?>');
+    var birthday = new Date('<?= $dataPatient['birthdate']; ?>');
+
+    var yearNow = today.getFullYear();
+    var monthNow = today.getMonth();
+    var dateNow = today.getDate();
+
+    var yearBirth = birthday.getFullYear();
+    var monthBirth = birthday.getMonth();
+    var dateBirth = birthday.getDate();
+
+    if (dateNow >= dateBirth) {
+        document.getElementById("dateBirth").innerHTML = (dateNow - dateBirth);
+    } else {
+        monthBirth--;
+
+        document.getElementById("dateBirth").innerHTML = 31 + dateNow - dateBirth;
+
+        if (monthBirth < 0) {
+            monthBirth = 11;
+            yearBirth--;
+        }
+        document.getElementById("dateBirth").innerHTML = (dateNow - dateBirth + 30);
+
+    }
+    if (monthNow >= monthBirth) {
+        document.getElementById("monthBirth").innerHTML = (monthNow - monthBirth);
+    } else {
+        yearNow = yearNow - 1;
+        document.getElementById("monthBirth").innerHTML = (monthNow - monthBirth + 12);
+    }
+
+    document.getElementById("yearBirth").innerHTML = yearNow - yearBirth;
+
     window.onload = window.print;
 </script>
-
-
 
 </html>
