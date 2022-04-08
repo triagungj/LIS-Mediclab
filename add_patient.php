@@ -100,10 +100,10 @@ function generateTransNumber()
                 <div class="col-6 col-lg-9">
                     <h6>Data Pasien</h6>
                     <div class="d-inline">
-                        <button type="button" class="btn btn-primary mt-2">Hide</button>
-                        <button type="button" class="btn btn-primary mt-2">Show</button>
-                        <button type="button" class="btn btn-primary mt-2">Order</button>
                         <a href="./worklist.php"><button type="button" class="btn btn-primary mt-2">Back</button></a>
+                        <button type="button" class="btn btn-primary mt-2" onclick="onHide()">Hide</button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="onShow()">Show</button>
+                        <!-- <button type="button" class="btn btn-primary mt-2">Order</button> -->
                     </div>
                 </div>
                 <?php if ($resultEdit['date_finish'] != null && $resultEdit['date_acc'] == null) { ?>
@@ -132,7 +132,7 @@ function generateTransNumber()
                 <?php } ?>
             </div>
         </div>
-        <div class="border p-3">
+        <div class="border p-3" id="patientSection">
             <form method="POST" action="<?php if ($edit) {
                                             echo 'insert_report.php?nota=' . $_GET['nota'];
                                         } else {
@@ -167,7 +167,7 @@ function generateTransNumber()
                             <div class="col-4">
                                 <input value="<?php if ($edit) {
                                                     echo $resultEdit['norm'];
-                                                } ?>" required type="number" name="inputRegNumberReport" id="inputRegNumberReport" class="form-control" aria-describedby="regNumberHelpInline">
+                                                } ?>" maxlength="6" required type="text" name="inputRegNumberReport" id="inputRegNumberReport" class="form-control" aria-describedby="regNumberHelpInline">
                             </div>
                             <div class="col-2 text-end">
                                 <label for="inputNotaReport" class="col-form-label">Nota :</label>
@@ -592,9 +592,13 @@ function generateTransNumber()
 
     }
 
-    formSample.addEventListener('finish_sample', function() {
-        return confirm('Sample telah selesai?');
-    }, false);
+    function onHide() {
+        document.getElementById('patientSection').classList.add('d-none');
+    }
+
+    function onShow() {
+        document.getElementById('patientSection').classList.remove('d-none');
+    }
 </script>
 
 </html>
