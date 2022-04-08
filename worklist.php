@@ -19,6 +19,13 @@ if (isset($_SESSION['username'])) {
 }
 
 
+$range = 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$first_page = ($page > 1) ? ($page * $range) - $range : 0;
+
+$previous = $page - 1;
+$next = $page + 1;
+
 if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient']) && isset($_GET['room'])) {
     $date = $_GET['date'];
     $norm = $_GET['norm'];
@@ -26,11 +33,21 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
     $room = $_GET['room'];
     $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
         WHERE name_patient LIKE '%$name_patient%' AND date_report LIKE '$date%'
+        AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nota DESC limit $first_page, $range";
+    $resultReport = mysqli_query($conn, $sqlReport);
+    $totalDataSql = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
+        WHERE name_patient LIKE '%$name_patient%' AND date_report LIKE '$date%'
         AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nota DESC";
-    $resultReport = mysqli_query($conn, $sqlReport);
+    $totalDataQuery = mysqli_query($conn, $totalDataSql);
+    $total_data = mysqli_num_rows($totalDataQuery);
+    $total_page = ceil($total_data / $range);
 } else {
-    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd ORDER BY nota DESC";
+    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd ORDER BY nota DESC limit $first_page, $range";
     $resultReport = mysqli_query($conn, $sqlReport);
+    $totalDataSql = "SELECT nota FROM report";
+    $totalDataQuery = mysqli_query($conn, $totalDataSql);
+    $total_data = mysqli_num_rows($totalDataQuery);
+    $total_page = ceil($total_data / $range);
 }
 
 
@@ -92,9 +109,10 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                     </div>
                 </div>
             </div>
+            <input value="<?= isset($_GET['search']) ? $_GET['page'] : 1; ?>" name="page" type="text" class="form-control d-none" id="inlineFormInputGroupRoom">
 
             <div class="col-2 col">
-                <input value="Cari" type="submit" class="btn btn-primary mt-3" />
+                <input type="submit" value="Cari" class="btn btn-primary mt-3" />
                 <a href="./add_patient.php" class="btn btn-primary mt-3" type="submit" class="btn btn-primary">Tambah</a class="btn btn-primary">
             </div>
 
@@ -102,6 +120,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
     </div>
 
     <div class="ms-3 me-3 table-responsive-lg">
+
         <table class="table table-bordered align-middle">
             <thead>
                 <tr>
@@ -153,6 +172,33 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
 
             </tbody>
         </table>
+        <ul class="pagination justify-content-center">
+            <li class="page-item ">
+                <a class="btn btn-info" <?php if ($page > 1) {
+                                            echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$previous'";
+                                        } ?>>
+                    Previous
+                </a>
+            </li>
+            <?php
+            for ($x = 1; $x <= $total_page; $x++) {
+            ?>
+                <li class="page-item me-2 ms-2"><a class="btn <?php if ($x != $page) {
+                                                                    echo 'btn-primary';
+                                                                } else {
+                                                                    echo 'btn-danger';
+                                                                } ?>" href="<?php echo "?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$x"; ?>">
+                        <?php echo $x; ?>
+                    </a></li>
+            <?php
+            }
+            ?>
+            <li class="page-item ">
+                <a class="btn btn-info" <?php if ($page < $total_page) {
+                                            echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$next'";
+                                        } ?>>Next</a>
+            </li>
+        </ul>
     </div>
 
 
