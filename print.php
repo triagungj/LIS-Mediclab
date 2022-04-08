@@ -150,14 +150,14 @@ if (isset($_GET['nota'])) {
                     <tr>
                         <td width="50%">
                             <span class="text-nb">NB: Bila ada keraguan Hasil Pemeriksaan, Mohon menghubungi Laboratorium RSUD Wates. Telp. (0274) 773169 ext 1146</span>
-                            <div class="text-center">
+                            <div class="text-center signature">
                                 <p>Dokter Penanggung Jawab</p>
                                 <div class="blank-section"></div>
                                 <p>(<?= $accDocName; ?>)</p>
                             </div>
                         </td>
                         <td width="50%" class="align-bottom">
-                            <div class="text-center">
+                            <div class="text-center signature">
                                 <span>ACC:</span>
                                 <p>
                                     Tanggal: <?= $dataPatient['date_acc']; ?>
