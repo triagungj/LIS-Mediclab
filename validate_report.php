@@ -86,6 +86,8 @@ if (isset($_GET['nota'])) {
                     <h6>Data Pasien</h6>
                     <div class="d-flex align-middle">
                         <a href="./worklist_finish.php" class="btn btn-primary mt-2">Back</a>
+                        <button type="button" class="btn btn-primary mt-2 ms-2" onclick="onHide()">Hide</button>
+                        <button type="button" class="btn btn-primary mt-2 ms-2" onclick="onShow()">Show</button>
                         <?php if ($resultReport['date_acc'] == null) { ?>
                             <form method="POST" action="acc_report.php?nota=<?= $nota; ?>">
                                 <button type="submit" name="acc_report" class="btn btn-success align-items-center mt-2 ms-2">
@@ -129,7 +131,7 @@ if (isset($_GET['nota'])) {
                 <?php } ?>
             </div>
         </div>
-        <div class="border p-3">
+        <div class="border p-3" id="patientSection">
             <div class="row table-responsive">
                 <div class="col-12 col-md-6">
                     <div class="row align-items-center mb-1">
@@ -408,6 +410,14 @@ if (isset($_GET['nota'])) {
 
         document.getElementById("yearAge").innerHTML = yearNow - yearBirth;
     <?php } ?>
+
+    function onHide() {
+        document.getElementById('patientSection').classList.add('d-none');
+    }
+
+    function onShow() {
+        document.getElementById('patientSection').classList.remove('d-none');
+    }
 </script>
 
 </html>

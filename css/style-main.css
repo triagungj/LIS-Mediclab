@@ -14,7 +14,7 @@ svg {
 }
 
 .blank-section{
-  min-height: 100px;
+  min-height: 75px;
 }
 
 .text-bold{
@@ -147,6 +147,10 @@ svg {
 .print-page .section-sample .text-nb {
   font-size: 12px;
   margin: 0;
+}
+
+.print-page .section-sample .signature{
+  font-size: 14px;
 }
 
 /* .print-page .section-sample .table-sample tbody td{ 
