@@ -66,23 +66,29 @@ if (isset($_GET['nota'])) {
 </head>
 
 <body>
-    <div class="header bg-primary mb-4">
-        <div class="container d-flex justify-content-between pt-4 pb-2">
+    <div class="header bg-primary pb-2">
+        <marquee>
+            <h6 class="mt-2 text-light text-name-responsive">Selamat datang, <?= $name ?>.</h6>
+        </marquee>
+        <div class="container d-flex justify-content-between pt-2">
             <a href="./">
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
             <div class="d-flex align-items-center">
-                <h5 class="mr-4 text-light text-name">Selamat datang, <?= $name ?></h5>
-                <div style="min-width:40px"></div>
+                <div class="mr-4 text-light text-name text-end">
+                    <h6 class="m-0">Selamat datang,</h6>
+                    <h5><?= $name ?></h5>
+                </div>
+                <div style="min-width:20px"></div>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
         </div>
     </div>
 
-    <div class="ps-4 pe-4">
+    <div class="ps-4 pe-4 mt-2">
         <div class="bg-surface p-3 rounded-top border">
             <div class="row align-items-center">
-                <div class="col-6 col-lg-9">
+                <div class="col-12 col-md-5 ">
                     <h6>Data Pasien</h6>
                     <div class="d-flex align-middle">
                         <a href="./worklist_finish.php" class="btn btn-primary mt-2">Back</a>
@@ -106,20 +112,20 @@ if (isset($_GET['nota'])) {
 
                 </div>
                 <?php if ($resultReport['date_finish'] != null && $resultReport['date_acc'] == null) { ?>
-                    <div class="col-6 col-lg-3 align-items-center d-flex">
+                    <div class="col-12 col-md-7 d-flex justify-content-end mt-2">
                         <div class="me-2">
                             <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
                         </div>
                         <div>
                             <h4 class="text-success"><u>FINISH</u></h4>
                             <p class="text-success">
-                                <b><?= $resultReport['date_finish']; ?></b>
+                                <b><?= $resultReport['date_finish']; ?></b><br>
                                 <?php if ($resultReport['transmit'] == 1) echo 'TRANSMITTED' ?> <br />
                             </p>
                         </div>
                     </div>
                 <?php } else if ($resultReport['date_acc'] != null) { ?>
-                    <div class="col-6 col-lg-3 align-items-center d-flex">
+                    <div class="col-12 col-md-7 d-flex justify-content-end mt-2">
                         <div class="me-2">
                             <img src="assets/check_circle_black_24dp.svg" alt="check" class="icon-check">
                         </div>

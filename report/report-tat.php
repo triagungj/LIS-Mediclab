@@ -31,7 +31,7 @@ if (isset($_SESSION['username'])) {
 </head>
 
 <body>
-    <div class="header bg-primary mb-4 ">
+    <div class="header bg-primary">
         <div class="container d-flex justify-content-between pt-4 pb-2">
             <a href="../">
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
@@ -45,7 +45,7 @@ if (isset($_SESSION['username'])) {
     </div>
 
     <div class="row ms-2 me-2">
-        <div class="col-3 ">
+        <div class="col-md-3 mt-4">
             <div class="rounded-top border">
                 <div class="bg-surface p-2 mb-2">
                     Jenis Laporan
@@ -79,7 +79,7 @@ if (isset($_SESSION['username'])) {
             </div>
 
         </div>
-        <div class="col-9">
+        <div class="col-md-9 mt-4">
             <div class="rounded-top border">
                 <div class="bg-surface p-2 text-center">
                     Laporan TAT
