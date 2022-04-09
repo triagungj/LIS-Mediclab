@@ -29,23 +29,28 @@ if (isset($_SESSION['username'])) {
 </head>
 
 <body>
-    <div class="header bg-primary">
-        <div class="container d-flex justify-content-between pt-4 pb-2">
+    <div class="header bg-primary pb-2">
+        <marquee>
+            <h6 class="mt-2 text-light text-name-responsive">Selamat datang, <?= $name ?>.</h6>
+        </marquee>
+        <div class="container d-flex justify-content-between">
             <a href="./">
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
-            <div class="d-flex align-items-end">
-                <h5 class="mr-4 text-light text-name">Selamat datang, <?= $name ?></h5>
-                <div style="min-width:40px"></div>
+            <div class="d-flex align-items-center">
+                <div class="mr-4 text-light text-name text-end">
+                    <h6 class="m-0">Selamat datang,</h6>
+                    <h5><?= $name ?></h5>
+                </div>
+                <div style="min-width:20px"></div>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
         </div>
     </div>
-    <div style="height: 60px;"></div>
 
     <div class="content-dashboard container mt-4">
-        <div class="row menu-items g-2">
-            <div class="col-lg-6 col-12 chart">
+        <div class="row menu-items">
+            <div class="col-lg-6 col-12 chart mt-4">
                 <div class="p-3 bg-light text-center">
                     <img src="assets/bar_chart_black_24dp.svg" style="height: 280px; width: 280px;" alt="">
                     <h2>CHART</h2>
@@ -53,8 +58,7 @@ if (isset($_SESSION['username'])) {
             </div>
             <div class="col-lg-6 col-12 container menus">
                 <div class="row">
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-5 col-12 text-center">
+                    <div class="col-lg-6 col-12 text-center p-4">
                         <a href="<?php if ($row['jabatan'] == 'validator') {
                                         echo 'worklist_finish.php';
                                     } else {
@@ -62,42 +66,37 @@ if (isset($_SESSION['username'])) {
                                     } ?>" class="decoration-none">
                             <div class="bg-danger pt-2 pb-2 border-radius-4">
                                 <img src="assets/fact_check_black_24dp.svg" alt="image" class="filter-white">
-                                <div style="min-height: 15px;"></div>
-                                <h6 class="text-light">WORKLIST</h6>
+                                <div style="min-height: 30px;"></div>
+                                <h5 class="text-light text-bold">WORKLIST</h5>
                             </div>
                         </a>
                     </div>
-                    <div class=" col-lg-1">
-                    </div>
-                    <div class="col-lg-5 col-12 text-center">
+                    <div class="col-lg-6 col-12 text-center  p-4">
                         <a href="./report/report-tat.php" class="decoration-none">
                             <div class="bg-primary pt-2 pb-2 border-radius-4">
                                 <img src="assets/summarize_black_24dp.svg" alt="image" class="filter-white">
-                                <div style="min-height: 15px;"></div>
-                                <h6 class="text-light">REPORT</h6>
+                                <div style="min-height: 30px;"></div>
+                                <h5 class="text-light text-bold">REPORT</h5>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="spacer" style="min-height: 50px;"></div>
                 <div class="row">
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-5 col-12 text-center">
+                    <div class="col-lg-6 col-12 text-center p-4">
                         <a href="./lab_record.php" class="decoration-none">
                             <div class="bg-warning pt-2 pb-2 border-radius-4">
                                 <img src="assets/history_black_24dp.svg" alt="image" class="filter-white">
-                                <div style="min-height: 15px;"></div>
-                                <h6 class="text-light">HISTORY</h6>
+                                <div style="min-height: 30px;"></div>
+                                <h5 class="text-light text-bold">HISTORY</h5>
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-5 col-12 text-center">
+                    <div class="col-lg-6 col-12 text-center p-4">
                         <a href="#" class="decoration-none">
                             <div class="bg-success pt-2 pb-2 border-radius-4">
                                 <img src="assets/print_black_24dp.svg" alt="image" class="filter-white">
-                                <div style="min-height: 15px;"></div>
-                                <h6 class="text-light">LIST PRINT</h6>
+                                <div style="min-height: 30px;"></div>
+                                <h5 class="text-light text-bold">LIST PRINT</h5>
                             </div>
                         </a>
                     </div>
@@ -105,8 +104,6 @@ if (isset($_SESSION['username'])) {
             </div>
         </div>
     </div>
-
-
 </body>
 
 <script src="js/bootstrap.bundle.min.js"></script>

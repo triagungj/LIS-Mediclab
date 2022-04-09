@@ -31,23 +31,62 @@ if (isset($_SESSION['username'])) {
 </head>
 
 <body>
-    <div class="header bg-primary mb-4 ">
-        <div class="container d-flex justify-content-between pt-4 pb-2">
+    <div class="header bg-primary pb-2">
+        <marquee>
+            <h6 class="mt-2 text-light text-name-responsive">Selamat datang, <?= $name ?>.</h6>
+        </marquee>
+        <div class="container d-flex justify-content-between">
             <a href="./">
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
-            <div class="d-flex align-items-end">
-                <h5 class="mr-4 text-light text-name">Selamat datang, <?= $name ?></h5>
-                <div style="min-width:40px"></div>
+            <div class="d-flex align-items-center">
+                <div class="mr-4 text-light text-name text-end">
+                    <h6 class="m-0">Selamat datang,</h6>
+                    <h5><?= $name ?></h5>
+                </div>
+                <div style="min-width:20px"></div>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
         </div>
     </div>
-    <div class="ms-4 ">
-        <input type="text" placeholder="Nomor RM" />
-        <input type="text" placeholder="Nama Pasien" />
-        <input type="text" placeholder="Ruang" />
-        <button class="btn btn-primary">Cari</button>
+    <div class="ps-3 px-4">
+        <form method="GET" action="worklist.php" class="row mt-2 mb-4 ">
+            <div class="col-10 row pt-3">
+                <div class="col-6 col-lg-4">
+                    <div class="input-group input-group-default mb-3">
+                        <span class="input-group-text">Tanggal</span>
+                        <input value="<?= $_GET['date']; ?>" name="date" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-2">
+                    <div class="input-group input-group-default mb-3">
+                        <span class="input-group-text">No. RM</span>
+                        <input value="<?= $_GET['norm']; ?>" name="norm" type="text" class="form-control" id="inlineFormInputGroupRegistNumber" placeholder="No. RM">
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="input-group input-group-default mb-3">
+                        <span class="input-group-text">Nama</span>
+                        <input value="<?= $_GET['name_patient']; ?>" name="name_patient" type="text" class="form-control" id="inlineFormInputGroupName" placeholder="Nama">
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="input-group input-group-default mb-3">
+                        <span class="input-group-text">Ruang</span>
+                        <input value="<?= $_GET['room']; ?>" name="room" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Ruang">
+                    </div>
+                </div>
+            </div>
+            <input value="<?= isset($_GET['search']) ? $_GET['page'] : 1; ?>" name="page" type="text" class="form-control d-none" id="inlineFormInputGroupRoom">
+
+            <div class="col-2 col">
+                <input type="submit" value="Cari" class="btn btn-primary mt-3" />
+            </div>
+
+        </form>
     </div>
     <div class="row ms-2 me-2 mt-2">
         <div class="col-md-6">

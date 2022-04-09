@@ -65,14 +65,20 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
 </head>
 
 <body>
-    <div class="header bg-primary">
-        <div class="container d-flex justify-content-between pt-4 pb-2">
+    <div class="header bg-primary pb-2">
+        <marquee>
+            <h6 class="mt-2 text-light text-name-responsive">Selamat datang, <?= $name ?>.</h6>
+        </marquee>
+        <div class="container d-flex justify-content-between">
             <a href="./">
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
             <div class="d-flex align-items-center">
-                <h5 class="mr-4 text-light text-name">Selamat datang, <?= $name ?></h5>
-                <div style="min-width:40px"></div>
+                <div class="mr-4 text-light text-name text-end">
+                    <h6 class="m-0">Selamat datang,</h6>
+                    <h5><?= $name ?></h5>
+                </div>
+                <div style="min-width:20px"></div>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
         </div>
@@ -119,89 +125,98 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
         </form>
     </div>
 
-    <div class="ms-3 me-3 table-responsive-lg">
+    <?php if (mysqli_num_rows($resultReport) == 0) { ?>
+        <hr>
+        <div class="d-flex align-items-center" style="min-height:300px">
+            <div class="box w-100 text-center">
+                <img src="assets/folder_off_black_24dp.svg" alt="empty" class="img-empty">
+                <h3 class="mt-2">Data tidak ditemukan.</h3>
+            </div>
+        </div>
+    <?php } else { ?>
+        <div class="ms-3 me-3 table-responsive-lg">
+            <div style="min-height: 400px;">
+                <table class="table table-bordered align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" width="7%">No Lab</th>
+                            <th scope="col" class="text-center" width="7%">No RM</th>
+                            <th scope="col" class="text-center" width="20%">Nama</th>
+                            <th scope="col" class="text-center" width="7%">Ruang</th>
+                            <th scope="col" class="text-center" width="14%">No Trans</th>
+                            <th scope="col" class="text-center" width="7%">Status</th>
+                            <th scope="col" class="text-center" width="17%">Transmit</th>
+                            <th scope="col" class="text-center" width="7%">Print</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($resultReport as $dataReport) : ?>
+                            <tr>
+                                <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['nolab'] ?></td>
+                                <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['norm']; ?></td>
+                                <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['name_patient']; ?></td>
+                                <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['room_name']; ?></td>
+                                <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['nota']; ?></td>
+                                <td onclick="onClickTable('<?= $dataReport['nota']; ?>')" class="text-center">
+                                    <?php if ($dataReport['date_finish'] != null && $dataReport['date_acc'] == null) {
+                                        echo "<b>FINISH</b>";
+                                    } else if ($dataReport['date_acc'] != null) {
+                                        echo "<b class='text-succes'>ACC</b>";
+                                    } else {
+                                        echo 'PROCESS';
+                                    } ?>
+                                </td>
+                                <td onclick="onClickTable('<?= $dataReport['nota']; ?>')" class="text-center">
+                                    <?php if ($dataReport['transmit'] == 1) {
+                                        echo 'TRANSMITTED';
+                                    } else {
+                                        echo 'NOT TRANSMITTED';
+                                    } ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php if ($dataReport['date_acc'] != null) { ?>
+                                        <a href="print.php?nota=<?= $dataReport['nota']; ?>" target="_blank" class="btn btn-info">
+                                            Print
+                                        </a>
+                                    <?php } ?>
+                                </td>
 
-        <table class="table table-bordered align-middle">
-            <thead>
-                <tr>
-                    <th scope="col" class="text-center" width="7%">No Lab</th>
-                    <th scope="col" class="text-center" width="7%">No RM</th>
-                    <th scope="col" class="text-center" width="20%">Nama</th>
-                    <th scope="col" class="text-center" width="7%">Ruang</th>
-                    <th scope="col" class="text-center" width="14%">No Trans</th>
-                    <th scope="col" class="text-center" width="7%">Status</th>
-                    <th scope="col" class="text-center" width="17%">Transmit</th>
-                    <th scope="col" class="text-center" width="7%">Print</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($resultReport as $dataReport) : ?>
-                    <tr>
-                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['nolab'] ?></td>
-                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['norm']; ?></td>
-                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['name_patient']; ?></td>
-                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['room_name']; ?></td>
-                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')"><?= $dataReport['nota']; ?></td>
-                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')" class="text-center">
-                            <?php if ($dataReport['date_finish'] != null && $dataReport['date_acc'] == null) {
-                                echo "<b>FINISH</b>";
-                            } else if ($dataReport['date_acc'] != null) {
-                                echo "<b class='text-succes'>ACC</b>";
-                            } else {
-                                echo 'PROCESS';
-                            } ?>
-                        </td>
-                        <td onclick="onClickTable('<?= $dataReport['nota']; ?>')" class="text-center">
-                            <?php if ($dataReport['transmit'] == 1) {
-                                echo 'TRANSMITTED';
-                            } else {
-                                echo 'NOT TRANSMITTED';
-                            } ?>
-                        </td>
-                        <td class="text-center">
-                            <?php if ($dataReport['date_acc'] != null) { ?>
-                                <a href="print.php?nota=<?= $dataReport['nota']; ?>" target="_blank" class="btn btn-info">
-                                    Print
-                                </a>
-                            <?php } ?>
-                        </td>
+                            </tr>
+                            <?php $number++; ?>
+                        <?php endforeach; ?>
 
-                    </tr>
-                    <?php $number++; ?>
-                <?php endforeach; ?>
-
-            </tbody>
-        </table>
-        <ul class="pagination justify-content-center">
-            <li class="page-item ">
-                <a class="btn btn-info" <?php if ($page > 1) {
-                                            echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$previous'";
-                                        } ?>>
-                    Previous
-                </a>
-            </li>
-            <?php
-            for ($x = 1; $x <= $total_page; $x++) {
-            ?>
-                <li class="page-item me-2 ms-2"><a class="btn <?php if ($x != $page) {
-                                                                    echo 'btn-primary';
-                                                                } else {
-                                                                    echo 'btn-danger';
-                                                                } ?>" href="<?php echo "?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$x"; ?>">
-                        <?php echo $x; ?>
-                    </a></li>
-            <?php
-            }
-            ?>
-            <li class="page-item ">
-                <a class="btn btn-info" <?php if ($page < $total_page) {
-                                            echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$next'";
-                                        } ?>>Next</a>
-            </li>
-        </ul>
-    </div>
-
-
+                    </tbody>
+                </table>
+            </div>
+            <ul class="pagination justify-content-center">
+                <li class="page-item me-2">
+                    <a class="btn btn-info" <?php if ($page > 1) {
+                                                echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$previous'";
+                                            } ?>>
+                        Previous
+                    </a>
+                </li>
+                <?php
+                for ($x = 1; $x <= $total_page; $x++) {
+                ?>
+                    <li class="page-item me-2 ms-2"><a class="btn <?php if ($x != $page) {
+                                                                        echo 'btn-primary';
+                                                                    } else {
+                                                                        echo 'btn-danger';
+                                                                    } ?>" href="<?php echo "?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$x"; ?>">
+                            <?php echo $x; ?>
+                        </a></li>
+                <?php
+                }
+                ?>
+                <li class="page-item ms-2">
+                    <a class="btn btn-info" <?php if ($page < $total_page) {
+                                                echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$next'";
+                                            } ?>>Next</a>
+                </li>
+            </ul>
+        </div>
+    <?php } ?>
 </body>
 
 <script>
