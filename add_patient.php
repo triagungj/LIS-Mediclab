@@ -50,6 +50,11 @@ if ($edit) {
 $roomSql = "SELECT * FROM room";
 $resultRoom = mysqli_query($conn, $roomSql);
 
+// Get Cat Sample 
+$catSampleSql = "SELECT * FROM  category_sample";
+$catSampleResult = mysqli_query($conn, $catSampleSql);
+
+
 // Random Lab Number
 function generateLabNumber($conn)
 {
@@ -399,9 +404,13 @@ function generateTransNumber()
                                 <label for="selectSampleCategoryReport" class="col-form-label">Jenis Sample :</label>
                             </div>
                             <div class="col-10">
-                                <select required name="selectSampleCategoryReport" class="form-select" aria-label="selectStatusPatient">
+                                <select name="selectSampleCategoryReport" class="form-select" aria-label="selectStatusPatient">
                                     <option disabled selected hidden value="">-</option>
-                                    <option <?php if ($edit) if ($resultEdit['sample_category'] == 'hematologi') echo 'selected'; ?> value="hematologi">Hematologi</option>
+                                    <?php foreach ($catSampleResult as $dataCatSample) : ?>
+                                        <option value="<?= $dataCatSample['kd_category']; ?>" <?php if ($edit) if ($resultEdit['sample_category'] == $dataCatSample['kd_category']) echo 'selected'; ?>>
+                                            <?= $dataCatSample['name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
