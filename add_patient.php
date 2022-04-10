@@ -201,13 +201,6 @@ function generateTransNumber()
                             <input value="<?php if ($edit) echo $resultEdit['name_patient']; ?>" required type="text" id="inputNameReport" name="inputNameReport" class="form-control" aria-describedby="nameHelpInline">
                         </div>
                         <div class="row align-items-center">
-
-                            <div class="col-12 col-md-6 text-start">
-                                <div class="input-group input-group-default mb-2">
-                                    <span class="input-group-text" style="min-width: 80px;">Tgl Lahir</span>
-                                    <input value="<?php if ($edit) echo $resultEdit['birthdate']; ?>" required id="birthdayReport" name="inputBirthdayReport" type="date" class="form-control" aria-describedby="birthdayHelpInline" onchange="getAgeBirthday()">
-                                </div>
-                            </div>
                             <div class="col-12 col-md-6 text-start">
                                 <div class="input-group input-group-default mb-2">
                                     <span class="input-group-text" style="min-width: 80px;">Jenis Kelamin</span>
@@ -222,16 +215,31 @@ function generateTransNumber()
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-12 col-md-6 text-start">
+                                <div class="input-group input-group-default mb-2">
+                                    <span class="input-group-text" style="min-width: 80px;">Tgl Lahir</span>
+                                    <input value="<?php if ($edit) echo $resultEdit['birthdate']; ?>" required id="birthdayReport" name="inputBirthdayReport" type="date" class="form-control" aria-describedby="birthdayHelpInline" onchange="getAgeBirthday()">
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group input-group-default mb-2">
-                            <span class="input-group-text" style="min-width: 80px;">Umur</span>
-                            <input id="inputAgeYear" type="text" disabled class="form-control text-end">
-                            <span class="input-group-text">Tahun</span>
-                            <input id="inputAgeMonth" type="text" disabled class="form-control text-end">
-                            <span class="input-group-text">Bulan</span>
-                            <input id="inputAgeDate" type="text" disabled class="form-control text-end">
-                            <span class="input-group-text">Hari</span>
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-1">
+                                <div class="input-group input-group-default ">
+                                    <span class="input-group-text" style="min-width: 80px;">Umur</span>
+                                    <input id="inputAgeYear" type="text" disabled class="form-control text-end">
+                                    <span class="input-group-text">Tahun</span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-2">
+                                <div class="input-group input-group-default ">
+                                    <input id="inputAgeMonth" type="text" disabled class="form-control text-end">
+                                    <span class="input-group-text">Bulan</span>
+                                    <input id="inputAgeDate" type="text" disabled class="form-control text-end">
+                                    <span class="input-group-text">Hari</span>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="input-group input-group-default mb-2">
                             <span class="input-group-text" style="min-width: 80px;">Alamat</span>
                             <input value="<?php if ($edit) echo $resultEdit['address']; ?>" required type="text" name="inputAddressReport" class="form-control" aria-describedby="addressHelpInline">
@@ -326,31 +334,37 @@ function generateTransNumber()
                             <span class="input-group-text" style="min-width: 80px;">Kesan</span>
                             <input value="<?php if ($edit) echo $resultEdit['pesan']; ?>" required name="inputPesanReport" type="text" class="form-control" aria-describedby="massagePatientHelpInline">
                         </div>
-                        <div class="input-group input-group-default mb-2 align-items-center border">
-                            <span class="input-group-text" style="min-width: 80px;">Sample</span>
-                            <div class="form-check me-4 ms-4">
-                                <input <?php if ($edit) if ($resultEdit['sample'] == 'normal') echo 'checked'; ?> required value="normal" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleNormal">
-                                <label class="form-check-label" for="flexRadioSampleNormal">
-                                    Normal
-                                </label>
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-2 mb-2">
+                                <span class="input-group-text" style="min-width: 80px;">Sample</span>
                             </div>
-                            <div class="form-check me-4">
-                                <input <?php if ($edit) if ($resultEdit['sample'] == 'ikterik') echo 'checked'; ?> value="ikterik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleIkterik">
-                                <label class="form-check-label" for="flexRadioSampleIkterik">
-                                    Ikterik
-                                </label>
-                            </div>
-                            <div class="form-check me-4">
-                                <input <?php if ($edit) if ($resultEdit['sample'] == 'lisis') echo 'checked'; ?> value="lisis" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLisis">
-                                <label class="form-check-label" for="flexRadioSampleLisis">
-                                    Lisis
-                                </label>
-                            </div>
-                            <div class="form-check me-4">
-                                <input <?php if ($edit) if ($resultEdit['sample'] == 'lipemik') echo 'checked'; ?> value="lipemik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLipemik">
-                                <label class="form-check-label" for="flexRadioSampleLipemik">
-                                    Lipemik
-                                </label>
+                            <div class="col-12 col-md-10">
+                                <div class="input-group input-group-default mb-2 ms-2 align-items-center">
+                                    <div class="form-check me-4 ">
+                                        <input <?php if ($edit) if ($resultEdit['sample'] == 'normal') echo 'checked'; ?> required value="normal" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleNormal">
+                                        <label class="form-check-label" for="flexRadioSampleNormal">
+                                            Normal
+                                        </label>
+                                    </div>
+                                    <div class="form-check me-4">
+                                        <input <?php if ($edit) if ($resultEdit['sample'] == 'ikterik') echo 'checked'; ?> value="ikterik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleIkterik">
+                                        <label class="form-check-label" for="flexRadioSampleIkterik">
+                                            Ikterik
+                                        </label>
+                                    </div>
+                                    <div class="form-check me-4">
+                                        <input <?php if ($edit) if ($resultEdit['sample'] == 'lisis') echo 'checked'; ?> value="lisis" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLisis">
+                                        <label class="form-check-label" for="flexRadioSampleLisis">
+                                            Lisis
+                                        </label>
+                                    </div>
+                                    <div class="form-check me-4">
+                                        <input <?php if ($edit) if ($resultEdit['sample'] == 'lipemik') echo 'checked'; ?> value="lipemik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLipemik">
+                                        <label class="form-check-label" for="flexRadioSampleLipemik">
+                                            Lipemik
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="input-group input-group-default mb-2">
