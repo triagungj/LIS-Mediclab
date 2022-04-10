@@ -31,16 +31,17 @@ if (isset($_POST['date_from']) && isset($_POST['date_to']) && isset($_POST['cat_
     $catSample = $_POST['cat_sample'];
     $room = $_POST['room'];
     $range = $_POST['range'];
-    $sqlReport = "SELECT * FROM report WHERE transmit=1 
-        AND sample_category='$catSample' AND room LIKE '%$room%' 
+    $sqlReport = "SELECT * FROM report WHERE 
+        sample_category='$catSample' AND room LIKE '%$room%' 
         AND date_report BETWEEN '$dateFrom' AND '$dateTo'
+        AND date_acc IS NOT NULL
         ORDER BY nota DESC limit $range";
     $resultReport = mysqli_query($conn, $sqlReport);
 } else {
     $dateFrom = date('Y-m-d');
     $dateTo = date('Y-m-d');
     $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
-        WHERE transmit=1 AND date_finish IS NOT NULL ORDER BY nota DESC";
+        WHERE date_acc IS NOT NULL ORDER BY nota DESC";
     $resultReport = mysqli_query($conn, $sqlReport);
 }
 $totalData = mysqli_num_rows($resultReport);
@@ -162,15 +163,17 @@ $averageTime =
                             <input required value="<?= $_POST['range']; ?>" name="range" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Jumlah">
                         </div>
                         <div class="col-6 col-lg-1 mt-3">
-                            <input required value="Cari" type="submit" class="btn btn-primary w-100" />
+                            <input required value="Cari" type="submit" name="search" class="btn btn-primary w-100" />
                         </div>
                     </div>
-                    <input value="<?= isset($_GET['search']) ? $_GET['page'] : 1; ?>" name="page" type="text" class="form-control d-none" id="inlineFormInputGroupRoom">
+
                 </form>
                 <div class="ms-4 mt-4">
                     <p>
-                        Index tanggal: <b><?= $dateFrom; ?></b> s/d <b><?= $dateTo; ?></b>
-                        - Total: <b><?= $totalData; ?></b> Pasien (Rata-rata Pemeriksaan <b><?= $averageTime; ?></b>)
+                        <?php if (isset($_POST['search'])) { ?>
+                            Index tanggal: <b><?= $dateFrom; ?></b> s/d <b><?= $dateTo; ?></b>
+                        <?php } ?>
+                        Total Pasien: <b><?= $totalData; ?></b> Pasien (Rata-rata Pemeriksaan <b><?= $averageTime; ?></b>)
                     </p>
                 </div>
                 <div class="ms-3 me-3 table-responsive-lg">
@@ -213,8 +216,6 @@ $averageTime =
                         </table>
                     </div>
                 </div>
-
-
             </div>
         </div>
 

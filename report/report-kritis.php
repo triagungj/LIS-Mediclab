@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include '../config.php';
 
 error_reporting(0);
 
@@ -51,7 +51,7 @@ if (isset($_SESSION['username'])) {
     </div>
 
     <div class="row ms-2 me-2">
-        <div class="col-3 ">
+        <div class="col-md-3 mt-4">
             <div class="rounded-top border">
                 <div class="bg-surface p-2 mb-2">
                     Jenis Laporan
@@ -85,17 +85,53 @@ if (isset($_SESSION['username'])) {
             </div>
 
         </div>
-        <div class="col-9">
-            <div class="rounded-top border ">
+        <div class="col-md-9 mt-4 mb-4">
+            <div class="rounded-top border m-0">
                 <div class="bg-surface p-2 text-center">
                     Laporan Kritis
                 </div>
-                <div class="" style="min-height: 400px;"></div>
+            </div>
+            <div class="border">
+                <form method="POST" action="report-tat.php" class="mb-2">
+                    <div class="row ps-2 pe-2">
+                        <div class="col-6 col-lg-3 mt-3 d-flex align-items-center">
+                            <div class="input-group input-group-default">
+                                <span class="input-group-text">Dari</span>
+                                <input required value="<?= $_POST['date_from']; ?>" name="date_from" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3 mt-3">
+                            <div class="input-group input-group-default">
+                                <span class="input-group-text">Sampai</span>
+                                <input required value="<?= $_POST['date_to']; ?>" name="date_to" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-2 mt-3">
+                            <select name="cat_sample" id="catSample" class="form-select" required>
+                                <option hidden value="">Category</option>
+                                <?php foreach ($catSampleResult as $dataCatSample) : ?>
+                                    <option value="<?= $dataCatSample['kd_category']; ?>" <?php if ($_POST['cat_sample'] == $dataCatSample['kd_category']) echo 'selected' ?>>
+                                        <?= $dataCatSample['name']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-6 col-lg-2 mt-3">
+                            <input value="<?= $_POST['room']; ?>" name="room" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Ruang">
+                        </div>
+                        <div class="col-6 col-lg-1 mt-3">
+                            <input required value="<?= $_POST['range']; ?>" name="range" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Jumlah">
+                        </div>
+                        <div class="col-6 col-lg-1 mt-3">
+                            <input required value="Cari" type="submit" class="btn btn-primary w-100" />
+                        </div>
+                    </div>
+                    <input value="<?= isset($_GET['search']) ? $_GET['page'] : 1; ?>" name="page" type="text" class="form-control d-none" id="inlineFormInputGroupRoom">
+                </form>
+
             </div>
         </div>
-
-
-    </div>
 
 </body>
 

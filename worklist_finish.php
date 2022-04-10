@@ -133,7 +133,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
             </div>
         </div>
     <?php } else { ?>
-        <div class="ms-3 me-3 table-responsive-lg">
+        <div class="table-responsive-lg ps-3 pe-3">
             <div style="min-height: 400px;">
                 <table class=" table table-bordered align-middle">
                     <thead>
@@ -186,34 +186,34 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                     </tbody>
                 </table>
             </div>
-            <ul class="pagination justify-content-center">
-                <li class="page-item ">
-                    <a class="btn btn-info" <?php if ($page > 1) {
-                                                echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$previous'";
-                                            } ?>>
-                        Previous
-                    </a>
-                </li>
-                <?php
-                for ($x = 1; $x <= $total_page; $x++) {
-                ?>
-                    <li class="page-item me-2 ms-2"><a class="btn <?php if ($x != $page) {
-                                                                        echo 'btn-primary';
-                                                                    } else {
-                                                                        echo 'btn-danger';
-                                                                    } ?>" href="<?php echo "?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$x"; ?>">
-                            <?php echo $x; ?>
-                        </a></li>
-                <?php
-                }
-                ?>
-                <li class="page-item ">
-                    <a class="btn btn-info" <?php if ($page < $total_page) {
-                                                echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$next'";
-                                            } ?>>Next</a>
-                </li>
-            </ul>
         </div>
+        <ul class="pagination justify-content-center mt-2">
+            <li class="page-item ">
+                <a class="btn btn-info" <?php if ($page > 1) {
+                                            echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$previous'";
+                                        } ?>>
+                    Previous
+                </a>
+            </li>
+            <?php
+            for ($x = 1; $x <= $total_page; $x++) {
+            ?>
+                <li class="page-item me-2 ms-2"><a class="btn <?php if ($x != $page) {
+                                                                    echo 'btn-primary';
+                                                                } else {
+                                                                    echo 'btn-danger';
+                                                                } ?>" href="<?php echo "?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$x"; ?>">
+                        <?php echo $x; ?>
+                    </a></li>
+            <?php
+            }
+            ?>
+            <li class="page-item ">
+                <a class="btn btn-info" <?php if ($page < $total_page) {
+                                            echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$next'";
+                                        } ?>>Next</a>
+            </li>
+        </ul>
     <?php } ?>
 </body>
 
