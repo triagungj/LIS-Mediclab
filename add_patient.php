@@ -201,13 +201,6 @@ function generateTransNumber()
                             <input value="<?php if ($edit) echo $resultEdit['name_patient']; ?>" required type="text" id="inputNameReport" name="inputNameReport" class="form-control" aria-describedby="nameHelpInline">
                         </div>
                         <div class="row align-items-center">
-
-                            <div class="col-12 col-md-6 text-start">
-                                <div class="input-group input-group-default mb-2">
-                                    <span class="input-group-text" style="min-width: 80px;">Tgl Lahir</span>
-                                    <input value="<?php if ($edit) echo $resultEdit['birthdate']; ?>" required id="birthdayReport" name="inputBirthdayReport" type="date" class="form-control" aria-describedby="birthdayHelpInline" onchange="getAgeBirthday()">
-                                </div>
-                            </div>
                             <div class="col-12 col-md-6 text-start">
                                 <div class="input-group input-group-default mb-2">
                                     <span class="input-group-text" style="min-width: 80px;">Jenis Kelamin</span>
@@ -222,16 +215,31 @@ function generateTransNumber()
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-12 col-md-6 text-start">
+                                <div class="input-group input-group-default mb-2">
+                                    <span class="input-group-text" style="min-width: 80px;">Tgl Lahir</span>
+                                    <input value="<?php if ($edit) echo $resultEdit['birthdate']; ?>" required id="birthdayReport" name="inputBirthdayReport" type="date" class="form-control" aria-describedby="birthdayHelpInline" onchange="getAgeBirthday()">
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group input-group-default mb-2">
-                            <span class="input-group-text" style="min-width: 80px;">Umur</span>
-                            <input id="inputAgeYear" type="text" disabled class="form-control text-end">
-                            <span class="input-group-text">Tahun</span>
-                            <input id="inputAgeMonth" type="text" disabled class="form-control text-end">
-                            <span class="input-group-text">Bulan</span>
-                            <input id="inputAgeDate" type="text" disabled class="form-control text-end">
-                            <span class="input-group-text">Hari</span>
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-1">
+                                <div class="input-group input-group-default ">
+                                    <span class="input-group-text" style="min-width: 80px;">Umur</span>
+                                    <input id="inputAgeYear" type="text" disabled class="form-control text-end">
+                                    <span class="input-group-text">Tahun</span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-2">
+                                <div class="input-group input-group-default ">
+                                    <input id="inputAgeMonth" type="text" disabled class="form-control text-end">
+                                    <span class="input-group-text">Bulan</span>
+                                    <input id="inputAgeDate" type="text" disabled class="form-control text-end">
+                                    <span class="input-group-text">Hari</span>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="input-group input-group-default mb-2">
                             <span class="input-group-text" style="min-width: 80px;">Alamat</span>
                             <input value="<?php if ($edit) echo $resultEdit['address']; ?>" required type="text" name="inputAddressReport" class="form-control" aria-describedby="addressHelpInline">
