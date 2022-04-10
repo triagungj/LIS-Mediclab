@@ -334,31 +334,37 @@ function generateTransNumber()
                             <span class="input-group-text" style="min-width: 80px;">Kesan</span>
                             <input value="<?php if ($edit) echo $resultEdit['pesan']; ?>" required name="inputPesanReport" type="text" class="form-control" aria-describedby="massagePatientHelpInline">
                         </div>
-                        <div class="input-group input-group-default mb-2 align-items-center border">
-                            <span class="input-group-text" style="min-width: 80px;">Sample</span>
-                            <div class="form-check me-4 ms-4">
-                                <input <?php if ($edit) if ($resultEdit['sample'] == 'normal') echo 'checked'; ?> required value="normal" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleNormal">
-                                <label class="form-check-label" for="flexRadioSampleNormal">
-                                    Normal
-                                </label>
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-2 mb-2">
+                                <span class="input-group-text" style="min-width: 80px;">Sample</span>
                             </div>
-                            <div class="form-check me-4">
-                                <input <?php if ($edit) if ($resultEdit['sample'] == 'ikterik') echo 'checked'; ?> value="ikterik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleIkterik">
-                                <label class="form-check-label" for="flexRadioSampleIkterik">
-                                    Ikterik
-                                </label>
-                            </div>
-                            <div class="form-check me-4">
-                                <input <?php if ($edit) if ($resultEdit['sample'] == 'lisis') echo 'checked'; ?> value="lisis" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLisis">
-                                <label class="form-check-label" for="flexRadioSampleLisis">
-                                    Lisis
-                                </label>
-                            </div>
-                            <div class="form-check me-4">
-                                <input <?php if ($edit) if ($resultEdit['sample'] == 'lipemik') echo 'checked'; ?> value="lipemik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLipemik">
-                                <label class="form-check-label" for="flexRadioSampleLipemik">
-                                    Lipemik
-                                </label>
+                            <div class="col-12 col-md-10">
+                                <div class="input-group input-group-default mb-2 ms-2 align-items-center">
+                                    <div class="form-check me-4 ">
+                                        <input <?php if ($edit) if ($resultEdit['sample'] == 'normal') echo 'checked'; ?> required value="normal" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleNormal">
+                                        <label class="form-check-label" for="flexRadioSampleNormal">
+                                            Normal
+                                        </label>
+                                    </div>
+                                    <div class="form-check me-4">
+                                        <input <?php if ($edit) if ($resultEdit['sample'] == 'ikterik') echo 'checked'; ?> value="ikterik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleIkterik">
+                                        <label class="form-check-label" for="flexRadioSampleIkterik">
+                                            Ikterik
+                                        </label>
+                                    </div>
+                                    <div class="form-check me-4">
+                                        <input <?php if ($edit) if ($resultEdit['sample'] == 'lisis') echo 'checked'; ?> value="lisis" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLisis">
+                                        <label class="form-check-label" for="flexRadioSampleLisis">
+                                            Lisis
+                                        </label>
+                                    </div>
+                                    <div class="form-check me-4">
+                                        <input <?php if ($edit) if ($resultEdit['sample'] == 'lipemik') echo 'checked'; ?> value="lipemik" class="form-check-input" type="radio" name="radioSampleReport" id="flexRadioSampleLipemik">
+                                        <label class="form-check-label" for="flexRadioSampleLipemik">
+                                            Lipemik
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="input-group input-group-default mb-2">
