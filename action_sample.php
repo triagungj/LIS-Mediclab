@@ -21,6 +21,16 @@ if (isset($_GET['nota'])) {
         endforeach;
         header("Location: ./add_patient.php?nota=$nota");
     } else if (isset($_POST['finish_sample'])) {
+        $sub_sample_sql = "SELECT * FROM sub_sample WHERE kd_sample = '$kd_sample'";
+        $row_sub_sample = mysqli_query($conn, $sub_sample_sql);
+        foreach ($row_sub_sample as $data) :
+            $input = 'input' . $data['kd_sub_category_sample'];
+            $flagInput = 'flagInput' . $data['kd_sub_category_sample'];
+            $update_sub_sample_sql = "UPDATE sub_sample SET value='$_POST[$input]', flag='$_POST[$flagInput]' 
+                WHERE kd_sub_category_sample='$data[kd_sub_category_sample]' AND kd_sample = '$kd_sample'";
+            mysqli_query($conn, $update_sub_sample_sql);
+        endforeach;
+
         $dateNow = date("Y-m-d H:i:s");
         $resultReportSql = "UPDATE report SET date_finish='$dateNow' WHERE nota='$nota'";
         if (mysqli_query($conn, $resultReportSql)) {
