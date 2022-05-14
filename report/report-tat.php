@@ -31,9 +31,12 @@ if (isset($_POST['date_from']) && isset($_POST['date_to']) && isset($_POST['cat_
     $catSample = $_POST['cat_sample'];
     $room = $_POST['room'];
     $range = $_POST['range'];
+
+    $dateToTime = dayIncrement($dateTo);
+
     $sqlReport = "SELECT * FROM report WHERE 
         sample_category='$catSample' AND room LIKE '%$room%' 
-        AND date_report BETWEEN '$dateFrom' AND '$dateTo'
+        AND date_report >= '$dateFrom' AND date_report <= '$dateToTime'
         AND date_acc IS NOT NULL
         ORDER BY nota DESC limit $range";
     $resultReport = mysqli_query($conn, $sqlReport);
@@ -56,6 +59,19 @@ foreach ($resultReport as $dataReport) {
 $averageSeconds = $diffInSeconds / $totalData;
 $averageTime =
     sprintf('%02d:%02d:%02d', ($averageSeconds / 3600), ($averageSeconds / 60 % 60), $averageSeconds % 60);
+
+function dayIncrement($date)
+{
+    $date1 = str_replace('-', '/', $date);
+    $tomorrow = date('Y-m-d', strtotime($date1 . "+1 days"));
+    return $tomorrow;
+}
+function dayDecrement($date)
+{
+    $date1 = str_replace('-', '/', $date);
+    $tomorrow = date('Y-m-d', strtotime($date1 . "-1 days"));
+    return $tomorrow;
+}
 
 ?>
 <!DOCTYPE html>
