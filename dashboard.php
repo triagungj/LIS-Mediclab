@@ -18,7 +18,14 @@ if (isset($_SESSION['username'])) {
     header("Location: ./");
 }
 
+$sampleTotalSql = "SELECT category_sample.name as 'nama', COUNT(nota) as 'total'
+    FROM report 
+    LEFT JOIN category_sample ON report.sample_category=category_sample.kd_category
+    GROUP BY category_sample.name";
+$sampleTotalArray = mysqli_query($conn, $sampleTotalSql);
+
 ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
 <head>
     <meta charset="utf-8">
@@ -52,8 +59,7 @@ if (isset($_SESSION['username'])) {
         <div class="row menu-items">
             <div class="col-lg-6 col-12 chart mt-4">
                 <div class="p-3 bg-light text-center">
-                    <img src="assets/bar_chart_black_24dp.svg" style="height: 280px; width: 280px;" alt="">
-                    <h2>CHART</h2>
+                    <canvas id="myChart" style="width:400%;max-width:800px;height:600px"></canvas>
                 </div>
             </div>
             <div class="col-lg-6 col-12 container menus">
@@ -105,7 +111,41 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
 </body>
+<script>
+    sampleTotalName = [];
+    sampleTotalValue = [];
+    <?php foreach ($sampleTotalArray as $data) : ?>
+        sampleTotalName.push('<?= $data['nama']; ?>');
+        sampleTotalValue.push(<?= $data['total']; ?>);
+    <?php endforeach; ?>
 
+    var xValues = sampleTotalName;
+    var yValues = sampleTotalValue;
+    var barColors = [
+        "#b91d47",
+        "#00aba9",
+        "#2b5797",
+        "#e8c3b9",
+        "#1e7145"
+    ];
+
+    new Chart("myChart", {
+        type: "pie",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: "Total Laporan Pasien"
+            }
+        }
+    });
+</script>
 <script src="js/bootstrap.bundle.min.js"></script>
 
 </html>
