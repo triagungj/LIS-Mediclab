@@ -11,8 +11,8 @@ if (isset($_SESSION['username'])) {
     $sql = "SELECT * FROM users WHERE username='$username'";
     $result = mysqli_query($conn, $sql);
     if ($result->num_rows > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $name = $row['name'];
+        $rowUser['jabatan'] = mysqli_fetch_assoc($result);
+        $name = $rowUser['jabatan']['name'];
     }
 } else {
     header("Location: ./");
@@ -64,12 +64,6 @@ function dayIncrement($date)
 {
     $date1 = str_replace('-', '/', $date);
     $tomorrow = date('Y-m-d', strtotime($date1 . "+1 days"));
-    return $tomorrow;
-}
-function dayDecrement($date)
-{
-    $date1 = str_replace('-', '/', $date);
-    $tomorrow = date('Y-m-d', strtotime($date1 . "-1 days"));
     return $tomorrow;
 }
 
@@ -234,7 +228,17 @@ function dayDecrement($date)
                 </div>
             </div>
         </div>
-
 </body>
+<script>
+    function onClickTable(nota) {
+        var jabatan = '<?= $rowUser['jabatan']; ?>';
+
+        if (jabatan == 'validator') {
+            window.location.href = '../validate_report.php?nota=' + nota;
+        } else {
+            window.location.href = '../add_patient.php?nota=' + nota;
+        }
+    }
+</script>
 
 </html>
