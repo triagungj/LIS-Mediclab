@@ -183,8 +183,13 @@ function dayIncrement($date)
                 </form>
                 <div class="ms-4 mt-4">
                     <p>
-                        <?php if (isset($_GET['search'])) { ?>
-                            Index tanggal: <b><?= $dateFrom; ?></b> s/d <b><?= $dateTo; ?>.</b> Total Laporan Kritis: <b><?= $total_data; ?></b>
+                        <?php if (
+                            $_GET['date_from'] != null
+                            && $_GET['date_to'] != null
+                        ) { ?>
+                            Index tanggal: <b><?= $dateFrom; ?></b> s/d <b><?= $dateTo; ?></b>. Total Laporan Kritis: <b><?= $total_data; ?></b>
+                        <?php } else { ?>
+                            Laporan Kritis <b>Terbaru</b>
                         <?php } ?>
                     </p>
                 </div>
