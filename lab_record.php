@@ -18,6 +18,55 @@ if (isset($_SESSION['username'])) {
     header("Location: ./");
 }
 
+$range = 8;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$first_page = ($page > 1) ? ($page * $range) - $range : 0;
+
+$previous = $page - 1;
+$next = $page + 1;
+
+if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient']) && isset($_GET['room'])) {
+    $date = $_GET['date'];
+    $norm = $_GET['norm'];
+    $name_patient = $_GET['name_patient'];
+    $room = $_GET['room'];
+    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
+        WHERE name_patient LIKE '%$name_patient%' AND date_report LIKE '$date%'
+        AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nota DESC limit $first_page, $range";
+    $resultReport = mysqli_query($conn, $sqlReport);
+    $totalDataSql = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
+        WHERE name_patient LIKE '%$name_patient%' AND date_report LIKE '$date%'
+        AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nota DESC";
+    $totalDataQuery = mysqli_query($conn, $totalDataSql);
+    $total_data = mysqli_num_rows($totalDataQuery);
+    $total_page = ceil($total_data / $range);
+} else {
+    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd ORDER BY nota DESC limit $first_page, $range";
+    $resultReport = mysqli_query($conn, $sqlReport);
+    $totalDataSql = "SELECT nota FROM report";
+    $totalDataQuery = mysqli_query($conn, $totalDataSql);
+    $total_data = mysqli_num_rows($totalDataQuery);
+    $total_page = ceil($total_data / $range);
+}
+
+if (isset($_GET['selected'])) {
+    $selected = $_GET['selected'];
+    $selectedSql = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd WHERE nolab = '$selected'";
+    $selectedResult = mysqli_query($conn, $selectedSql);
+    $selectedRow = mysqli_fetch_assoc($selectedResult);
+    $selectedNota = $selectedRow['nota'];
+} else {
+    $selectedRow = mysqli_fetch_assoc($resultReport);
+    $selectedNota = $selectedRow['nota'];
+}
+
+$subSampleSql = "SELECT * FROM sub_sample 
+    LEFT JOIN sample on sub_sample.kd_sample = sample.kd_sample
+    LEFT JOIN sub_category_sample on sub_sample.kd_sub_category_sample = sub_category_sample.kd_sub_category
+    WHERE nota = '$selectedNota'";
+
+$resultSample = mysqli_query($conn, $subSampleSql);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -50,7 +99,7 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
     <div class="ps-3 px-4">
-        <form method="GET" action="worklist.php" class="row mt-2 mb-4 ">
+        <form method="GET" class="row mt-2 mb-4 ">
             <div class="col-10 row pt-3">
                 <div class="col-6 col-lg-4">
                     <div class="input-group input-group-default mb-3">
@@ -94,43 +143,62 @@ if (isset($_SESSION['username'])) {
                 <div class="bg-surface p-2">
                     <span>Daftar Pasien</span>
                 </div>
-                <div class="ms-2 me-2 mt-2">
+                <div class="ms-2 me-2 mt-2" style="min-height: 400px;">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col" width="10%">No</th>
-                                <th scope="col">Tanggal</th>
-                                <th scope="col">Nama</th>
-                                <th scope="col">No. RM</th>
+                                <th class="text-center" scope="col" width="10%">No</th>
+                                <th class="text-center" scope="col">Tanggal</th>
+                                <th class="text-center" scope="col">Nama</th>
+                                <th class="text-center" scope="col">No. RM</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Data</td>
-                                <td>Data</td>
-                                <td>Data</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Data</td>
-                                <td>Data</td>
-                                <td>Data</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Data</td>
-                                <td>Data</td>
-                                <td>Data</td>
-                            </tr>
+                            <?php $number = 1 + $first_page; ?>
+                            <?php foreach ($resultReport as $dataReport) : ?>
+                                <tr class="<?= ($selectedRow['nolab'] == $dataReport['nolab']) ? "bg-surface" : ''; ?>" onclick="onClickTable(<?= $dataReport['nolab']; ?>)">
+                                    <td class="text-center"><?= $number ?></td>
+                                    <td class="text-center"><?= date('Y-m-d', strtotime($dataReport['date_report'])); ?></td>
+                                    <td><?= $dataReport['name_patient']; ?></td>
+                                    <td class="text-center"><?= $dataReport['norm']; ?> (<?= $dataReport['nolab']; ?>)</td>
+                                </tr>
+                                <?php $number++ ?>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
+                <ul class="pagination justify-content-center mt-2">
+                    <li class="page-item me-2">
+                        <a class="btn btn-info" <?php if ($page > 1) {
+                                                    echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$previous'";
+                                                } ?>>
+                            Previous
+                        </a>
+                    </li>
+                    <?php
+                    for ($x = 1; $x <= $total_page; $x++) {
+                    ?>
+                        <li class="page-item me-2 ms-2"><a class="btn <?php if ($x != $page) {
+                                                                            echo 'btn-primary';
+                                                                        } else {
+                                                                            echo 'btn-danger';
+                                                                        } ?>" href="<?php echo "?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$x"; ?>">
+                                <?php echo $x; ?>
+                            </a></li>
+                    <?php
+                    }
+                    ?>
+                    <li class="page-item ms-2">
+                        <a class="btn btn-info" <?php if ($page < $total_page) {
+                                                    echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$next'";
+                                                } ?>>Next</a>
+                    </li>
+                </ul>
 
             </div>
         </div>
         <div class="col-md-6 pe-2 ps-2">
-            <div class="rounded-top border">
+            <div id="tableRecord" class="rounded-top border">
                 <div class="bg-surface p-2 justify-content-between d-flex align-items-center">
                     <span>Daftar Pasien</span>
                     <button class="btn btn-primary me-4">PRINT</button>
@@ -140,53 +208,112 @@ if (isset($_SESSION['username'])) {
                         <div class="row">
                             <div class="col-2">Nama</div>
                             <div class="col-1">:</div>
-                            <div class="col-9">Bambang</div>
+                            <div class="col-9"><?= $selectedRow['name_patient'] ?></div>
                         </div>
                         <div class="row">
                             <div class="col-2">Umur</div>
                             <div class="col-1">:</div>
-                            <div class="col-9">1990-03-22 / 31 Tahun</div>
+                            <div class="col-9"><?= $selectedRow['birthdate'] ?> / 31 Tahun</div>
                         </div>
                         <div class="row">
                             <div class="col-2">Ruang</div>
                             <div class="col-1">:</div>
-                            <div class="col-9">KALIBIRU 1 Umum / -</div>
+                            <div class="col-9"><?= $selectedRow['room_name'] ?> / <?= strtoupper($selectedRow['status']) ?></div>
                         </div>
                         <div class="row">
                             <div class="col-2">Status</div>
                             <div class="col-1">:</div>
-                            <div class="col-9">-</div>
+                            <div class="col-9"><b>
+                                    <?php if ($selectedRow['date_acc'] != null) {
+                                        echo 'ACC';
+                                    } else if ($selectedRow['date_finish'] != null) {
+                                        echo 'FINISH';
+                                    } else {
+                                        echo 'PROCCESS';
+                                    }
+                                    ?>
+                                </b>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xl-6 col-sm-12 col-md-12">
                         <div class="row">
                             <div class="col-2">No. Lab</div>
                             <div class="col-1">:</div>
-                            <div class="col-9">203203809138 (203291)</div>
+                            <div class="col-9"><?= $selectedRow['nolab']; ?> (<?= $selectedRow['norm']; ?>)</div>
                         </div>
                         <div class="row">
                             <div class="col-2">Terima</div>
                             <div class="col-1">:</div>
-                            <div class="col-9">07:16</div>
+                            <div class="col-9">
+                                <?= date('H:i', strtotime($selectedRow['date_report'])); ?>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-2">Selesai</div>
                             <div class="col-1">:</div>
-                            <div class="col-9">07:34</div>
+                            <div class="col-9">
+                                <?= ($selectedRow['date_finish'] != null) ? date('H:i', strtotime($selectedRow['date_finish'])) : '-'; ?>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-2">Alamat</div>
                             <div class="col-1">:</div>
-                            <div class="col-9">Jl. Wates No. 32 RT 3/5, Kulonprogo, DIY</div>
+                            <div class="col-9">
+                                <?= $selectedRow['address']; ?>
+                            </div>
                         </div>
                     </div>
+                    <hr class="ms-4 me-4 mt-2 mb-2">
+                    <div class="table-responsive-lg">
+                        Sample: <b><?= strtoupper($selectedRow['sample_category']); ?></b>
+                        <table class="table table-bordered border-dark table-record mt-2">
+                            <thead>
+                                <tr>
+                                    <th scope="col" width="36%" class="text-center">Pemeriksaan</th>
+                                    <th scope="col" width="21%" class="text-center">Hasil</th>
+                                    <th scope="col" width="14%" class="text-center">Satuan</th>
+                                    <th scope="col" class="text-center">Rujukan</th>
+                                    <th scope="col" class="text-center">Flag</th>
+                                </tr>
+                            </thead>
+                            <?php foreach ($resultSample as $sampleData) : ?>
+                                <tr>
+                                    <td><?= $sampleData['name']; ?></td>
+                                    <td class="text-center">
+                                        <span>
+                                            <?= $sampleData['value']; ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center"><?= $sampleData['satuan']; ?></td>
+                                    <td class="text-center"><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
+                                    <td class="text-center">
+                                        <span class="<?php if ($sampleData['flag'] != 'normal') echo 'text-danger text-bold' ?>">
+                                            <?= strtoupper($sampleData['flag']); ?>
+                                        </span>
+                                    </td>
 
-                    <div style="min-height: 200px;"></div>
+                                </tr>
+
+                                <?php $count++; ?>
+                            <?php endforeach; ?>
+                        </table>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
+
+    <div class="mt-4"></div>
 </body>
+<script>
+    function onClickTable(nolab) {
+        let getPatientUrl = '?<?= "date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$page"; ?>' +
+            '&selected=';
+        let url = getPatientUrl.concat(nolab);
+        window.location.replace(url + '#tableRecord');
+    }
+</script>
 
 </html>
