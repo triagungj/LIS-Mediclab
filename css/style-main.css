@@ -108,6 +108,13 @@ svg {
   vertical-align: middle;
 }
 
+/* TABLE RECORD */
+.table-record tbody td{
+  padding: 6px;
+  font-size: 11pt;
+
+}
+
 /* print page */
 .print-page * {
   font-family: Arial, Helvetica, sans-serif;
