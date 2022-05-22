@@ -17,6 +17,11 @@ svg {
   min-height: 75px;
 }
 
+.signature-image{
+  max-width: 100px;
+  max-height: 100px;
+}
+
 .text-bold{
   font-weight: bold;
 }
@@ -59,7 +64,12 @@ svg {
 
 .body-login {
   height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-blend-mode: darken;
 }
+
 .form-login {
   background: #dadef4;
   padding: 50px 50px 20px 50px;
@@ -72,6 +82,20 @@ svg {
 
 .form-login input {
   border-radius: 10px;
+}
+
+.content-dashboard{
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  min-height: 585px;
+}
+
+.content-dashboard .dashboard-menu{
+  border-radius: 20px;
+  background: rgb(187, 234, 255, 0.9);
+  overflow: hidden;
 }
 
 .content-dashboard .menu-items {

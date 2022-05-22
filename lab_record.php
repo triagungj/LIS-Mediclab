@@ -18,7 +18,7 @@ if (isset($_SESSION['username'])) {
     header("Location: ./");
 }
 
-$range = 8;
+$range = 15;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $first_page = ($page > 1) ? ($page * $range) - $range : 0;
 
@@ -76,7 +76,7 @@ $resultSample = mysqli_query($conn, $subSampleSql);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - History</title>
+    <title>Lab Record - Mediclab</title>
 </head>
 
 <body>
@@ -99,7 +99,7 @@ $resultSample = mysqli_query($conn, $subSampleSql);
         </div>
     </div>
     <div class="ps-3 px-4">
-        <form method="GET" class="row mt-2 mb-4 ">
+        <form method="GET" class="row mt-2 ">
             <div class="col-10 row pt-3">
                 <div class="col-6 col-lg-4">
                     <div class="input-group input-group-default mb-3">
@@ -137,173 +137,190 @@ $resultSample = mysqli_query($conn, $subSampleSql);
 
         </form>
     </div>
-    <div class="row ms-2 me-2 mt-2">
-        <div class="col-md-6">
-            <div class="table-responsive-md border rounded-top">
-                <div class="bg-surface p-2">
-                    <span>Daftar Pasien</span>
-                </div>
-                <div class="ms-2 me-2 mt-2" style="min-height: 400px;">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center" scope="col" width="10%">No</th>
-                                <th class="text-center" scope="col">Tanggal</th>
-                                <th class="text-center" scope="col">Nama</th>
-                                <th class="text-center" scope="col">No. RM</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $number = 1 + $first_page; ?>
-                            <?php foreach ($resultReport as $dataReport) : ?>
-                                <tr class="<?= ($selectedRow['nolab'] == $dataReport['nolab']) ? "bg-surface" : ''; ?>" onclick="onClickTable(<?= $dataReport['nolab']; ?>)">
-                                    <td class="text-center"><?= $number ?></td>
-                                    <td class="text-center"><?= date('Y-m-d', strtotime($dataReport['date_report'])); ?></td>
-                                    <td><?= $dataReport['name_patient']; ?></td>
-                                    <td class="text-center"><?= $dataReport['norm']; ?> (<?= $dataReport['nolab']; ?>)</td>
-                                </tr>
-                                <?php $number++ ?>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <ul class="pagination justify-content-center mt-2">
-                    <li class="page-item me-2">
-                        <a class="btn btn-info" <?php if ($page > 1) {
-                                                    echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$previous'";
-                                                } ?>>
-                            Previous
-                        </a>
-                    </li>
-                    <?php
-                    for ($x = 1; $x <= $total_page; $x++) {
-                    ?>
-                        <li class="page-item me-2 ms-2"><a class="btn <?php if ($x != $page) {
-                                                                            echo 'btn-primary';
-                                                                        } else {
-                                                                            echo 'btn-danger';
-                                                                        } ?>" href="<?php echo "?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$x"; ?>">
-                                <?php echo $x; ?>
-                            </a></li>
-                    <?php
-                    }
-                    ?>
-                    <li class="page-item ms-2">
-                        <a class="btn btn-info" <?php if ($page < $total_page) {
-                                                    echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$next'";
-                                                } ?>>Next</a>
-                    </li>
-                </ul>
-
+    <hr>
+    <?php if ($total_data == 0) { ?>
+        <div class="d-flex align-items-center ps-3 pe-3" style="min-height:300px">
+            <div class="box w-100 text-center">
+                <img src="assets/folder_off_black_24dp.svg" alt="empty" class="img-empty">
+                <h3 class="mt-2">Data tidak ditemukan</h3>
             </div>
         </div>
-        <div class="col-md-6 pe-2 ps-2">
-            <div id="tableRecord" class="rounded-top border">
-                <div class="bg-surface p-2 justify-content-between d-flex align-items-center">
-                    <span>Daftar Pasien</span>
-                    <button class="btn btn-primary me-4">PRINT</button>
-                </div>
-                <div class="mt-2 ps-2 row table-responsive-md ">
-                    <div class="col-xl-6 col-sm-12 col-md-12">
-                        <div class="row">
-                            <div class="col-2">Nama</div>
-                            <div class="col-1">:</div>
-                            <div class="col-9"><?= $selectedRow['name_patient'] ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">Umur</div>
-                            <div class="col-1">:</div>
-                            <div class="col-9"><?= $selectedRow['birthdate'] ?> / 31 Tahun</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">Ruang</div>
-                            <div class="col-1">:</div>
-                            <div class="col-9"><?= $selectedRow['room_name'] ?> / <?= strtoupper($selectedRow['status']) ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">Status</div>
-                            <div class="col-1">:</div>
-                            <div class="col-9"><b>
-                                    <?php if ($selectedRow['date_acc'] != null) {
-                                        echo 'ACC';
-                                    } else if ($selectedRow['date_finish'] != null) {
-                                        echo 'FINISH';
-                                    } else {
-                                        echo 'PROCCESS';
-                                    }
-                                    ?>
-                                </b>
-                            </div>
-                        </div>
+
+    <?php } else { ?>
+        <div class="row ms-2 me-2 mt-2">
+            <div class="col-md-6">
+                <div class="table-responsive-md border rounded-top">
+                    <div class="bg-surface p-2">
+                        <span>Daftar Pasien</span>
                     </div>
-                    <div class="col-xl-6 col-sm-12 col-md-12">
-                        <div class="row">
-                            <div class="col-2">No. Lab</div>
-                            <div class="col-1">:</div>
-                            <div class="col-9"><?= $selectedRow['nolab']; ?> (<?= $selectedRow['norm']; ?>)</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">Terima</div>
-                            <div class="col-1">:</div>
-                            <div class="col-9">
-                                <?= date('H:i', strtotime($selectedRow['date_report'])); ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">Selesai</div>
-                            <div class="col-1">:</div>
-                            <div class="col-9">
-                                <?= ($selectedRow['date_finish'] != null) ? date('H:i', strtotime($selectedRow['date_finish'])) : '-'; ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">Alamat</div>
-                            <div class="col-1">:</div>
-                            <div class="col-9">
-                                <?= $selectedRow['address']; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="ms-4 me-4 mt-2 mb-2">
-                    <div class="table-responsive-lg">
-                        Sample: <b><?= strtoupper($selectedRow['sample_category']); ?></b>
-                        <table class="table table-bordered border-dark table-record mt-2">
+                    <div class="ms-2 me-2 mt-2" style="min-height: 400px;">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" width="36%" class="text-center">Pemeriksaan</th>
-                                    <th scope="col" width="21%" class="text-center">Hasil</th>
-                                    <th scope="col" width="14%" class="text-center">Satuan</th>
-                                    <th scope="col" class="text-center">Rujukan</th>
-                                    <th scope="col" class="text-center">Flag</th>
+                                    <th class="text-center" scope="col" width="10%">No</th>
+                                    <th class="text-center" scope="col">Tanggal</th>
+                                    <th class="text-center" scope="col">Nama</th>
+                                    <th class="text-center" scope="col">No. RM</th>
                                 </tr>
                             </thead>
-                            <?php foreach ($resultSample as $sampleData) : ?>
-                                <tr>
-                                    <td><?= $sampleData['name']; ?></td>
-                                    <td class="text-center">
-                                        <span>
-                                            <?= $sampleData['value']; ?>
-                                        </span>
-                                    </td>
-                                    <td class="text-center"><?= $sampleData['satuan']; ?></td>
-                                    <td class="text-center"><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
-                                    <td class="text-center">
-                                        <span class="<?php if ($sampleData['flag'] != 'normal') echo 'text-danger text-bold' ?>">
-                                            <?= strtoupper($sampleData['flag']); ?>
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-                                <?php $count++; ?>
-                            <?php endforeach; ?>
+                            <tbody>
+                                <?php $number = 1 + $first_page; ?>
+                                <?php foreach ($resultReport as $dataReport) : ?>
+                                    <tr class="<?= ($selectedRow['nolab'] == $dataReport['nolab']) ? "bg-surface" : ''; ?>" onclick="onClickTable(<?= $dataReport['nolab']; ?>)">
+                                        <td class="text-center"><?= $number ?></td>
+                                        <td class="text-center"><?= date('Y-m-d', strtotime($dataReport['date_report'])); ?></td>
+                                        <td><?= $dataReport['name_patient']; ?></td>
+                                        <td class="text-center"><?= $dataReport['norm']; ?> (<?= $dataReport['nolab']; ?>)</td>
+                                    </tr>
+                                    <?php $number++ ?>
+                                <?php endforeach; ?>
+                            </tbody>
                         </table>
                     </div>
-                </div>
+                    <ul class="pagination justify-content-center mt-2">
+                        <li class="page-item me-2">
+                            <a class="btn btn-info" <?php if ($page > 1) {
+                                                        echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$previous'";
+                                                    } ?>>
+                                Previous
+                            </a>
+                        </li>
+                        <?php
+                        for ($x = 1; $x <= $total_page; $x++) {
+                        ?>
+                            <li class="page-item me-2 ms-2"><a class="btn <?php if ($x != $page) {
+                                                                                echo 'btn-primary';
+                                                                            } else {
+                                                                                echo 'btn-danger';
+                                                                            } ?>" href="<?php echo "?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$x"; ?>">
+                                    <?php echo $x; ?>
+                                </a></li>
+                        <?php
+                        }
+                        ?>
+                        <li class="page-item ms-2">
+                            <a class="btn btn-info" <?php if ($page < $total_page) {
+                                                        echo "href='?date=$_GET[date]&norm=$_GET[norm]&name_patient=$_GET[name_patient]&room=$_GET[room]&page=$next'";
+                                                    } ?>>Next</a>
+                        </li>
+                    </ul>
 
+                </div>
+            </div>
+            <div class="col-md-6 pe-2 ps-2">
+                <div id="tableRecord" class="rounded-top border">
+                    <div class="bg-surface p-2 justify-content-between d-flex align-items-center">
+                        <span>Daftar Pasien</span>
+                        <?php if ($selectedRow['date_acc'] != null) { ?>
+                            <a href="print.php?nota=<?= $selectedRow['nota']; ?>" target="_blank" class="btn btn-primary me-4">PRINT</a>
+                        <?php } ?>
+                    </div>
+                    <div class="mt-2 ps-2 row table-responsive-md ">
+                        <div class="col-xl-6 col-sm-12 col-md-12">
+                            <div class="row">
+                                <div class="col-2">Nama</div>
+                                <div class="col-1">:</div>
+                                <div class="col-9"><?= $selectedRow['name_patient'] ?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Umur</div>
+                                <div class="col-1">:</div>
+                                <div class="col-9"><?= $selectedRow['birthdate'] ?> / 31 Tahun</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Ruang</div>
+                                <div class="col-1">:</div>
+                                <div class="col-9"><?= $selectedRow['room_name'] ?> / <?= strtoupper($selectedRow['status']) ?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Status</div>
+                                <div class="col-1">:</div>
+                                <div class="col-9"><b>
+                                        <?php if ($selectedRow['date_acc'] != null) {
+                                            echo 'ACC';
+                                        } else if ($selectedRow['date_finish'] != null) {
+                                            echo 'FINISH';
+                                        } else {
+                                            echo 'PROCCESS';
+                                        }
+                                        ?>
+                                    </b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-sm-12 col-md-12">
+                            <div class="row">
+                                <div class="col-2">No. Lab</div>
+                                <div class="col-1">:</div>
+                                <div class="col-9"><?= $selectedRow['nolab']; ?> (<?= $selectedRow['norm']; ?>)</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Terima</div>
+                                <div class="col-1">:</div>
+                                <div class="col-9">
+                                    <?= date('H:i', strtotime($selectedRow['date_report'])); ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Selesai</div>
+                                <div class="col-1">:</div>
+                                <div class="col-9">
+                                    <?= ($selectedRow['date_finish'] != null) ? date('H:i', strtotime($selectedRow['date_finish'])) : '-'; ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Alamat</div>
+                                <div class="col-1">:</div>
+                                <div class="col-9">
+                                    <?= $selectedRow['address']; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ps-2 pe-3 ">
+                            <hr>
+                        </div>
+                        <div class="table-responsive-lg">
+                            Sample: <b><?= strtoupper($selectedRow['sample_category']); ?></b>
+                            <table class="table table-bordered border-dark table-record mt-2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="36%" class="text-center">Pemeriksaan</th>
+                                        <th scope="col" width="21%" class="text-center">Hasil</th>
+                                        <th scope="col" width="14%" class="text-center">Satuan</th>
+                                        <th scope="col" class="text-center">Rujukan</th>
+                                        <th scope="col" class="text-center">Flag</th>
+                                    </tr>
+                                </thead>
+                                <?php foreach ($resultSample as $sampleData) : ?>
+                                    <tr>
+                                        <td><?= $sampleData['name']; ?></td>
+                                        <td class="text-center">
+                                            <span>
+                                                <?= $sampleData['value']; ?>
+                                            </span>
+                                        </td>
+                                        <td class="text-center"><?= $sampleData['satuan']; ?></td>
+                                        <td class="text-center"><?php echo $sampleData['min_value'] . ' - ' . $sampleData['max_value']; ?></td>
+                                        <td class="text-center">
+                                            <span class="<?php if ($sampleData['flag'] != 'normal') echo 'text-danger text-bold' ?>">
+                                                <?= strtoupper($sampleData['flag']); ?>
+                                            </span>
+                                        </td>
+
+                                    </tr>
+
+                                    <?php $count++; ?>
+                                <?php endforeach; ?>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
+
+
+    <?php } ?>
 
     <div class="mt-4"></div>
 </body>

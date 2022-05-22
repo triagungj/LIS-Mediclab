@@ -96,7 +96,7 @@ function dayIncrement($date)
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/style-main.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Report</title>
+    <title>Report Kritis - Mediclab</title>
 </head>
 
 <body>
@@ -142,12 +142,6 @@ function dayIncrement($date)
                         <div class="p-4 d-flex">
                             <img src="../assets/bar_chart_black_24dp.svg" alt="configuration">
                             <span class="align-middle ms-2">Jumlah Pemeriksaan</span>
-                        </div>
-                    </a>
-                    <a href="./report-stock.php" class="decoration-none">
-                        <div class="p-4 d-flex">
-                            <img src="../assets/bar_chart_black_24dp.svg" alt="configuration">
-                            <span class="align-middle ms-2">Stock Opname Reagen</span>
                         </div>
                     </a>
                 </div>

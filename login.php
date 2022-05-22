@@ -28,11 +28,10 @@ if (isset($_POST['submit'])) {
     <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <title>Mediclab - Login</title>
+    <title>Login - Mediclab</title>
 </head>
 
-<body class="bg-primary body-login">
-
+<body class="vh-100 body-login" style="background: rgba(0, 0, 0, 0.7) url('assets/hospital.jpg');">
     <div>
         <div class="container pt-4 pb-2">
             <h4><b class="text-white">MEDICLAB</b></h4>

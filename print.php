@@ -47,13 +47,13 @@ if (isset($_GET['nota'])) {
             <div class="col-10 text-center pt-2">
                 <div>
                     <h6 class="text-headline">PEMERINTAH KABUPATEN KULONPROGO</h6>
-                    <h6 class="text-headline">RUMAH SAKIT DAERAH UMUM WATES</h6>
+                    <h6 class="text-headline">RUMAH SAKIT ALIH JENJANG</h6>
                     <h6 class="text-headline">INSTALASI LABORATORIUM PATOLOGI KLINIK</h6>
                     <div class="m-0 text-address">
-                        JL. Tentara Pelajar Km. 1 No. 5 Wates Kulon Progo Yogyakarta 55651
+                        JL. Sentolo Km. 5 No. 32 Sentolo Kulon Progo Yogyakarta 55657
                     </div>
                     <div class="m-0 text-address">
-                        Telp. (0274) 773169 Fax. (0274) 773092, email: rsud@kulonprogokab.go.id
+                        Telp. (0274) 773169 Fax. (0274) 773092, email: rsaj@kulonprogokab.go.id
                     </div>
                 </div>
             </div>
@@ -157,7 +157,9 @@ if (isset($_GET['nota'])) {
                             <span class="text-nb">NB: Bila ada keraguan Hasil Pemeriksaan, Mohon menghubungi Laboratorium RSUD Wates. Telp. (0274) 773169 ext 1146</span>
                             <div class="text-center signature">
                                 <p>Dokter Penanggung Jawab</p>
-                                <div class="blank-section"></div>
+                                <div class="blank-section">
+                                    <img class="signature-image" src="signature/<?= $accDoc['username']; ?>.png" alt="">
+                                </div>
                                 <p>(<?= $accDocName; ?>)</p>
                             </div>
                         </td>
@@ -169,7 +171,9 @@ if (isset($_GET['nota'])) {
                                     <br>
                                     Diperiksa Oleh,
                                 </p>
-                                <div class="blank-section"></div>
+                                <div class="blank-section">
+                                    <img class="signature-image" src="signature/<?= $petugas['username']; ?>.png" alt="">
+                                </div>
                                 <p>(<?= $petugasName; ?>)</p>
                             </div>
                         </td>
