@@ -32,7 +32,7 @@ $sampleTotalArray = mysqli_query($conn, $sampleTotalSql);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Dashboard</title>
+    <title>Dashboard - Mediclab </title>
 </head>
 
 <body>
@@ -55,56 +55,59 @@ $sampleTotalArray = mysqli_query($conn, $sampleTotalSql);
         </div>
     </div>
 
-    <div class="content-dashboard container mt-4">
-        <div class="row menu-items">
-            <div class="col-lg-6 col-12 chart mt-4">
-                <div class="p-3 bg-light text-center">
-                    <canvas id="myChart" style="width:400%;max-width:800px;height:600px"></canvas>
-                </div>
-            </div>
-            <div class="col-lg-6 col-12 container menus">
-                <div class="row">
-                    <div class="col-lg-6 col-12 text-center p-4">
-                        <a href="<?php if ($row['jabatan'] == 'validator') {
-                                        echo 'worklist_finish.php';
-                                    } else {
-                                        echo 'worklist.php';
-                                    } ?>" class="decoration-none">
-                            <div class="bg-danger pt-2 pb-2 border-radius-4">
-                                <img src="assets/fact_check_black_24dp.svg" alt="image" class="filter-white">
-                                <div style="min-height: 30px;"></div>
-                                <h5 class="text-light text-bold">WORKLIST</h5>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-6 col-12 text-center  p-4">
-                        <a href="./report/report-tat.php" class="decoration-none">
-                            <div class="bg-primary pt-2 pb-2 border-radius-4">
-                                <img src="assets/summarize_black_24dp.svg" alt="image" class="filter-white">
-                                <div style="min-height: 30px;"></div>
-                                <h5 class="text-light text-bold">REPORT</h5>
-                            </div>
-                        </a>
+    <div class="content-dashboard pt-3" style="background-image: url('assets/hospital.jpg');">
+        <div class="dashboard-menu container pt-4">
+            <h3 class="text-center"><b>RUMAH SAKIT ALIH JENJANG</b></h3>
+            <div class="row menu-items">
+                <div class="col-lg-6 col-12 chart mt-2">
+                    <div class="p-3 text-center">
+                        <canvas id="myChart" style="width:400%;max-width:800px;height:600px"></canvas>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6 col-12 text-center p-4">
-                        <a href="./lab_record.php" class="decoration-none">
-                            <div class="bg-warning pt-2 pb-2 border-radius-4">
-                                <img src="assets/history_black_24dp.svg" alt="image" class="filter-white">
-                                <div style="min-height: 30px;"></div>
-                                <h5 class="text-light text-bold">HISTORY</h5>
-                            </div>
-                        </a>
+                <div class="col-lg-6 col-12 container menus ">
+                    <div class="row">
+                        <div class="col-lg-6 col-12 text-center p-4">
+                            <a href="<?php if ($row['jabatan'] == 'validator') {
+                                            echo 'worklist_finish.php';
+                                        } else {
+                                            echo 'worklist.php';
+                                        } ?>" class="decoration-none">
+                                <div class="bg-danger pt-2 pb-2 border-radius-4">
+                                    <img src="assets/fact_check_black_24dp.svg" alt="image" class="filter-white">
+                                    <div style="min-height: 30px;"></div>
+                                    <h5 class="text-light text-bold">WORKLIST</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-12 text-center  p-4">
+                            <a href="./report/report-tat.php" class="decoration-none">
+                                <div class="bg-primary pt-2 pb-2 border-radius-4">
+                                    <img src="assets/summarize_black_24dp.svg" alt="image" class="filter-white">
+                                    <div style="min-height: 30px;"></div>
+                                    <h5 class="text-light text-bold">REPORT</h5>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-lg-6 col-12 text-center p-4">
-                        <a href="#" class="decoration-none">
-                            <div class="bg-success pt-2 pb-2 border-radius-4">
-                                <img src="assets/print_black_24dp.svg" alt="image" class="filter-white">
-                                <div style="min-height: 30px;"></div>
-                                <h5 class="text-light text-bold">LIST PRINT</h5>
-                            </div>
-                        </a>
+                    <div class="row">
+                        <div class="col-lg-6 col-12 text-center p-4">
+                            <a href="./lab_record.php" class="decoration-none">
+                                <div class="bg-warning pt-2 pb-2 border-radius-4">
+                                    <img src="assets/history_black_24dp.svg" alt="image" class="filter-white">
+                                    <div style="min-height: 30px;"></div>
+                                    <h5 class="text-light text-bold">HISTORY</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-12 text-center p-4">
+                            <a href="./list_print.php" class="decoration-none">
+                                <div class="bg-success pt-2 pb-2 border-radius-4">
+                                    <img src="assets/print_black_24dp.svg" alt="image" class="filter-white">
+                                    <div style="min-height: 30px;"></div>
+                                    <h5 class="text-light text-bold">LIST PRINT</h5>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -62,7 +62,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
 
     <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Validator Worklist</title>
+    <title>Validator Worklist - Mediclab</title>
 </head>
 
 <body>

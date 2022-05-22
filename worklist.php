@@ -33,16 +33,16 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
     $room = $_GET['room'];
     $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
         WHERE name_patient LIKE '%$name_patient%' AND date_report LIKE '$date%'
-        AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nota DESC limit $first_page, $range";
+        AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nolab DESC limit $first_page, $range";
     $resultReport = mysqli_query($conn, $sqlReport);
     $totalDataSql = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd 
         WHERE name_patient LIKE '%$name_patient%' AND date_report LIKE '$date%'
-        AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nota DESC";
+        AND norm LIKE '%$norm%' AND room LIKE '%$room%' ORDER BY nolab DESC";
     $totalDataQuery = mysqli_query($conn, $totalDataSql);
     $total_data = mysqli_num_rows($totalDataQuery);
     $total_page = ceil($total_data / $range);
 } else {
-    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd ORDER BY nota DESC limit $first_page, $range";
+    $sqlReport = "SELECT * FROM report LEFT JOIN room ON report.room=room.room_kd ORDER BY nolab DESC limit $first_page, $range";
     $resultReport = mysqli_query($conn, $sqlReport);
     $totalDataSql = "SELECT nota FROM report";
     $totalDataQuery = mysqli_query($conn, $totalDataSql);
@@ -61,7 +61,7 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
 
     <link href="css/style-main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Dashboard</title>
+    <title>Worklist - Mediclab</title>
 </head>
 
 <body>

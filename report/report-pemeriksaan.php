@@ -18,6 +18,38 @@ if (isset($_SESSION['username'])) {
     header("Location: ./");
 }
 
+$totalSql = "SELECT table_patient.sample_kd, table_patient.sample_name, table_patient.total_patient, table_param.total_parameter, table_kritis.total_kritis
+	FROM 
+	(SELECT category_sample.kd_category as 'sample_kd', category_sample.name as 'sample_name', COUNT(report.nota) as 'total_patient'
+    FROM report 
+    LEFT JOIN category_sample ON report.sample_category=category_sample.kd_category
+    GROUP BY category_sample.name) table_patient
+    
+    LEFT JOIN 
+    	(SELECT category_sample.kd_category as 'sample_kd', COUNT(sub_sample.kd_sub_sample) as 'total_parameter' 
+	FROM category_sample 
+    LEFT JOIN sub_category_sample ON category_sample.kd_category=sub_category_sample.kd_category 
+    LEFT JOIN sub_sample ON sub_category_sample.kd_sub_category=sub_sample.kd_sub_category_sample
+    LEFT JOIN sample ON sub_sample.kd_sample = sample.kd_sample
+    LEFT JOIN report ON sample.nota = report.nota
+    GROUP BY category_sample.kd_category) table_param
+    ON table_patient.sample_kd = table_param.sample_kd
+    
+     LEFT JOIN 
+    	(SELECT category_sample.kd_category as 'sample_kd', COUNT(sub_sample.kd_sub_sample) as 'total_kritis' 
+	FROM category_sample 
+    LEFT JOIN sub_category_sample ON category_sample.kd_category=sub_category_sample.kd_category 
+    LEFT JOIN sub_sample ON sub_category_sample.kd_sub_category=sub_sample.kd_sub_category_sample
+    LEFT JOIN sample ON sub_sample.kd_sample = sample.kd_sample
+    LEFT JOIN report ON sample.nota = report.nota
+    WHERE sub_sample.flag != 'normal'
+    GROUP BY category_sample.kd_category) table_kritis
+    ON table_patient.sample_kd = table_kritis.sample_kd
+    
+    GROUP BY table_patient.sample_kd";
+
+$totalArray = mysqli_query($conn, $totalSql);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +59,7 @@ if (isset($_SESSION['username'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/style-main.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Report</title>
+    <title>Report Pemeriksaan - Mediclab</title>
 </head>
 
 <body>
@@ -75,12 +107,6 @@ if (isset($_SESSION['username'])) {
                             <span class="align-middle ms-2">Jumlah Pemeriksaan</span>
                         </div>
                     </a>
-                    <a href="./report-stock.php" class="decoration-none">
-                        <div class="p-4 d-flex">
-                            <img src="../assets/bar_chart_black_24dp.svg" alt="configuration">
-                            <span class="align-middle ms-2">Stock Opname Reagen</span>
-                        </div>
-                    </a>
                 </div>
             </div>
 
@@ -92,43 +118,37 @@ if (isset($_SESSION['username'])) {
                 </div>
             </div>
             <div class="border">
-                <form method="POST" action="report-tat.php" class="mb-2">
-                    <div class="row ps-2 pe-2">
-                        <div class="col-6 col-lg-3 mt-3 d-flex align-items-center">
-                            <div class="input-group input-group-default">
-                                <span class="input-group-text">Dari</span>
-                                <input required value="<?= $_POST['date_from']; ?>" name="date_from" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3 mt-3">
-                            <div class="input-group input-group-default">
-                                <span class="input-group-text">Sampai</span>
-                                <input required value="<?= $_POST['date_to']; ?>" name="date_to" type="date" class="form-control" id="inlineFormInputGroupDate" placeholder="Tanggal">
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-lg-2 mt-3">
-                            <select name="cat_sample" id="catSample" class="form-select" required>
-                                <option hidden value="">Category</option>
-                                <?php foreach ($catSampleResult as $dataCatSample) : ?>
-                                    <option value="<?= $dataCatSample['kd_category']; ?>" <?php if ($_POST['cat_sample'] == $dataCatSample['kd_category']) echo 'selected' ?>>
-                                        <?= $dataCatSample['name']; ?>
-                                    </option>
+                <div class="ms-3 me-3 mt-3 table-responsive-lg">
+                    <div style="min-height: 400px;">
+                        <table class=" table table-bordered align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center" width="5%">NO</th>
+                                    <th scope="col" class="text-center" width="20%">Pemeriksaan</th>
+                                    <th scope="col" class="text-center" width="15%">Jumlah Laporan</th>
+                                    <th scope="col" class="text-center" width="20%">Jumlah Parameter</th>
+                                    <th scope="col" class="text-center" width="20%">Parameter Kritis</th>
+                                    <th scope="col" class="text-center" width="20%">Presentase Kritis</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $number = 1; ?>
+                                <?php foreach ($totalArray as $dataTotal) : ?>
+                                    <tr>
+                                        <?php $precentage = number_format((float) $dataTotal['total_kritis'] / $dataTotal['total_parameter'] * 100, 2, '.', '') ?>
+                                        <td class="text-center"><?= $number ?></td>
+                                        <td class="text-center"><?= $dataTotal['sample_name']; ?></td>
+                                        <td class="text-center"><?= $dataTotal['total_patient']; ?></td>
+                                        <td class="text-center"><?= $dataTotal['total_parameter']; ?></td>
+                                        <td class="text-center"><?= $dataTotal['total_kritis']; ?></td>
+                                        <td class="text-center"><?= $precentage; ?> %</td>
+                                    </tr>
+                                    <?php $number++; ?>
                                 <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-6 col-lg-2 mt-3">
-                            <input value="<?= $_POST['room']; ?>" name="room" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Ruang">
-                        </div>
-                        <div class="col-6 col-lg-1 mt-3">
-                            <input required value="<?= $_POST['range']; ?>" name="range" type="text" class="form-control" id="inlineFormInputGroupRoom" placeholder="Jumlah">
-                        </div>
-                        <div class="col-6 col-lg-1 mt-3">
-                            <input required value="Cari" type="submit" class="btn btn-primary w-100" />
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
-                    <input value="<?= isset($_GET['search']) ? $_GET['page'] : 1; ?>" name="page" type="text" class="form-control d-none" id="inlineFormInputGroupRoom">
-                </form>
+                </div>
             </div>
         </div>
 

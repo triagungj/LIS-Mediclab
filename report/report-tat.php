@@ -76,7 +76,7 @@ function dayIncrement($date)
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/style-main.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <title>Mediclab - Report</title>
+    <title>Report TAT - Mediclab</title>
 </head>
 
 <body>
@@ -122,12 +122,6 @@ function dayIncrement($date)
                         <div class="p-4 d-flex">
                             <img src="../assets/bar_chart_black_24dp.svg" alt="configuration">
                             <span class="align-middle ms-2">Jumlah Pemeriksaan</span>
-                        </div>
-                    </a>
-                    <a href="./report-stock.php" class="decoration-none">
-                        <div class="p-4 d-flex">
-                            <img src="../assets/bar_chart_black_24dp.svg" alt="configuration">
-                            <span class="align-middle ms-2">Stock Opname Reagen</span>
                         </div>
                     </a>
                 </div>
@@ -178,54 +172,65 @@ function dayIncrement($date)
                     </div>
 
                 </form>
-                <div class="ms-4 mt-4">
-                    <p>
-                        <?php if (isset($_POST['search'])) { ?>
-                            Index tanggal: <b><?= $dateFrom; ?></b> s/d <b><?= $dateTo; ?></b>
-                        <?php } ?>
-                        Total Pasien: <b><?= $totalData; ?></b> Pasien (Rata-rata Pemeriksaan <b><?= $averageTime; ?></b>)
-                    </p>
-                </div>
-                <div class="ms-3 me-3 table-responsive-lg">
-                    <div style="min-height: 400px;">
-                        <table class=" table table-bordered align-middle">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="text-center" width="5%">No</th>
-                                    <th scope="col" class="text-center" width="14%">Tanggal</th>
-                                    <th scope="col" class="text-center" width="20%">Nama</th>
-                                    <th scope="col" class="text-center" width="7%">No RM</th>
-                                    <th scope="col" class="text-center" width="7%">Daftar</th>
-                                    <th scope="col" class="text-center" width="7%">Selesai</th>
-                                    <th scope="col" class="text-center" width="7%">TAT</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $number = 1; ?>
-                                <?php foreach ($resultReport as $dataReport) : ?>
-                                    <tr onclick="onClickTable('<?= $dataReport['nota']; ?>')">
-                                        <?php
-                                        $reportDate = strtotime($dataReport['date_report']);
-                                        $finishDate = strtotime($dataReport['date_finish']);
-                                        $dateTimeObject1 = date_create($dataReport['date_report']);
-                                        $dateTimeObject2 = date_create($dataReport['date_finish']);
 
-                                        $difference = date_diff($dateTimeObject1, $dateTimeObject2);
-                                        ?>
-                                        <td class="text-center"><?= $number ?></td>
-                                        <td class="text-center"><?= date('Y-m-d', $reportDate); ?></td>
-                                        <td><?= $dataReport['name_patient']; ?></td>
-                                        <td class="text-center"><?= $dataReport['norm']; ?></td>
-                                        <td class="text-center"><?= date('H:i:s', $reportDate); ?></td>
-                                        <td class="text-center"><?= date('H:i:s', $finishDate); ?></td>
-                                        <td class="text-center"><?= $difference->format('%H:%I:%S'); ?></td>
-                                    </tr>
-                                    <?php $number++; ?>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                <?php if ($totalData == 0) { ?>
+                    <div class="d-flex align-items-center ps-3 pe-3" style="min-height:300px">
+                        <div class="box w-100 text-center">
+                            <img src="../assets/folder_off_black_24dp.svg" alt="empty" class="img-empty">
+                            <h3 class="mt-2">Data tidak ditemukan</h3>
+                        </div>
                     </div>
-                </div>
+
+                <?php } else { ?>
+                    <div class="ms-4 mt-4">
+                        <p>
+                            <?php if (isset($_POST['search'])) { ?>
+                                Index tanggal: <b><?= $dateFrom; ?></b> s/d <b><?= $dateTo; ?></b>
+                            <?php } ?>
+                            Total Pasien: <b><?= $totalData; ?></b> Pasien (Rata-rata Pemeriksaan <b><?= $averageTime; ?></b>)
+                        </p>
+                    </div>
+                    <div class="ms-3 me-3 table-responsive-lg">
+                        <div style="min-height: 400px;">
+                            <table class=" table table-bordered align-middle">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center" width="5%">No</th>
+                                        <th scope="col" class="text-center" width="14%">Tanggal</th>
+                                        <th scope="col" class="text-center" width="20%">Nama</th>
+                                        <th scope="col" class="text-center" width="7%">No RM</th>
+                                        <th scope="col" class="text-center" width="7%">Daftar</th>
+                                        <th scope="col" class="text-center" width="7%">Selesai</th>
+                                        <th scope="col" class="text-center" width="7%">TAT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $number = 1; ?>
+                                    <?php foreach ($resultReport as $dataReport) : ?>
+                                        <tr onclick="onClickTable('<?= $dataReport['nota']; ?>')">
+                                            <?php
+                                            $reportDate = strtotime($dataReport['date_report']);
+                                            $finishDate = strtotime($dataReport['date_finish']);
+                                            $dateTimeObject1 = date_create($dataReport['date_report']);
+                                            $dateTimeObject2 = date_create($dataReport['date_finish']);
+
+                                            $difference = date_diff($dateTimeObject1, $dateTimeObject2);
+                                            ?>
+                                            <td class="text-center"><?= $number ?></td>
+                                            <td class="text-center"><?= date('Y-m-d', $reportDate); ?></td>
+                                            <td><?= $dataReport['name_patient']; ?></td>
+                                            <td class="text-center"><?= $dataReport['norm']; ?></td>
+                                            <td class="text-center"><?= date('H:i:s', $reportDate); ?></td>
+                                            <td class="text-center"><?= date('H:i:s', $finishDate); ?></td>
+                                            <td class="text-center"><?= $difference->format('%H:%I:%S'); ?></td>
+                                        </tr>
+                                        <?php $number++; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
 </body>
