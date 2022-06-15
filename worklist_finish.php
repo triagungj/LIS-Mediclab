@@ -75,11 +75,6 @@ if (isset($_GET['date']) && isset($_GET['norm']) && isset($_GET['name_patient'])
                 <h3 class="text-light"><b>MEDICLAB</b></h3>
             </a>
             <div class="d-flex align-items-center">
-                <div class="mr-4 text-light text-name text-end">
-                    <h6 class="m-0">Selamat datang,</h6>
-                    <h5><?= $name ?></h5>
-                </div>
-                <div style="min-width:20px"></div>
                 <a href="logout.php"><button class="btn btn-light">Logout</button></a>
             </div>
         </div>
